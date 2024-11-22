@@ -5,3 +5,5 @@ protobuf==4.25.3
 numpy==1.26.4
 soundfile==0.12.1
 openai
+django
+django-debug-toolbar
