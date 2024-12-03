@@ -3,6 +3,7 @@ import json
 import base64
 import os
 import time
+import re
 from datetime import datetime, timedelta, timezone
 from robot_credentials import RobotCredentials
 from robot_data import RobotData
@@ -46,6 +47,7 @@ class MoxieServer:
     _mqtt_project_id: str
     _topic_handlers: dict
     _zmq_handlers: dict
+    _client_metrics: dict
     def __init__(self, robot, rbdata, endpoint="openmoxie"):
         self._robot = robot
         self._robot_data = rbdata
@@ -63,6 +65,9 @@ class MoxieServer:
         self._connect_handlers = []
         self._remote_chat = RemoteChat(self)
         self._zmq_handlers = {}
+        self._client_metrics = {}
+        self._connect_pattern = r"connected from (.*) as (d_[a-f0-9-]+)"
+        self._disconnect_pattern = r"Client (d_[a-f0-9-]+) closed its connection"
 
     def connect(self, start = False):
         jwt_token = self._robot.create_jwt(self._mqtt_project_id)
@@ -95,6 +100,8 @@ class MoxieServer:
         # The only two supported in IOT - commands for a wildcard of commands, config for our robot configuration
         client.subscribe('/devices/+/events/#')
         client.subscribe('/devices/+/state')
+        client.subscribe('$SYS/broker/clients/#')
+        client.subscribe('$SYS/broker/log/#')
         for ch in self._connect_handlers:
             ch(self, rc) 
 
@@ -106,8 +113,25 @@ class MoxieServer:
             self.on_device_event(fromdevice, dec[4], msg)
         elif basetype == "state":
             self.on_device_state(fromdevice, msg)
+        elif fromdevice == "clients":
+            self.on_client_metrics(basetype, msg)
+        elif fromdevice == "log":
+            self.on_log_message(basetype, msg)
         else:
             print(f"Rx UNK topic: {dec}")
+
+    def on_log_message(self, basetype, msg):
+        if basetype == "N": # Notifications
+            line = msg.payload.decode('utf-8')
+            match = re.search(self._connect_pattern, line)
+            match2 = None if match else re.search(self._disconnect_pattern, line)
+            if match:
+                self.on_device_connect(match.group(2), True, match.group(1))
+            elif match2:
+                self.on_device_connect(match2.group(1), False)
+
+    def on_client_metrics(self, basetype, msg):
+        self._client_metrics[basetype] = int(msg.payload.decode('utf-8'))
 
     # ALL EVENTS FROM-DEVICE ARRIVE HERE
     def on_device_event(self, device_id, eventname, msg):
@@ -149,15 +173,20 @@ class MoxieServer:
             else:
                 print(f'Unhandled RX ProtoBuf {protoname} over ZMQ Bridge')
 
+    def on_device_connect(self, device_id, connected, ip_addr=None):
+        if connected:
+            print(f'NEW CLIENT {device_id} from {ip_addr}')
+            self.send_config_to_bot_json(device_id, self._robot_data.get_config(device_id))
+            # subscripe to ZMQ STT
+            sub = ProtoSubscribe()
+            sub.protos.append('embodied.perception.audio.zmqSTTRequest')
+            sub.timestamp = now_ms()
+            self.send_zmq_to_bot(device_id, sub)
+        else:
+            print(f'LOST CLIENT {device_id}')
+
     def on_device_state(self, device_id, msg):
         print("Rx STATE topic: " + msg.payload.decode('utf-8'))
-        # We don't have a signal when connecting, so use state to send config - and also to subscribe :(
-        self.send_config_to_bot_json(device_id, self._robot_data.get_config(device_id))
-        # subscripe to ZMQ STT
-        sub = ProtoSubscribe()
-        sub.protos.append('embodied.perception.audio.zmqSTTRequest')
-        sub.timestamp = now_ms()
-        self.send_zmq_to_bot(device_id, sub)
 
     def send_config_to_bot_json(self, device_id, payload: dict):
         self._client.publish(f"/devices/{device_id}/config", payload=json.dumps(payload))
@@ -183,6 +212,9 @@ class MoxieServer:
         else:
             print(f"Warning! Invalid canned message: {canned_data}")
 
+    def print_metrics(self):
+        print(f"Client Metrics: {self._client_metrics}")
+        
     def start(self):
         self._client.loop_start()
 
@@ -200,4 +232,5 @@ c.add_zmq_handler('embodied.perception.audio.zmqSTTRequest', STTHandler(c))
 c.connect(start=True)
 
 while True:
- time.sleep(5)    
+    time.sleep(60)
+    c.print_metrics()
