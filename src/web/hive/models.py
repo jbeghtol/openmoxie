@@ -27,15 +27,15 @@ class DevicePermit(Enum):
 
 class MoxieDevice(models.Model):
     device_id = models.CharField(max_length=200)
-    email = models.EmailField(null=True)
-    permit = models.IntegerField(choices=[(tag.value, tag.name) for tag in DevicePermit])
+    email = models.EmailField(null=True, blank=True)
+    permit = models.IntegerField(choices=[(tag.value, tag.name) for tag in DevicePermit],default=DevicePermit.UNKNOWN.value)
     schedule = models.ForeignKey(MoxieSchedule, on_delete=models.SET_NULL, null=True)
 
     def __str__(self):
         return self.device_id
 
 class MoxieLogs(models.Model):
-    device = models.ForeignKey(MoxieSchedule, on_delete=models.CASCADE)
+    device = models.ForeignKey(MoxieDevice, on_delete=models.CASCADE)
     timestamp = models.TimeField()
     uid = models.IntegerField()
     tag = models.CharField(max_length=80)

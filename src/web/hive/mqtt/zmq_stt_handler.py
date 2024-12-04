@@ -1,5 +1,5 @@
-from moxie_zmq_handler import ZMQHandler
-from protos.embodied.perception.audio.zmqSTT_pb2 import zmqSTTRequest,zmqSTTResponse
+from .moxie_zmq_handler import ZMQHandler
+from .protos.embodied.perception.audio.zmqSTT_pb2 import zmqSTTRequest,zmqSTTResponse
 import soundfile as sf
 import numpy as np
 import io

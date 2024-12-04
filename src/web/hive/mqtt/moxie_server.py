@@ -1,3 +1,4 @@
+import concurrent
 import paho.mqtt.client as mqtt
 import json
 import base64
@@ -5,17 +6,18 @@ import os
 import time
 import re
 from datetime import datetime, timedelta, timezone
-from robot_credentials import RobotCredentials
-from robot_data import RobotData
-from moxie_remote_chat import RemoteChat
-from moxie_messages import CANNED_QUERY_REMOTE_CHAT_CONTEXTS, CANNED_QUERY_CONTEXT_INDEX
-from protos.embodied.logging.Log_pb2 import ProtoSubscribe
-from zmq_stt_handler import STTHandler
+from .robot_credentials import RobotCredentials
+from .robot_data import RobotData
+from .moxie_remote_chat import RemoteChat
+from .moxie_messages import CANNED_QUERY_REMOTE_CHAT_CONTEXTS, CANNED_QUERY_CONTEXT_INDEX
+from .protos.embodied.logging.Log_pb2 import ProtoSubscribe
+from .zmq_stt_handler import STTHandler
 
 
 _IOT_CLIENT_ID_FORMAT = 'projects/{0}/locations/us-central1/registries/devices/devices/{1}'
 _BASIC_FORMAT = '{1}'
 _google_mqtt_endpoint = 'mqtt.googleapis.com'
+_MOXIE_SERVICE_INSTANCE = None
 
 class Endpoint:
     def __init__(self, project_id, mqtt_host=_google_mqtt_endpoint, port=443):
@@ -39,7 +41,6 @@ def now_ms():
     return time.time_ns() // 1_000_000
 
 class MoxieServer:
-
     _robot : any
     _remote_chat : any
     _client : any
@@ -68,6 +69,7 @@ class MoxieServer:
         self._client_metrics = {}
         self._connect_pattern = r"connected from (.*) as (d_[a-f0-9-]+)"
         self._disconnect_pattern = r"Client (d_[a-f0-9-]+) closed its connection"
+        self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=5)
 
     def connect(self, start = False):
         jwt_token = self._robot.create_jwt(self._mqtt_project_id)
@@ -126,9 +128,9 @@ class MoxieServer:
             match = re.search(self._connect_pattern, line)
             match2 = None if match else re.search(self._disconnect_pattern, line)
             if match:
-                self.on_device_connect(match.group(2), True, match.group(1))
+                self._worker_queue.submit(self.on_device_connect, match.group(2), True, match.group(1))
             elif match2:
-                self.on_device_connect(match2.group(1), False)
+                self._worker_queue.submit(self.on_device_connect, match2.group(1), False)
 
     def on_client_metrics(self, basetype, msg):
         self._client_metrics[basetype] = int(msg.payload.decode('utf-8'))
@@ -173,9 +175,11 @@ class MoxieServer:
             else:
                 print(f'Unhandled RX ProtoBuf {protoname} over ZMQ Bridge')
 
+    # NOTE: Called from worker thread pool
     def on_device_connect(self, device_id, connected, ip_addr=None):
         if connected:
             print(f'NEW CLIENT {device_id} from {ip_addr}')
+            self._robot_data.db_connect(device_id)
             self.send_config_to_bot_json(device_id, self._robot_data.get_config(device_id))
             # subscripe to ZMQ STT
             sub = ProtoSubscribe()
@@ -183,6 +187,7 @@ class MoxieServer:
             sub.timestamp = now_ms()
             self.send_zmq_to_bot(device_id, sub)
         else:
+            self._robot_data.db_release(device_id)
             print(f'LOST CLIENT {device_id}')
 
     def on_device_state(self, device_id, msg):
@@ -214,23 +219,36 @@ class MoxieServer:
 
     def print_metrics(self):
         print(f"Client Metrics: {self._client_metrics}")
-        
+
     def start(self):
         self._client.loop_start()
 
     def stop(self):
         self._client.loop_stop()
 
+def cleanup_instance():
+    global _MOXIE_SERVICE_INSTANCE
+    if _MOXIE_SERVICE_INSTANCE:
+        _MOXIE_SERVICE_INSTANCE._client.disconnect()
+        _MOXIE_SERVICE_INSTANCE = None
 
-creds = RobotCredentials(True)
-rbdata = RobotData()
-c = MoxieServer(creds, rbdata)
-#c.add_connect_handler(on_connect)
-#c.add_config_handler(on_config)
-#c.add_command_handler("remote_chat", on_chat_response)
-c.add_zmq_handler('embodied.perception.audio.zmqSTTRequest', STTHandler(c))
-c.connect(start=True)
+def get_instance():
+    global _MOXIE_SERVICE_INSTANCE
+    return _MOXIE_SERVICE_INSTANCE
 
-while True:
-    time.sleep(60)
-    c.print_metrics()
+def create_service_instance():
+    global _MOXIE_SERVICE_INSTANCE
+    if not _MOXIE_SERVICE_INSTANCE:
+        creds = RobotCredentials(True)
+        rbdata = RobotData()
+        _MOXIE_SERVICE_INSTANCE = MoxieServer(creds, rbdata)
+        _MOXIE_SERVICE_INSTANCE.add_zmq_handler('embodied.perception.audio.zmqSTTRequest', STTHandler(_MOXIE_SERVICE_INSTANCE))
+        _MOXIE_SERVICE_INSTANCE.connect(start=True)
+    
+    return _MOXIE_SERVICE_INSTANCE
+    
+if __name__ == "__main__":
+    c = create_service_instance()
+    while True:
+        time.sleep(60)
+        c.print_metrics()
