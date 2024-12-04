@@ -6,7 +6,6 @@ from ..models import MoxieDevice, MoxieSchedule
 def run_db_atomic(functor, *args, **kwargs):
     with connections['default'].cursor() as cursor:
         with transaction.atomic():
-            print(f'DB TRANS {functor}')
             functor(*args, **kwargs)
             pass
 
@@ -47,9 +46,7 @@ class RobotData:
             del self._robot_map[robot_id]
 
     def init_from_db(self, robot_id):
-        print('Init from DB')
         device, created = MoxieDevice.objects.get_or_create(device_id=robot_id)
-        print('Init from DB2')
         if created:
             print(f'Created new model for this device {robot_id}')
             schedule = MoxieSchedule.objects.get(name='default')
