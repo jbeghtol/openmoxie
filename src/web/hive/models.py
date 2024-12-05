@@ -1,6 +1,9 @@
 from enum import Enum
 from django.db import models
 
+class AIVendor(Enum):
+    OPEN_AI = 1
+
 class SinglePromptChat(models.Model):
     name = models.CharField(max_length=200)
     module_id = models.CharField(max_length=200)
@@ -9,7 +12,11 @@ class SinglePromptChat(models.Model):
     max_volleys = models.IntegerField(default=9999)
     opener = models.TextField()
     prompt = models.TextField()
-
+    vendor = models.IntegerField(choices=[(tag.value, tag.name) for tag in AIVendor],default=AIVendor.OPEN_AI.value)
+    model = models.CharField(max_length=200, default="gpt-3.5-turbo")
+    max_tokens = models.IntegerField(default=70)
+    temperature = models.FloatField(default=0.5)
+    
     def __str__(self):
         return self.name
     

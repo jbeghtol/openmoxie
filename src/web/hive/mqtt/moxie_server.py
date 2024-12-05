@@ -143,7 +143,8 @@ class MoxieServer:
             if rcr.get('backend') == "data" and rcr.get('query',{}).get('query') == "modules":
                 # REMOTE MODULES REQUEST
                 req_id = rcr.get('event_id')
-                rc_modules = self._robot_data.get_modules(device_id)
+                #rc_modules = self._robot_data.get_modules(device_id)
+                rc_modules = self._remote_chat.get_modules_info()
                 print(f"Tx modules to: remote_chat: {rc_modules}")
                 self.send_command_to_bot_json(device_id, 'remote_chat', { 'command': 'remote_chat', 'result': 0, 'event_id': req_id, 'query_data': rc_modules} )
             elif rcr.get('backend') == "router":

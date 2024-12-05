@@ -1,11 +1,12 @@
 from openai import OpenAI
 import copy
 import concurrent.futures
+from ..models import SinglePromptChat
 
 class ChatSession:
-    def __init__(self, max_turns=20):
+    def __init__(self, max_history=20):
         self._history = []
-        self._max_turns = max_turns
+        self._max_history = max_history
 
     def add_history(self, role, message, history=None):
         history = self._history if not history else history
@@ -14,8 +15,8 @@ class ChatSession:
             history[-1]["content"] =  history[-1].get("content", '') + ' ' + message
         else:
             history.append({ "role": role, "content": message })
-            if len(history) > self._max_turns:
-                history = history[-self._max_turns:]
+            if len(history) > self._max_history:
+                history = history[-self._max_history:]
 
     def reset(self):
         self._history = []
@@ -41,11 +42,24 @@ class ChatSession:
 
 
 class SingleContextChatSession(ChatSession):
-    def __init__(self, max_turns=20):
-        super().__init__(max_turns)        
+    def __init__(self, 
+                 max_history=20, 
+                 max_volleys=9999,
+                 prompt="You are a having a conversation with your friend. Make it interesting and keep the conversation moving forward. Your utterances are around 30-40 words long. Ask only one question per response and ask it at the end of your response.",
+                 opener="Hi there!  Welcome to Open Moxie chat!",
+                 model="gpt-3.5-turbo",
+                 max_tokens=70,
+                 temperature=0.5
+                 ):
+        super().__init__(max_history)
+        self._max_volleys = max_volleys        
         self._context = [ { "role": "system", 
-            "content": "You are a having a conversation with your friend. Make it interesting and keep the conversation moving forward. Your utterances are around 30-40 words long. Ask only one question per response and ask it at the end of your response."
+            "content": prompt
             } ]
+        self._opener = opener
+        self._model = model
+        self._max_tokens = max_tokens
+        self._temperature = temperature
 
     def next_response(self, speech):
         # clone, add new input, official history comes from notify
@@ -53,35 +67,65 @@ class SingleContextChatSession(ChatSession):
         self.add_history('user', speech, history)
         client = OpenAI()
         return client.chat.completions.create(
-                    model="gpt-3.5-turbo",
+                    model=self._model,
                     messages=self._context + history,
-                    max_tokens=70,
-                    temperature=0.5
+                    max_tokens=self._max_tokens,
+                    temperature=self._temperature
                 ).choices[0].message.content
-
+    
     def get_prompt(self):
-        return super().get_prompt(msg='Hi there!  Welcome to Open Moxie chat!')
+        return super().get_prompt(msg=self._opener)
 
+class SinglePromptDBChatSession(SingleContextChatSession):
+    def __init__(self, pk):
+        source = SinglePromptChat.objects.get(pk=pk)
+        super().__init__(max_history=source.max_history, max_volleys=source.max_volleys, prompt=source.prompt, opener=source.opener, max_tokens=source.max_tokens, temperature=source.temperature)
 
 class RemoteChat:
     def __init__(self, server):
         self._server = server
         self._device_sessions = {}
         self._modules = { }
-        self.register_module('OPENMOXIE_CHAT', 'default', SingleContextChatSession)
+        self._modules_info = { "modules": [], "version": "openmoxie_v1" }
         self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=5)
+        self.update_from_database()
 
     def register_module(self, module_id, content_id, cname):
         self._modules[f'{module_id}/{content_id}'] = cname
 
-    def get_session(self, device_id, id, cname):
+    def get_modules_info(self):
+        return self._modules_info
+    
+    def update_from_database(self):
+        # Here we query the database to get all the module/content IDs and update the modules schema and register the modules
+        new_modules = {}
+        mod_map = {}
+        for chat in SinglePromptChat.objects.all():
+            new_modules[f'{chat.module_id}/{chat.content_id}'] = { 'xtor': SinglePromptDBChatSession, 'params': { 'pk': chat.pk } }
+            print(f'Registering {chat.module_id}')
+            # Group content IDs under module IDs
+            if chat.module_id in mod_map:
+                mod_map[chat.module_id].append(chat.content_id)
+            else:
+                mod_map[chat.module_id] = [ chat.content_id ]
+        # Models/content IDs into the module info schema - bare bones mandatory fields only
+        mlist = []
+        for mod in mod_map.keys():
+            modinfo = { "info": { "id": mod }, "rules": "RANDOM", "source": "REMOTE_CHAT", "content_infos": [] }
+            for cid in mod_map[mod]:
+                modinfo["content_infos"].append({ "info": { "id": cid } })
+            mlist.append(modinfo)
+        self._modules_info["modules"] = mlist
+        self._modules = new_modules
+    
+    def get_session(self, device_id, id, maker):
         # each device has a single session only for now
         if device_id in self._device_sessions:
             if self._device_sessions[device_id]['id'] == id:
                 return self._device_sessions[device_id]['session']
         print("New session")
         # new session needed
-        new_session = { 'id': id, 'session': cname() }
+        new_session = { 'id': id, 'session': maker['xtor'](**maker['params']) }
         self._device_sessions[device_id] = new_session
         return new_session['session']
 
