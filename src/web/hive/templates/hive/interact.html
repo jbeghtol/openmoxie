@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3 class="chat-title">Chat Interaction</h3>
+<div class="chat-window">
+  <table class="table">
+    <tr><th>Module ID</th><td>{{object.module_id}}</td></tr>
+    <tr><th>Content ID</th><td>{{object.content_id}}</td></tr>
+  </table>
+</div>
+<h3 class="chat-title">History</h3>
+<div id="chat_window" class="chat-window">
+  <ul id="chat_history" class="list-group">
+    <!-- TODO: use {{token}} to query CH and submit new input -->
+  </ul>
+</div>
+<div id="chat_input" class="chat-window">
+  <form id="chat_form">
+    <input id="user_input" name="user_input" class="form-control" placeholder="Say something..."></input>
+  </form>
+</div>
+<script>
+  function add_to_history(cname, badge, prefix, text) {
+    $("#chat_history").append("<li class='" + cname + "'><span class='badge rounded-pill " + badge + "'>" + prefix + "</span>&nbsp;" + text + "</li>");
+    $('#chat_window').scrollTop($('#chat_window')[0].scrollHeight);
+  }
+
+  $(document).ready(function() {
+    $('#chat_form').submit(function(e) {
+      e.preventDefault(); // Prevent form submission
+      var speech = $('#user_input').val()
+      var formData = {
+        'speech': speech,
+        'token': '{{token}}',
+        'module_id': '{{object.module_id}}',
+        'content_id': '{{object.content_id}}'
+      };
+      
+      if (speech != '')
+        add_to_history('list-group-item list-group-item-success chat-line', 'bg-success', 'User', speech)
+
+      $.ajax({
+        type: 'POST',
+        url: "{% url 'hive:interact_update' %}", // Django URL pattern name
+        data: formData,
+        dataType: 'json',
+        success: function(response) {
+          console.log(response);
+          // Handle successful response
+          $('#user_input').val('');
+          // Add the new line
+          add_to_history('list-group-item list-group-item-primary chat-line', 'bg-primary', 'Moxie', response["message"])
+        },
+        error: function(xhr, status, error) {
+          console.log(xhr.responseText);
+          // Handle error response
+          $('#user_input').val('');
+        }
+      });
+    });
+    // submit initial empty to get prompt
+    $('#chat_form').trigger('submit');
+  });
+</script>
+{% endblock %}

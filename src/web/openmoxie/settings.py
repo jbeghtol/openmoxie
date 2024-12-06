@@ -35,7 +35,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'hive.apps.HiveConfig',
-    'polls.apps.PollsConfig',
+#    'polls.apps.PollsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'debug_toolbar',
+    'jquery',
+    'django_bootstrap5'
 ]
 
 STATIC_ROOT = BASE_DIR / 'static'
@@ -96,6 +98,14 @@ DATABASES = {
     }
 }
 
+BOOTSTRAP5 = {
+    'css': {
+        'url': '/static/bootstrap/css/bootstrap.min.css'
+    },
+    'js': {
+        'url': '/static/bootstrap/js/bootstrap.min.js'
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators

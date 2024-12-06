@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Devices</h2>
+<table class="table table-striped">
+  <tr><th>Moxie Devices</th><th>Permission</th><th>Schedule</th></tr>
+  {% for device in recent_devices %}
+  <tr><td>{{device.device_id}}</td><td>{{device.permit}}</td><td>{{device.schedule}}</td></tr>
+  {% endfor %}
+</table>
+<br>
+<h2>Schedules</h2>
+<table class="table table-striped">
+  <tr><th>Name</th></tr>
+  {% for s in schedules %}
+  <tr><td>{{s.name}}</td></tr>
+  {% endfor %}
+</table>
+<br>
+<h2>Conversations</h2>
+<table class="table table-striped">
+  <tr><th>Module ID</th><th>Content ID</th><th></th></tr>
+  {% for s in conversations %}
+  <tr><td>{{s.module_id}}</td><td>{{s.content_id}}</td><td><a href="{% url 'hive:interact' s.pk %}">Interact</a></td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

@@ -7,3 +7,5 @@ soundfile==0.12.1
 openai
 django
 django-debug-toolbar
+django-jquery
+django-bootstrap5

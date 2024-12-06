@@ -60,21 +60,36 @@ class SingleContextChatSession(ChatSession):
         self._model = model
         self._max_tokens = max_tokens
         self._temperature = temperature
+        self._auto_history = False
 
+    def set_auto_history(self, val):
+        self._auto_history = val
+        
     def next_response(self, speech):
-        # clone, add new input, official history comes from notify
-        history = copy.deepcopy(self._history)
-        self.add_history('user', speech, history)
+        if self._auto_history:
+            # accumulating automatically, no interruptions or aborts
+            self.add_history('user', speech)
+            history = self._history
+        else:
+            # clone, add new input, official history comes from notify
+            history = copy.deepcopy(self._history)
+            self.add_history('user', speech, history)
         client = OpenAI()
-        return client.chat.completions.create(
+        resp = client.chat.completions.create(
                     model=self._model,
                     messages=self._context + history,
                     max_tokens=self._max_tokens,
                     temperature=self._temperature
                 ).choices[0].message.content
+        if self._auto_history:
+            self.add_history('assistant', resp)
+        return resp
     
     def get_prompt(self):
-        return super().get_prompt(msg=self._opener)
+        resp = super().get_prompt(msg=self._opener)
+        if self._auto_history:
+            self.add_history('assistant', resp)
+        return resp
 
 class SinglePromptDBChatSession(SingleContextChatSession):
     def __init__(self, pk):
@@ -128,6 +143,11 @@ class RemoteChat:
         new_session = { 'id': id, 'session': maker['xtor'](**maker['params']) }
         self._device_sessions[device_id] = new_session
         return new_session['session']
+
+    def get_web_session_for_module(self, device_id, module_id, content_id):
+        id = module_id + '/' + content_id
+        maker = self._modules.get(id)
+        return self.get_session(device_id, id, maker) if maker else None
 
     def make_response(self, rcr, res=0):
         resp = { 

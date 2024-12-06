@@ -227,6 +227,14 @@ class MoxieServer:
     def stop(self):
         self._client.loop_stop()
 
+    def get_web_session_for_module(self, device_id, module_id, content_id):
+        sess = self._remote_chat.get_web_session_for_module(device_id, module_id, content_id)
+        sess.set_auto_history(True)
+        return sess
+    
+    def remote_chat(self):
+        return self._remote_chat
+    
 def cleanup_instance():
     global _MOXIE_SERVICE_INSTANCE
     if _MOXIE_SERVICE_INSTANCE:

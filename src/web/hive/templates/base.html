@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+{% load django_bootstrap5 %}
+{% load static %}
+<html>
+<head>
+    <title>Open Moxie Hive Control</title>
+    {% bootstrap_css %}
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'hive/style.css' %}">
+</head>
+<body>
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+    {% bootstrap_javascript %}
+</body>
+</html>

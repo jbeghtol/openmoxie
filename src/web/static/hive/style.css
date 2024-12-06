@@ -1,0 +1,18 @@
+.chat-window {
+    width: 50vw; /* 1/2 the width of the screen */
+    max-height: 500px; /* max height of 500px */
+    overflow-y: auto; /* scrollable */
+    padding: 10px; /* optional padding */
+    margin: 10px;
+    border: 1px solid #ccc; /* optional border */
+    border-radius: 5px; /* optional border radius */
+  }
+
+  .chat-line {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+
+  .chat-title {
+    margin: 10px;
+  }
