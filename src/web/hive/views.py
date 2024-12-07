@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.urls import reverse
 from django.views import generic
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
@@ -39,3 +40,7 @@ def interact_update(request):
     line = session.get_prompt() if not speech else session.next_response(speech)    
     
     return JsonResponse({'message': line})
+
+def reload_database(request):
+    get_instance().remote_chat().update_from_database()
+    return HttpResponseRedirect(reverse("hive:dashboard"))

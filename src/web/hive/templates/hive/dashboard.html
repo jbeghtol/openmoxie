@@ -16,7 +16,7 @@
   {% endfor %}
 </table>
 <br>
-<h2>Conversations</h2>
+<h2>Conversations</h2><a href="{% url 'hive:reload_database' %}">[Reload from DB]</a>
 <table class="table table-striped">
   <tr><th>Module ID</th><th>Content ID</th><th></th></tr>
   {% for s in conversations %}
