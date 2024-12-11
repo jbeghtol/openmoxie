@@ -14,28 +14,8 @@ from .protos.embodied.logging.Log_pb2 import ProtoSubscribe
 from .zmq_stt_handler import STTHandler
 
 
-_IOT_CLIENT_ID_FORMAT = 'projects/{0}/locations/us-central1/registries/devices/devices/{1}'
 _BASIC_FORMAT = '{1}'
-_google_mqtt_endpoint = 'mqtt.googleapis.com'
 _MOXIE_SERVICE_INSTANCE = None
-
-class Endpoint:
-    def __init__(self, project_id, mqtt_host=_google_mqtt_endpoint, port=443):
-        self.project_id = project_id
-        self.mqtt_host = mqtt_host
-        self.mqtt_port = port
-
-# Named IOT endpoints
-IOT_ENDPOINTS = { 
-    'staging': Endpoint('device-registry-staging-245022'),
-    'production': Endpoint('device-registry-production-495'),
-    'dev': Endpoint('device-registry-develop-454763'),
-    'staging2': Endpoint('staging', 'mqtt-staging.embodied.com'),
-    'production2': Endpoint('production', 'mqtt.embodied.com'),
-    'dev2': Endpoint('develop', 'mqtt-develop.embodied.com'),
-    'hk': Endpoint('hk', 'mqtt-hk.embodied.com'),
-    'openmoxie': Endpoint('openmoxie', 'duranaki.com', 8883)
-}
 
 def now_ms():
     return time.time_ns() // 1_000_000
@@ -49,12 +29,12 @@ class MoxieServer:
     _topic_handlers: dict
     _zmq_handlers: dict
     _client_metrics: dict
-    def __init__(self, robot, rbdata, endpoint="openmoxie"):
+    def __init__(self, robot, rbdata, project_id, mqtt_host, mqtt_port):
         self._robot = robot
         self._robot_data = rbdata
-        self._mqtt_project_id = IOT_ENDPOINTS.get(endpoint).project_id
-        self._mqtt_endpoint = IOT_ENDPOINTS.get(endpoint).mqtt_host
-        self._port = IOT_ENDPOINTS.get(endpoint).mqtt_port
+        self._mqtt_project_id = project_id
+        self._mqtt_endpoint = mqtt_host
+        self._port = mqtt_port
         #self._mqtt_client_id = _IOT_CLIENT_ID_FORMAT.format(self._mqtt_project_id, self._robot.device_id)
         self._mqtt_client_id = _BASIC_FORMAT.format(self._mqtt_project_id, self._robot.device_id)
         print("creating client with id: ", self._mqtt_client_id)
@@ -245,19 +225,19 @@ def get_instance():
     global _MOXIE_SERVICE_INSTANCE
     return _MOXIE_SERVICE_INSTANCE
 
-def create_service_instance():
+def create_service_instance(project_id, host, port):
     global _MOXIE_SERVICE_INSTANCE
     if not _MOXIE_SERVICE_INSTANCE:
         creds = RobotCredentials(True)
         rbdata = RobotData()
-        _MOXIE_SERVICE_INSTANCE = MoxieServer(creds, rbdata)
+        _MOXIE_SERVICE_INSTANCE = MoxieServer(creds, rbdata, project_id, host, port)
         _MOXIE_SERVICE_INSTANCE.add_zmq_handler('embodied.perception.audio.zmqSTTRequest', STTHandler(_MOXIE_SERVICE_INSTANCE))
         _MOXIE_SERVICE_INSTANCE.connect(start=True)
     
     return _MOXIE_SERVICE_INSTANCE
     
 if __name__ == "__main__":
-    c = create_service_instance()
+    c = create_service_instance("openmoxie", "duranaki.com", 8883)
     while True:
         time.sleep(60)
         c.print_metrics()

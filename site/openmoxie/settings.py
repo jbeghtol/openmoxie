@@ -97,6 +97,12 @@ DATABASES = {
     }
 }
 
+MQTT_ENDPOINT = {
+    'host': 'duranaki.com',
+    'port': 8883,
+    'project': 'openmoxie',
+}
+
 BOOTSTRAP5 = {
     'css': {
         'url': '/static/bootstrap/css/bootstrap.min.css'

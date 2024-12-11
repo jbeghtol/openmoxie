@@ -1,6 +1,7 @@
 from time import sleep
 from django.core.management.commands.runserver import Command as RunserverCommand
 from django.core.management import call_command
+from django.conf import settings
 import threading
 from hive.mqtt.moxie_server import create_service_instance, cleanup_instance
 
@@ -18,7 +19,8 @@ class Command(RunserverCommand):
         self._run_enabled = True
         print('Starting MQTT Services...')
         from hive.mqtt.moxie_server import create_service_instance
-        instance = create_service_instance()
+        ep = settings.MQTT_ENDPOINT
+        instance = create_service_instance(project_id=ep['project'], host=ep['host'], port=ep['port'])
         while self._run_enabled:
             sleep(60)
             instance.print_metrics()
