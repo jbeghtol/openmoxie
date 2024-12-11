@@ -101,6 +101,7 @@ MQTT_ENDPOINT = {
     'host': 'duranaki.com',
     'port': 8883,
     'project': 'openmoxie',
+    'cert_required': True,
 }
 
 BOOTSTRAP5 = {

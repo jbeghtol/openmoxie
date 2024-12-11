@@ -20,7 +20,7 @@ class Command(RunserverCommand):
         print('Starting MQTT Services...')
         from hive.mqtt.moxie_server import create_service_instance
         ep = settings.MQTT_ENDPOINT
-        instance = create_service_instance(project_id=ep['project'], host=ep['host'], port=ep['port'])
+        instance = create_service_instance(project_id=ep['project'], host=ep['host'], port=ep['port'], cert_required=ep.get('cert_required', True))
         while self._run_enabled:
             sleep(60)
             instance.print_metrics()

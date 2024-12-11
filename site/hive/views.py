@@ -6,6 +6,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
+import qrcode
+from PIL import Image
+from io import BytesIO
+
 from .models import SinglePromptChat, MoxieDevice, MoxieSchedule
 from .mqtt.moxie_server import get_instance
 import uuid
@@ -44,3 +48,10 @@ def interact_update(request):
 def reload_database(request):
     get_instance().remote_chat().update_from_database()
     return HttpResponseRedirect(reverse("hive:dashboard"))
+
+def endpoint_qr(request):
+    img = qrcode.make(get_instance().get_endpoint_qr_base64())
+    buffer = BytesIO()
+    img.save(buffer, 'PNG')
+    buffer.seek(0)
+    return HttpResponse(buffer, content_type='image/png')

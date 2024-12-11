@@ -4,12 +4,16 @@ import json
 import time
 import re
 import logging
+import base64
+import ssl
 from datetime import datetime, timedelta, timezone
 from .robot_credentials import RobotCredentials
 from .robot_data import RobotData
 from .moxie_remote_chat import RemoteChat
 from .moxie_messages import CANNED_QUERY_REMOTE_CHAT_CONTEXTS, CANNED_QUERY_CONTEXT_INDEX
 from .protos.embodied.logging.Log_pb2 import ProtoSubscribe
+from .protos.embodied.logging.Cloud2_pb2 import ServiceConfiguration2
+from .protos.embodied.wifiapp.QRCommands_pb2 import QRCommand
 from .zmq_stt_handler import STTHandler
 
 
@@ -27,20 +31,25 @@ class MoxieServer:
     _client : any
     _mqtt_client_id: str
     _mqtt_project_id: str
+    _cert_required: bool
     _topic_handlers: dict
     _zmq_handlers: dict
     _client_metrics: dict
-    def __init__(self, robot, rbdata, project_id, mqtt_host, mqtt_port):
+    def __init__(self, robot, rbdata, project_id, mqtt_host, mqtt_port, cert_required=True):
         self._robot = robot
         self._robot_data = rbdata
         self._mqtt_project_id = project_id
         self._mqtt_endpoint = mqtt_host
         self._port = mqtt_port
+        self._cert_required = cert_required
         #self._mqtt_client_id = _IOT_CLIENT_ID_FORMAT.format(self._mqtt_project_id, self._robot.device_id)
         self._mqtt_client_id = _BASIC_FORMAT.format(self._mqtt_project_id, self._robot.device_id)
         logger.info(f"Creating client with id: {self._mqtt_client_id}")
         self._client = mqtt.Client(client_id=self._mqtt_client_id, transport="tcp")
-        self._client.tls_set()
+        if self._cert_required:
+            self._client.tls_set()
+        else:
+            self._client.tls_set(cert_reqs=ssl.CERT_NONE)
         self._client.on_connect = self.on_connect
         self._client.on_message = self.on_message
         self._topic_handlers = None
@@ -216,6 +225,20 @@ class MoxieServer:
     def remote_chat(self):
         return self._remote_chat
     
+    def get_endpoint_qr_base64(self):
+        scfg = ServiceConfiguration2()
+        scfg.gcp_project = self._mqtt_project_id
+        scfg.mqtt_host = self._mqtt_endpoint
+        # Currently not aren't supporting any direct web services
+        #scfg.webservice_root = "https://moxie.duranaki.com"
+        scfg.override_port = self._port
+        scfg.disable_verify = self._insecure
+        # Serialize to bytes, then bytes to base64 string
+        scfg_base64 = base64.b64encode(scfg.SerializeToString()).decode('utf-8')
+        # Now make QR debug object, just in JSON
+        qr = { "debug": { "command": "om", "param": scfg_base64}}
+        return json.dumps(qr)
+    
 def cleanup_instance():
     global _MOXIE_SERVICE_INSTANCE
     if _MOXIE_SERVICE_INSTANCE:
@@ -226,12 +249,12 @@ def get_instance():
     global _MOXIE_SERVICE_INSTANCE
     return _MOXIE_SERVICE_INSTANCE
 
-def create_service_instance(project_id, host, port):
+def create_service_instance(project_id, host, port, cert_required=True):
     global _MOXIE_SERVICE_INSTANCE
     if not _MOXIE_SERVICE_INSTANCE:
         creds = RobotCredentials(True)
         rbdata = RobotData()
-        _MOXIE_SERVICE_INSTANCE = MoxieServer(creds, rbdata, project_id, host, port)
+        _MOXIE_SERVICE_INSTANCE = MoxieServer(creds, rbdata, project_id, host, port, cert_required)
         _MOXIE_SERVICE_INSTANCE.add_zmq_handler('embodied.perception.audio.zmqSTTRequest', STTHandler(_MOXIE_SERVICE_INSTANCE))
         _MOXIE_SERVICE_INSTANCE.connect(start=True)
     
