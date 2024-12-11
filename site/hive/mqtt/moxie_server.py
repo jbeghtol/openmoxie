@@ -1,10 +1,9 @@
 import concurrent
 import paho.mqtt.client as mqtt
 import json
-import base64
-import os
 import time
 import re
+import logging
 from datetime import datetime, timedelta, timezone
 from .robot_credentials import RobotCredentials
 from .robot_data import RobotData
@@ -19,6 +18,8 @@ _MOXIE_SERVICE_INSTANCE = None
 
 def now_ms():
     return time.time_ns() // 1_000_000
+
+logger = logging.getLogger(__name__)
 
 class MoxieServer:
     _robot : any
@@ -37,7 +38,7 @@ class MoxieServer:
         self._port = mqtt_port
         #self._mqtt_client_id = _IOT_CLIENT_ID_FORMAT.format(self._mqtt_project_id, self._robot.device_id)
         self._mqtt_client_id = _BASIC_FORMAT.format(self._mqtt_project_id, self._robot.device_id)
-        print("creating client with id: ", self._mqtt_client_id)
+        logger.info(f"Creating client with id: {self._mqtt_client_id}")
         self._client = mqtt.Client(client_id=self._mqtt_client_id, transport="tcp")
         self._client.tls_set()
         self._client.on_connect = self.on_connect
@@ -54,7 +55,7 @@ class MoxieServer:
     def connect(self, start = False):
         jwt_token = self._robot.create_jwt(self._mqtt_project_id)
         self._client.username_pw_set(username='unknown', password=jwt_token)
-        print("connecting to: ", self._mqtt_endpoint)
+        logger.info(f"connecting to: {self._mqtt_endpoint}")
         self._client.connect(self._mqtt_endpoint, self._port, 60)
         if start:
             self.start()
@@ -78,7 +79,7 @@ class MoxieServer:
             self._topic_handlers[topic] = [ callback ]
 
     def on_connect(self, client, userdata, flags, rc):
-        print("Connected with result code "+str(rc))
+        logger.info(f"Connected with result code {rc}")
         # The only two supported in IOT - commands for a wildcard of commands, config for our robot configuration
         client.subscribe('/devices/+/events/#')
         client.subscribe('/devices/+/state')
@@ -100,7 +101,7 @@ class MoxieServer:
         elif fromdevice == "log":
             self.on_log_message(basetype, msg)
         else:
-            print(f"Rx UNK topic: {dec}")
+            logger.debug(f"Rx UNK topic: {dec}")
 
     def on_log_message(self, basetype, msg):
         if basetype == "N": # Notifications
@@ -117,15 +118,15 @@ class MoxieServer:
 
     # ALL EVENTS FROM-DEVICE ARRIVE HERE
     def on_device_event(self, device_id, eventname, msg):
-        print("Rx EVENT topic: " + eventname)
+        logger.debug(f"Rx EVENT topic: {eventname}")
         if eventname == "remote-chat" or eventname == "remote-chat-staging":
             rcr = json.loads(msg.payload)
             if rcr.get('backend') == "data" and rcr.get('query',{}).get('query') == "modules":
                 # REMOTE MODULES REQUEST
                 req_id = rcr.get('event_id')
-                #rc_modules = self._robot_data.get_modules(device_id)
+                # Let the remote chat module provide the modules data
                 rc_modules = self._remote_chat.get_modules_info()
-                print(f"Tx modules to: remote_chat: {rc_modules}")
+                logger.debug(f"Tx modules to: remote_chat: {rc_modules}")
                 self.send_command_to_bot_json(device_id, 'remote_chat', { 'command': 'remote_chat', 'result': 0, 'event_id': req_id, 'query_data': rc_modules} )
             elif rcr.get('backend') == "router":
                 # REMOTE CHAT CONVERSATION ENDPOINT
@@ -135,13 +136,13 @@ class MoxieServer:
             if csa.get("subtopic") == "query":
                 if csa.get("query") == "schedule":
                     # SCHEDULE REQUEST
-                    print("Rx Schedule request.")
+                    logger.debug("Rx Schedule request.")
                     req_id = csa.get('request_id')
                     schedule = self._robot_data.get_schedule(device_id)
                     self.send_command_to_bot_json(device_id, 'query_result', { 'command': 'query_result', 'request_id': req_id, 'schedule': schedule} )
                 elif csa.get("query") == "mentor_behaviors":
                     # MENTOR BEHAVIOR REQUEST
-                    print("Rx MBH request.")
+                    logger.debug("Rx MBH request.")
                     req_id = csa.get('request_id')
                     mbh = self._robot_data.get_mbh(device_id)
                     self.send_command_to_bot_json(device_id, 'query_result', { 'command': 'query_result', 'request_id': req_id, 'mentor_behaviors': mbh} )
@@ -154,12 +155,12 @@ class MoxieServer:
             if handler:
                 handler.handle_zmq(device_id, protoname, protodata)
             else:
-                print(f'Unhandled RX ProtoBuf {protoname} over ZMQ Bridge')
+                logger.debug(f'Unhandled RX ProtoBuf {protoname} over ZMQ Bridge')
 
     # NOTE: Called from worker thread pool
     def on_device_connect(self, device_id, connected, ip_addr=None):
         if connected:
-            print(f'NEW CLIENT {device_id} from {ip_addr}')
+            logger.info(f'NEW CLIENT {device_id} from {ip_addr}')
             self._robot_data.db_connect(device_id)
             self.send_config_to_bot_json(device_id, self._robot_data.get_config(device_id))
             # subscripe to ZMQ STT
@@ -169,10 +170,10 @@ class MoxieServer:
             self.send_zmq_to_bot(device_id, sub)
         else:
             self._robot_data.db_release(device_id)
-            print(f'LOST CLIENT {device_id}')
+            logger.info(f'LOST CLIENT {device_id}')
 
     def on_device_state(self, device_id, msg):
-        print("Rx STATE topic: " + msg.payload.decode('utf-8'))
+        logger.debug("Rx STATE topic: " + msg.payload.decode('utf-8'))
 
     def send_config_to_bot_json(self, device_id, payload: dict):
         self._client.publish(f"/devices/{device_id}/config", payload=json.dumps(payload))
@@ -196,10 +197,10 @@ class MoxieServer:
         elif "subtopic" in canned_data["payload"]:
             self.publish_as_json("client-service-activity-log", payload=canned_data["payload"])
         else:
-            print(f"Warning! Invalid canned message: {canned_data}")
+            logger.warning(f"Warning! Invalid canned message: {canned_data}")
 
     def print_metrics(self):
-        print(f"Client Metrics: {self._client_metrics}")
+        logger.info(f"Client Metrics: {self._client_metrics}")
 
     def start(self):
         self._client.loop_start()

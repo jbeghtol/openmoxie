@@ -7,7 +7,7 @@ import time
 import concurrent.futures
 from openai import OpenAI
 
-LOG_WAV=True
+LOG_WAV=False
 OPENAI_MODEL='whisper-1'
 
 def now_ms():
