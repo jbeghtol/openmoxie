@@ -21,12 +21,12 @@ Currently this project contains the following:
 # Running your own instance
 
 1. Clone project
-1. Install dependencies via `python3 -m pip install -r requirements.txt`
-1. Make initial migrations `cd site; python3 manage.py makemigrations`
-1. Run initial migration `cd site; python3 manage.py migrate`
-1. Create a superuser `cd site; python manage.py createsuperuser`
-1. Run the initial data import `cd site; python3 manage.py init_data`
-1. Edit `site\openmoxie\settings.py` and edit this block with your own MQTT host
+2. Install dependencies via `python3 -m pip install -r requirements.txt`
+3. Make initial migrations `cd site; python3 manage.py makemigrations`
+4. Run initial migration `cd site; python3 manage.py migrate`
+5. Create a superuser `cd site; python manage.py createsuperuser`
+6. Run the initial data import `cd site; python3 manage.py init_data`
+7. Edit `site\openmoxie\settings.py` and edit this block with your own MQTT host
 ```
 MQTT_ENDPOINT = {
     'host': 'duranaki.com',
@@ -35,6 +35,8 @@ MQTT_ENDPOINT = {
     'cert_required': True,
 }
 ```
-1. Run the service `cd site; python3 manage.py runserver --noreload` (Note: no-reload is currently required to prevent the mqtt supervisor from being created twice for some reason.)
+8. Run the service `cd site; python3 manage.py runserver --noreload` (Note: no-reload is currently required to prevent the mqtt supervisor from being created twice for some reason.)
+
+Once it is running, you may visit http://localhost:8000/hive for the dashboard.
 
 

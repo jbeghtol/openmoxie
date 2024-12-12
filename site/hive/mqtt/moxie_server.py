@@ -237,7 +237,7 @@ class MoxieServer:
         # Currently not aren't supporting any direct web services
         #scfg.webservice_root = "https://moxie.duranaki.com"
         scfg.override_port = self._port
-        scfg.disable_verify = self._insecure
+        scfg.disable_verify = not self._cert_required
         # Serialize to bytes, then bytes to base64 string
         scfg_base64 = base64.b64encode(scfg.SerializeToString()).decode('utf-8')
         # Now make QR debug object, just in JSON
