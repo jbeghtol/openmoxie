@@ -92,6 +92,7 @@ class MoxieServer:
         # The only two supported in IOT - commands for a wildcard of commands, config for our robot configuration
         client.subscribe('/devices/+/events/#')
         client.subscribe('/devices/+/state')
+        # Subscriptions to monitor clients and broker logs
         client.subscribe('$SYS/broker/clients/#')
         client.subscribe('$SYS/broker/log/#')
         for ch in self._connect_handlers:
@@ -165,6 +166,10 @@ class MoxieServer:
                 handler.handle_zmq(device_id, protoname, protodata)
             else:
                 logger.debug(f'Unhandled RX ProtoBuf {protoname} over ZMQ Bridge')
+        elif eventname == "device-logs":
+            # These are per-client log messages
+            logrec = json.loads(msg.payload)
+            logger.debug(f'{device_id}[{logrec["tag"]}] - {logrec["message"]}')
 
     # NOTE: Called from worker thread pool
     def on_device_connect(self, device_id, connected, ip_addr=None):
