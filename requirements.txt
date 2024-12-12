@@ -10,3 +10,4 @@ django-debug-toolbar
 django-jquery
 django-bootstrap5
 qrcode
+Pillow
