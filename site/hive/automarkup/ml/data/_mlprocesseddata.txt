@@ -1,0 +1,4716 @@
+{
+    "lex": {
+        "shoemakers": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"adjective\"}}", 
+                "confidence": 1.0, 
+                "lift": 32.5, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "we'll": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"reduced\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.3333333333333335, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "shoemaker's": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"adjective\"}}", 
+                "confidence": 1.0, 
+                "lift": 32.5, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "around": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"adjective\"}}", 
+                "confidence": 1.0, 
+                "lift": 32.5, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "karu": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"noun\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.57142857142857, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "it's": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"reduced\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.3333333333333335, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "wife": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"noun\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.57142857142857, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "robot": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"noun\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.57142857142857, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "kumana": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"noun\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.57142857142857, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "objects": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"noun\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.57142857142857, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "they'll": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"reduced\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.3333333333333335, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "should": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"reduced\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.3333333333333335, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "have": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"Full\"}}", 
+                "confidence": 1.0, 
+                "lift": 4.193548387096774, 
+                "support": 0.015384615384615385
+            }
+        ], 
+        "kindness": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"adjective\"}}", 
+                "confidence": 1.0, 
+                "lift": 32.5, 
+                "support": 0.007692307692307693
+            }
+        ], 
+        "your": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"reduced\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 2.2222222222222223, 
+                "support": 0.015384615384615385
+            }, 
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"reduced\"}}", 
+                "confidence": 0.7857142857142857, 
+                "lift": 2.619047619047619, 
+                "support": 0.16923076923076924
+            }
+        ], 
+        "stitch": [
+            {
+                "associated_str": "{\"lex\": {\"entry\": \"noun\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.57142857142857, 
+                "support": 0.007692307692307693
+            }
+        ]
+    }, 
+    "emphasis": {
+        "right": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 0.5, 
+                "lift": 3.125, 
+                "support": 0.01
+            }
+        ], 
+        "love": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"strong\"}}", 
+                "confidence": 1.0, 
+                "lift": 10.0, 
+                "support": 0.01
+            }
+        ], 
+        "well": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.01
+            }
+        ], 
+        "robotics": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"strong\"}}", 
+                "confidence": 1.0, 
+                "lift": 10.0, 
+                "support": 0.01
+            }
+        ], 
+        "have": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.01
+            }
+        ], 
+        "really": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.02
+            }
+        ], 
+        "you're": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.01
+            }
+        ], 
+        "what": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"strong\"}}", 
+                "confidence": 0.5, 
+                "lift": 5.0, 
+                "support": 0.01
+            }
+        ], 
+        "birthdays": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"strong\"}}", 
+                "confidence": 1.0, 
+                "lift": 10.0, 
+                "support": 0.01
+            }
+        ], 
+        "that": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"strong\"}}", 
+                "confidence": 0.5, 
+                "lift": 5.0, 
+                "support": 0.01
+            }
+        ], 
+        "much": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.01
+            }
+        ], 
+        "hope": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.01
+            }
+        ], 
+        "them": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.01
+            }
+        ], 
+        "again": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.01
+            }
+        ], 
+        "telling": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.02
+            }
+        ], 
+        "wait": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"strong\"}}", 
+                "confidence": 1.0, 
+                "lift": 10.0, 
+                "support": 0.01
+            }
+        ], 
+        "roar": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.01
+            }
+        ], 
+        "upset": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"strong\"}}", 
+                "confidence": 1.0, 
+                "lift": 10.0, 
+                "support": 0.01
+            }
+        ], 
+        "playing": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"strong\"}}", 
+                "confidence": 1.0, 
+                "lift": 10.0, 
+                "support": 0.01
+            }
+        ], 
+        "cooked": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"strong\"}}", 
+                "confidence": 1.0, 
+                "lift": 10.0, 
+                "support": 0.01
+            }
+        ], 
+        "buzz": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.01
+            }
+        ], 
+        "think": [
+            {
+                "associated_str": "{\"emphasis\": {\"level\": \"moderate\"}}", 
+                "confidence": 1.0, 
+                "lift": 6.25, 
+                "support": 0.01
+            }
+        ]
+    }, 
+    "usel": {
+        "dance": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"8\"}}", 
+                "confidence": 0.5, 
+                "lift": 345.0882352941177, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "global": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.30000000000000004, 
+                "lift": 20.584210526315793, 
+                "support": 0.00025568908207619537
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 0.2, 
+                "lift": 10.666363636363636, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "sleep": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"0\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 19.954081632653065, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "thursday": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "tail": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "does": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 43.29520295202952, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.2142857142857143, 
+                "lift": 2.1057071069633886, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "under": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"0\"}}", 
+                "confidence": 0.5, 
+                "lift": 34.91964285714286, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "sorry": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"0\"}}", 
+                "confidence": 0.4, 
+                "lift": 27.935714285714287, 
+                "support": 0.0005113781641523907
+            }
+        ], 
+        "worth": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "sent": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.7777777777777778, 
+                "lift": 2.0944839721520925, 
+                "support": 0.0005966078581777891
+            }
+        ], 
+        "activities": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "garden": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "sitting": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.4, 
+                "lift": 3.930653266331659, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "didn\u2019t": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.4285714285714286, 
+                "lift": 4.211414213926777, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "wave": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "jack": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.15384615384615385, 
+                "lift": 2.892751479289941, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "telling": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.625, 
+                "lift": 3.125799232736573, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "cool": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.5, 
+                "lift": 34.30701754385965, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "clouds": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "level": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "watered": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "sand": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "it'll": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "talked": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "you'd": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "bacon": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "horn": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "invention": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"1\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 20.440766550522653, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "picked": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.4, 
+                "lift": 7.5211538461538465, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "click": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8, 
+                "lift": 2.154326371356438, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "even": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.375, 
+                "lift": 9.502969762419006, 
+                "support": 0.00025568908207619537
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.25, 
+                "lift": 10.82380073800738, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.3076923076923077, 
+                "lift": 3.0235794356397374, 
+                "support": 0.0003409187761015938
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"8\"}}", 
+                "confidence": 0.15384615384615385, 
+                "lift": 19.00080971659919, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "clock": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.75, 
+                "lift": 3.7509590792838874, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "exactly": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "emotions": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"1\"}}", 
+                "confidence": 0.4, 
+                "lift": 28.61707317073171, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "goes": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "international": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 49.92765957446809, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "learned": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.4444444444444445, 
+                "lift": 4.367392518146287, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "ever": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 12.370057986294151, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hero": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 49.92765957446809, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "gathered": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "leaping": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "here": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 11.095035460992909, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 15.24756335282651, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "smartest": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "slow": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 69.83928571428572, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hadn't": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.8333333333333333, 
+                "lift": 4.16773231031543, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "path": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"1\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 107.15068493150685, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "dm_robotname_5_3": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "irritating": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "change": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "wait": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.4, 
+                "lift": 3.930653266331659, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "great": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"2\"}}", 
+                "confidence": 0.4666666666666666, 
+                "lift": 33.591411042944785, 
+                "support": 0.0017898235745333673
+            }
+        ], 
+        "institute": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "amount": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 6.55108877721943, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "milkshake": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "suggestion": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8235294117647058, 
+                "lift": 2.2176889116904506, 
+                "support": 0.0011932157163555782
+            }
+        ], 
+        "usually": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "opinion": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 25.341252699784018, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "trainer": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.75, 
+                "lift": 3.7509590792838874, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "named": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "love": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"2\"}}", 
+                "confidence": 0.16, 
+                "lift": 11.517055214723927, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "imagine": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 69.83928571428572, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "beanstalk": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "arms": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8, 
+                "lift": 2.154326371356438, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "splash": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "music": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "calm": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.5, 
+                "lift": 12.670626349892009, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "today": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 2.807609475951185, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "breathe": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"0\"}}", 
+                "confidence": 0.1875, 
+                "lift": 13.094866071428571, 
+                "support": 0.00025568908207619537
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.25, 
+                "lift": 10.82380073800738, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "sharing": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0005966078581777891
+            }
+        ], 
+        "relax": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "bobbing": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.802884615384617, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "breaths": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666667, 
+                "lift": 3.3341858482523445, 
+                "support": 0.0005113781641523907
+            }
+        ], 
+        "baby": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hold": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.5, 
+                "lift": 4.9133165829145735, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "room": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "this": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "anywhere": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hope": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 0.25, 
+                "lift": 13.332954545454545, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "beautiful": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.2, 
+                "lift": 5.0682505399568045, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "figure": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"5\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 9.416532905296952, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "give": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"5\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 10.985955056179774, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "awesome": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 0.30000000000000004, 
+                "lift": 14.978297872340429, 
+                "support": 0.00025568908207619537
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"2\"}}", 
+                "confidence": 0.2, 
+                "lift": 14.39631901840491, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"5\"}}", 
+                "confidence": 0.2, 
+                "lift": 6.591573033707865, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.15384615384615385, 
+                "lift": 10.556005398110662, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "share": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.15384615384615385, 
+                "lift": 2.892751479289941, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "confused": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.9166666666666666, 
+                "lift": 2.4684989671792517, 
+                "support": 0.000937526634279383
+            }
+        ], 
+        "heard": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.41666666666666663, 
+                "lift": 2.083866155157715, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "want": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.203125, 
+                "lift": 8.794338099630997, 
+                "support": 0.0011079860223301798
+            }
+        ], 
+        "needs": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "comfort": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "write": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.3125, 
+                "lift": 3.0708228643216082, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "amazing": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 0.15384615384615385, 
+                "lift": 7.6811783960720135, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.23076923076923078, 
+                "lift": 15.834008097165992, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "animal": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.45454545454545453, 
+                "lift": 2.2733085328993257, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "plant": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "tried": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "turing": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "after": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.33333333333333337, 
+                "lift": 3.275544388609716, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "tries": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "birthday": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 68.6140350877193, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "floated": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "grow": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "remember": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4285714285714286, 
+                "lift": 2.1434051881622214, 
+                "support": 0.00025568908207619537
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 2.807609475951185, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "whenever": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "onto": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "appreciate": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "tale": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 0.4, 
+                "lift": 21.332727272727272, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "scoot": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.75, 
+                "lift": 32.47140221402214, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "basket": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "that's": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"20\"}}", 
+                "confidence": 0.375, 
+                "lift": 31.204787234042552, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "cute": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "shoes": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5555555555555556, 
+                "lift": 2.7784882068769536, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "move": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"0\"}}", 
+                "confidence": 0.2, 
+                "lift": 13.967857142857143, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "soon": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4444444444444445, 
+                "lift": 2.222790565501563, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "years": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5714285714285715, 
+                "lift": 2.8578735842162954, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "hugged": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 6.55108877721943, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "paper": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0003409187761015938
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.30000000000000004, 
+                "lift": 5.640865384615386, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "through": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "looks": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "still": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.3076923076923077, 
+                "lift": 3.0235794356397374, 
+                "support": 0.0003409187761015938
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 0.15384615384615385, 
+                "lift": 8.204895104895105, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "birds": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "thank": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "he's": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4444444444444445, 
+                "lift": 2.222790565501563, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "interesting": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.5, 
+                "lift": 9.401442307692308, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "broom": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "better": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.3125, 
+                "lift": 3.0708228643216082, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "window": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.75, 
+                "lift": 3.7509590792838874, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "weeks": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "might": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.45454545454545453, 
+                "lift": 2.2733085328993257, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "happened": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.27272727272727276, 
+                "lift": 11.80778262328078, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "good": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"2\"}}", 
+                "confidence": 0.2, 
+                "lift": 14.39631901840491, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.20588235294117646, 
+                "lift": 2.0231303576707065, 
+                "support": 0.0011932157163555782
+            }
+        ], 
+        "smarter": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 1.0, 
+                "lift": 9.826633165829147, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "band": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "snake": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.5, 
+                "lift": 21.64760147601476, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "front": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "kindness": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "name": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "each": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "mean": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.26666666666666666, 
+                "lift": 11.54538745387454, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "turtle": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.4, 
+                "lift": 3.930653266331659, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "everyone": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"9\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 39.438655462184876, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "fish": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 0.25, 
+                "lift": 13.332954545454545, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hard": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"5\"}}", 
+                "confidence": 0.2, 
+                "lift": 6.591573033707865, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "yeah": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0003409187761015938
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.00025568908207619537
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 3.275544388609715, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "goose": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 6.267628205128204, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "books": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.4, 
+                "lift": 27.44561403508772, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "forgot": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "laboratory": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 15.24756335282651, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 4.178418803418803, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 0.33333333333333337, 
+                "lift": 17.777272727272727, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "special": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "really": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"4\"}}", 
+                "confidence": 0.16666666666666669, 
+                "lift": 18.802884615384617, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "respects": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 25.341252699784018, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "missed": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 7.240357914224006, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "washed": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "squares": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 12.535256410256409, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "math": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "one's": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "bolts": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "you're": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"2\"}}", 
+                "confidence": 0.2142857142857143, 
+                "lift": 15.424627519719547, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "free": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "spies": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "people's": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "care": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.7777777777777778, 
+                "lift": 2.0944839721520925, 
+                "support": 0.0005966078581777891
+            }
+        ], 
+        "backwards": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "shells": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "days": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 3.275544388609715, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "turn": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "heartbeat": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 160.72602739726028, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "castle": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "footsteps": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "childhood": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "first": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8, 
+                "lift": 2.154326371356438, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "already": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "dino": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.802884615384617, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "number": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"excited\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 3910.9999999999995, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "yourself": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "fast": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.5, 
+                "lift": 34.30701754385965, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "another": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.15151515151515152, 
+                "lift": 6.5598792351559885, 
+                "support": 0.00042614847012699224
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"1\"}}", 
+                "confidence": 0.15151515151515152, 
+                "lift": 10.83980044345898, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "ways": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.18181818181818182, 
+                "lift": 4.607500490869822, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "doesn't": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 2.1836962590731437, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "little": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8749999999999999, 
+                "lift": 2.356294468671104, 
+                "support": 0.0011932157163555782
+            }
+        ], 
+        "heads": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "cruncher": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.16129032258064516, 
+                "lift": 4.08729882254581, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "elevator": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "their": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.23529411764705885, 
+                "lift": 5.9626476940668285, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "wonderful": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.46153846153846156, 
+                "lift": 2.3082825103285463, 
+                "support": 0.0005113781641523907
+            }
+        ], 
+        "stuffed": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 71.54268292682927, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "typing": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "white": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "legs": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.16666666666666666, 
+                "lift": 3.133814102564102, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "listen": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"0\"}}", 
+                "confidence": 0.6000000000000001, 
+                "lift": 41.90357142857144, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "eyes": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "that": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"9\"}}", 
+                "confidence": 0.25, 
+                "lift": 10.114655172413794, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "bouncing": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hotel": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "part": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.41666666666666663, 
+                "lift": 2.083866155157715, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "flowers": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "stairs": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "than": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.15384615384615385, 
+                "lift": 3.898654261505234, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.3076923076923077, 
+                "lift": 3.0235794356397374, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "here's": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.802884615384617, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "grew": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "project": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "exclaimed": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "loves": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 22.871345029239762, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "misunderstood": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "misunderstand": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "mini": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 1.0, 
+                "lift": 9.826633165829147, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "uncomfortable": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "mindfulness": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 16.89416846652268, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "craig": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 71.98159509202455, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "comfortable": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.4, 
+                "lift": 3.930653266331659, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "talking": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "have": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 16.642553191489363, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 14.431734317343173, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "need": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.18518518518518517, 
+                "lift": 3.482015669515669, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "seen": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5714285714285715, 
+                "lift": 2.8578735842162954, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "alive": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "thought": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.16129032258064516, 
+                "lift": 4.08729882254581, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "afraid": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "built": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.5, 
+                "lift": 12.670626349892009, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "also": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.15384615384615385, 
+                "lift": 3.898654261505234, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "chest": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"0\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 46.55952380952381, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "take": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"2\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 68.61403508771929, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hatch": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.75, 
+                "lift": 19.005939524838013, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "play": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 2.1836962590731437, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "sure": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.25, 
+                "lift": 17.153508771929825, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "electric": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "eggs": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8333333333333333, 
+                "lift": 2.244089970162956, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "mouth": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "nothing": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"7\"}}", 
+                "confidence": 1.0, 
+                "lift": 86.27205882352942, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "class": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "overwhelming": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "professor": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.2, 
+                "lift": 13.72280701754386, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "later": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4666666666666666, 
+                "lift": 2.3339300937766407, 
+                "support": 0.0005966078581777891
+            }
+        ], 
+        "metal": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "drive": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "face": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "looked": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"9\"}}", 
+                "confidence": 0.16666666666666666, 
+                "lift": 23.005882352941175, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "sorta": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"3\"}}", 
+                "confidence": 1.0, 
+                "lift": 345.0882352941177, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "you'll": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8333333333333333, 
+                "lift": 2.244089970162956, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "definitely": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.0005113781641523907
+            }
+        ], 
+        "sunset": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "clean": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.4, 
+                "lift": 3.930653266331659, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "fact": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 7.240357914224006, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "saying": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8, 
+                "lift": 2.154326371356438, 
+                "support": 0.0006818375522031876
+            }
+        ], 
+        "walking": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "agreed": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 6.55108877721943, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "bring": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "colors": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "rough": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 1.0, 
+                "lift": 9.826633165829147, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "fine": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"20\"}}", 
+                "confidence": 0.36363636363636365, 
+                "lift": 533.3181818181819, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "enjoyed": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.0005113781641523907
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "giant": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "busy": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 16.89416846652268, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "it\u2019s": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "pretty": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.18181818181818182, 
+                "lift": 3.4187062937062938, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "circle": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hoeing": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.802884615384617, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "personality": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8, 
+                "lift": 2.154326371356438, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "assistant": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8, 
+                "lift": 2.154326371356438, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "stop": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 1.0, 
+                "lift": 9.826633165829147, 
+                "support": 0.00025568908207619537
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "bear": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 3.275544388609715, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "report": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "leather": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "worried": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "scientist": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "won't": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.5, 
+                "lift": 4.9133165829145735, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "wrote": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "humans": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 6.55108877721943, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "seat": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "decided": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.4285714285714286, 
+                "lift": 4.211414213926777, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "close": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.2631578947368421, 
+                "lift": 2.5859560962708277, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "bark": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 45.742690058479525, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "lots": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 0.18181818181818182, 
+                "lift": 9.077756286266926, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "pictures": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "please": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.15384615384615385, 
+                "lift": 3.898654261505234, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.18181818181818182, 
+                "lift": 4.607500490869822, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.27272727272727276, 
+                "lift": 11.80778262328078, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "grandmother": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 8.44708423326134, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 3.275544388609715, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "there's": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hiss": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "probably": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "reading": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "frustrated": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "notice": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "rosie": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 1.0, 
+                "lift": 9.826633165829147, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "useful": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "attention": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 25.341252699784018, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "wear": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.5, 
+                "lift": 9.401442307692308, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "come": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"5\"}}", 
+                "confidence": 0.15384615384615385, 
+                "lift": 5.070440795159897, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "suggested": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "sniff": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"8\"}}", 
+                "confidence": 0.33333333333333337, 
+                "lift": 782.2, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "many": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.30000000000000004, 
+                "lift": 2.9479899497487443, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "adventures": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.5, 
+                "lift": 12.670626349892009, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "minds": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 25.341252699784018, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "demo_monster": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.4, 
+                "lift": 27.44561403508772, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "wheels": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4285714285714286, 
+                "lift": 2.1434051881622214, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "whole": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "riddle": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 2.1836962590731437, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "point": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "robotics": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.25, 
+                "lift": 17.153508771929825, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 0.25, 
+                "lift": 13.332954545454545, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "running": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.4, 
+                "lift": 3.930653266331659, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "dances": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "learning": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.5, 
+                "lift": 4.9133165829145735, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "module_id": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "aren't": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "teddy": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.4, 
+                "lift": 3.930653266331659, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "bumblebee": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.5, 
+                "lift": 21.64760147601476, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "whoa": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 6.55108877721943, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "empty": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "life": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "what's": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.25, 
+                "lift": 10.82380073800738, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"1\"}}", 
+                "confidence": 0.25, 
+                "lift": 17.885670731707318, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "catch": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 8.44708423326134, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "those": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4285714285714286, 
+                "lift": 2.1434051881622214, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "turtles": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "will": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"5\"}}", 
+                "confidence": 0.1739130434782609, 
+                "lift": 5.73180263800684, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "brilliant": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "frustrating": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "almost": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"5\"}}", 
+                "confidence": 0.4, 
+                "lift": 13.18314606741573, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "helped": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5555555555555556, 
+                "lift": 2.7784882068769536, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "middle": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.5, 
+                "lift": 12.670626349892009, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "evening": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "sits": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "technology": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "funny": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "anymore": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "things": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 2.807609475951185, 
+                "support": 0.0006818375522031876
+            }
+        ], 
+        "make": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "rules": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.5, 
+                "lift": 9.401442307692308, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "parts": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.15000000000000002, 
+                "lift": 2.820432692307693, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "digging": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 1.0, 
+                "lift": 9.826633165829147, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "gets": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"7\"}}", 
+                "confidence": 0.4, 
+                "lift": 34.50882352941177, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "bunny": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.5, 
+                "lift": 21.64760147601476, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "week": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"5\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 7.323970037453185, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "ball": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "that\u2019s": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hang": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "moment": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "moving": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"2\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 68.61403508771929, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "cleaning": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "student": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "robotic": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "might've": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "thoughts": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "center": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 25.341252699784018, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "dock": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "chickens": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "cheep": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "bottle": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.26666666666666666, 
+                "lift": 5.014102564102564, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "drawing": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.15000000000000002, 
+                "lift": 3.8011879049676036, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "howl": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "whimsical": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "t_storyjson": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 1.0, 
+                "lift": 53.33181818181818, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "just": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 11.095035460992909, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5555555555555556, 
+                "lift": 2.7784882068769536, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "being": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 4.178418803418803, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "money": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.4285714285714286, 
+                "lift": 4.211414213926777, 
+                "support": 0.00025568908207619537
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 5.372252747252748, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "fantastic": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 45.742690058479525, 
+                "support": 0.0003409187761015938
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 16.642553191489363, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "thanks": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.41666666666666663, 
+                "lift": 2.083866155157715, 
+                "support": 0.0008522969402539845
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "questions": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "seats": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 6.267628205128204, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "followed": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.802884615384617, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "letting": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "lets": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "book": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.2173913043478261, 
+                "lift": 2.1362246012672057, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "crying": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 69.83928571428572, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "homework": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "gave": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4444444444444445, 
+                "lift": 2.222790565501563, 
+                "support": 0.0003409187761015938
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 2.1836962590731437, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 11.851515151515152, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "emergency": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 49.92765957446809, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "read": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.375, 
+                "lift": 9.502969762419006, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "laughed": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 1.0, 
+                "lift": 9.826633165829147, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "listening": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.75, 
+                "lift": 3.7509590792838874, 
+                "support": 0.0005113781641523907
+            }
+        ], 
+        "blankets": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "wings": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 7.240357914224006, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "apart": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "knock": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.75, 
+                "lift": 3.7509590792838874, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "stranger": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "lost": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "shaped": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "sized": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "security": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 6.55108877721943, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "page": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.5, 
+                "lift": 12.670626349892009, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "couldn't": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8333333333333333, 
+                "lift": 2.244089970162956, 
+                "support": 0.00042614847012699224
+            }
+        ], 
+        "some": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5714285714285715, 
+                "lift": 2.8578735842162954, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "bach": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 1.0, 
+                "lift": 9.826633165829147, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hair": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "understood": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.5, 
+                "lift": 4.9133165829145735, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "respect": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"5\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 10.985955056179774, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "curious": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 12.535256410256409, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "happens": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "embodied": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.5, 
+                "lift": 4.9133165829145735, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "mummy": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "moon": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "everything": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.2, 
+                "lift": 3.7605769230769233, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "asking": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "robots": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"6\"}}", 
+                "confidence": 0.5, 
+                "lift": 234.66, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "exciting": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 49.92765957446809, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "super": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"2\"}}", 
+                "confidence": 0.2, 
+                "lift": 14.39631901840491, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "trophy": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 28.79263803680982, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "anything": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 6.55108877721943, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "tongue": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "gambit": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"7\"}}", 
+                "confidence": 1.0, 
+                "lift": 533.3181818181818, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "punchline": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "seeing": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "float": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 0.5, 
+                "lift": 26.66590909090909, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "clack": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "your": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4285714285714286, 
+                "lift": 2.1434051881622214, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "bubbly": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "dm_humanname_5_3": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "area": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"5\"}}", 
+                "confidence": 0.75, 
+                "lift": 24.718398876404496, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "there": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "question": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "long": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.18181818181818182, 
+                "lift": 3.4187062937062938, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "stuck": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.75, 
+                "lift": 2.0196809731466607, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "we're": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.2, 
+                "lift": 3.7605769230769233, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "strong": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 12.535256410256409, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "bubble": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.15789473684210528, 
+                "lift": 4.001250426281688, 
+                "support": 0.00025568908207619537
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.21052631578947367, 
+                "lift": 2.0687648770166622, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "happy": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 68.6140350877193, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "i've": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.2142857142857143, 
+                "lift": 2.1057071069633886, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "brand": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 1.0, 
+                "lift": 18.802884615384617, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "heat": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "hear": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.25, 
+                "lift": 10.82380073800738, 
+                "support": 0.000767067246228586
+            }
+        ], 
+        "library": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 5.6313894888408935, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 6.55108877721943, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "reef": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.4, 
+                "lift": 10.136501079913609, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "cottage": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "trying": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"7\"}}", 
+                "confidence": 0.22222222222222224, 
+                "lift": 19.17156862745098, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "they're": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "wish": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "inside": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 2.807609475951185, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "devices": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "stories": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4666666666666666, 
+                "lift": 2.3339300937766407, 
+                "support": 0.0005966078581777891
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"4\"}}", 
+                "confidence": 0.2, 
+                "lift": 3.7605769230769233, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "cake": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "problem": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.44999999999999996, 
+                "lift": 2.2505754475703323, 
+                "support": 0.000767067246228586
+            }
+        ], 
+        "piece": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "yelled": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 3.334185848252344, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "sometimes": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"0\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 14.431734317343173, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "upset": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"7\"}}", 
+                "confidence": 0.28571428571428575, 
+                "lift": 24.64915966386555, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "describe": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 102.92105263157895, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5, 
+                "lift": 2.5006393861892584, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "deep": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 17.777272727272724, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "single": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"5\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 21.97191011235955, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "exist": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "tooth": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "check": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.25, 
+                "lift": 2.4566582914572868, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "cream": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "shtefahn": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 49.92765957446809, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "rubber": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "interested": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "branch": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.5, 
+                "lift": 4.9133165829145735, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "papers": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "ribbons": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.75, 
+                "lift": 3.7509590792838874, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "nice": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"0\"}}", 
+                "confidence": 0.2, 
+                "lift": 9.985531914893619, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"motivational\", \"variant\": \"5\"}}", 
+                "confidence": 0.2, 
+                "lift": 73.33125, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "picture": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.5714285714285715, 
+                "lift": 2.8578735842162954, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "draw": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8, 
+                "lift": 2.154326371356438, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "repeat": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.5, 
+                "lift": 12.670626349892009, 
+                "support": 0.0001704593880507969
+            }, 
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.4, 
+                "lift": 10.136501079913609, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "kinds": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "accidental": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"1\"}}", 
+                "confidence": 0.6666666666666666, 
+                "lift": 47.69512195121951, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "june": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 1.0, 
+                "lift": 25.341252699784018, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "diffferent": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.75, 
+                "lift": 3.7509590792838874, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "let's": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.2, 
+                "lift": 5.0682505399568045, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "push": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "numstoriesunlocked": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"6\"}}", 
+                "confidence": 1.0, 
+                "lift": 53.33181818181818, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "journey": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"intimate\", \"variant\": \"1\"}}", 
+                "confidence": 0.3333333333333333, 
+                "lift": 53.57534246575342, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "pool": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"question\", \"variant\": \"8\"}}", 
+                "confidence": 0.5, 
+                "lift": 488.87499999999994, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "dolphins": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "land": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"0\"}}", 
+                "confidence": 0.4, 
+                "lift": 10.136501079913609, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "faster": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.001278772378517, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "potato": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0001704593880507969
+            }
+        ], 
+        "together": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"2\"}}", 
+                "confidence": 0.4, 
+                "lift": 2.0005115089514067, 
+                "support": 0.0006818375522031876
+            }
+        ], 
+        "classmate": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 0.8, 
+                "lift": 2.154326371356438, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "time": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.0003409187761015938
+            }
+        ], 
+        "alright": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"3\"}}", 
+                "confidence": 0.2142857142857143, 
+                "lift": 2.1057071069633886, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "accidents": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "starting": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00025568908207619537
+            }
+        ], 
+        "once": [
+            {
+                "associated_str": "{\"usel\": {\"genre\": \"none\", \"variant\": \"1\"}}", 
+                "confidence": 1.0, 
+                "lift": 2.6929079641955473, 
+                "support": 0.00042614847012699224
+            }
+        ]
+    }, 
+    "prosody": {
+        "love": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 10.2, 
+                "support": 0.0392156862745098
+            }
+        ], 
+        "help": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 17.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "point": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"loud\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 7.285714285714285, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "humans": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"loud\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 7.285714285714285, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "yeah": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"loud\", \"rate\": \"medium\", \"pitch\": \"high\"}}", 
+                "confidence": 1.0, 
+                "lift": 51.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "sophistic": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.666666666666666, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "born": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "professor's": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 17.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "sure": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0392156862745098
+            }
+        ], 
+        "grateful": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.666666666666666, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "ummm": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"soft\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 0.5, 
+                "lift": 12.75, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "wonder": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.666666666666666, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "blue": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"loud\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 7.285714285714285, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "there": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"loud\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 7.285714285714285, 
+                "support": 0.0196078431372549
+            }, 
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"soft\", \"rate\": \"x-fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 51.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "tired": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 10.2, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "mooo": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "late": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "everything": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"loud\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 7.285714285714285, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "emphasis": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"loud\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 7.285714285714285, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "slowly": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "ahhh": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "yesterday": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 17.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "wait": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"soft\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 25.5, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "might": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"soft\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 17.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "today": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"loud\", \"rate\": \"slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 51.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "even": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.666666666666666, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "good": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "okay": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"x-soft\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 25.5, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "very": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "fireworks": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "robots": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 10.2, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "soon": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "gloomy": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "breaths": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0392156862745098
+            }
+        ], 
+        "purrr": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "friends": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.666666666666666, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "missions": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"loud\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 7.285714285714285, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "faster": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.666666666666666, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "paolo": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.666666666666666, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "mmhmm": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 3.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "school": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.666666666666666, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "baymax": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"slow\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 10.2, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "supposed": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"soft\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 17.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "alright": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"soft\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 17.0, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "where": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"medium\", \"rate\": \"x-fast\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 5.666666666666666, 
+                "support": 0.0196078431372549
+            }
+        ], 
+        "talk": [
+            {
+                "associated_str": "{\"prosody\": {\"volume\": \"x-soft\", \"rate\": \"medium\", \"pitch\": \"medium\"}}", 
+                "confidence": 1.0, 
+                "lift": 25.5, 
+                "support": 0.0196078431372549
+            }
+        ]
+    }
+}

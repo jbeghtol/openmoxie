@@ -2,6 +2,8 @@ from openai import OpenAI
 import copy
 import concurrent.futures
 from ..models import SinglePromptChat
+from ..automarkup import process as automarkup_process
+from ..automarkup import initialize_rules as automarkup_initialize_rules
 
 class ChatSession:
     def __init__(self, max_history=20):
@@ -115,6 +117,7 @@ class RemoteChat:
         self._modules = { }
         self._modules_info = { "modules": [], "version": "openmoxie_v1" }
         self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=5)
+        self._automarkup_rules = automarkup_initialize_rules()
         self.update_from_database()
 
     def register_module(self, module_id, content_id, cname):
@@ -183,10 +186,14 @@ class RemoteChat:
             resp['input_speech'] = rcr['speech']
         return resp
                 
+    def make_markup(self, text):
+        return automarkup_process(text, self._automarkup_rules)
+
     def next_session_response(self, device_id, sess, rcr, resp):
         speech = rcr["speech"]
         text,overflow = sess.next_response(speech)
-        resp['output']['markup'] = text
+        resp['output']['text'] = text
+        resp['output']['markup'] = self.make_markup(text)
         if overflow:
             action = { 'action': 'exit_module', 'output_type': 'GLOBAL_RESPONSE' }
             resp['response_actions'][0] = action
