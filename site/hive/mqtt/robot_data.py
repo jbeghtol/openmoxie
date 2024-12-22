@@ -3,6 +3,9 @@ import logging
 from django.db import connections
 from django.db import transaction
 from ..models import MoxieDevice, MoxieSchedule
+from django.conf import settings
+
+root_path = settings.BASE_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -26,9 +29,9 @@ class RobotData:
     def __init__(self):
         global DEFAULT_SCHEDULE
         self._robot_map = {}
-        with open('data/default_data_schedule.json') as f:
+        with open(settings.BASE_DIR / 'data/default_data_schedule.json') as f:
             DEFAULT_SCHEDULE = json.load(f)
-        with open('data/default_data_settings.json') as f:
+        with open(settings.BASE_DIR / 'data/default_data_settings.json') as f:
             DEFAULT_ROBOT_CONFIG['settings'] = json.load(f)
 
 
@@ -45,8 +48,13 @@ class RobotData:
             logger.info(f'Releasing device data for {robot_id}')
             del self._robot_map[robot_id]
 
-    def is_connected(self, robot_id):
-        return robot_id in self._robot_map
+    # Check if init after connection for this bot is needed, and remember it so we only init once
+    def connect_init_needed(self, robot_id):
+        needed = robot_id not in self._robot_map
+        if needed:
+            # set an empty record, so we don't try again
+            self._robot_map[robot_id] = {}
+        return needed
     
     def init_from_db(self, robot_id):
         device, created = MoxieDevice.objects.get_or_create(device_id=robot_id)

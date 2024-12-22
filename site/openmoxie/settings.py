@@ -97,10 +97,10 @@ DATABASES = {
 }
 
 MQTT_ENDPOINT = {
-    'host': 'duranaki.com',
+    'host': 'mosquitto',
     'port': 8883,
     'project': 'openmoxie',
-    'cert_required': True,
+    'cert_required': False,
 }
 
 BOOTSTRAP5 = {
@@ -186,7 +186,7 @@ LOGGING = {
         'hive': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
-            'propagate': True,
+            'propagate': False,
         },
     },
 }

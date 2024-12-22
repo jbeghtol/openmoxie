@@ -1,8 +1,10 @@
 # init_data.py
 import json
 from django.core.management.base import BaseCommand
+from django.contrib.auth import get_user_model
 from ...models import MoxieSchedule, SinglePromptChat
 from ...mqtt.robot_data import RobotData
+import os
 
 class Command(BaseCommand):
     help = 'Import data to bootstrap database with initial data.'
@@ -26,3 +28,17 @@ class Command(BaseCommand):
         else:
             print("Default chat OPENMOXIE_CHAT already exists.")
 
+        # if env is set, attempt to create SU
+        username = os.environ.get('DJANGO_SUPERUSER_USERNAME')
+        email = os.environ.get('DJANGO_SUPERUSER_EMAIL')
+        password = os.environ.get('DJANGO_SUPERUSER_PASSWORD')
+
+        if username and email and password:
+            User = get_user_model()
+            if not User.objects.filter(username=username).exists():
+                print('Creating superuser...')
+                User.objects.create_superuser(username, email, password)
+            else:
+                print('Superuser already exists.')
+        else:
+            print('Superuser credentials not provided.')

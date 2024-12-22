@@ -119,7 +119,8 @@ class MoxieServer:
             match = re.search(self._connect_pattern, line)
             match2 = None if match else re.search(self._disconnect_pattern, line)
             if match:
-                self._worker_queue.submit(self.on_device_connect, match.group(2), True, match.group(1))
+                if self._robot_data.connect_init_needed(match.group(2)):
+                    self._worker_queue.submit(self.on_device_connect, match.group(2), True, match.group(1))
             elif match2:
                 self._worker_queue.submit(self.on_device_connect, match2.group(1), False)
             # else:
@@ -173,13 +174,6 @@ class MoxieServer:
             # These are per-client log messages
             logrec = json.loads(msg.payload)
             logger.debug(f'{device_id}[{logrec["tag"]}] - {logrec["message"]}')
-            # if 'Work cycle' in logrec["message"]:
-            #     logger.info("DEBUG - SUB ZMQ TO BOT")
-            #     sub = ProtoSubscribe()
-            #     sub.protos.append('embodied.perception.audio.zmqSTTRequest')
-            #     sub.timestamp = now_ms()
-            #     logger.info(f'Subscribed to ZMQ STT')
-            #     self.send_zmq_to_bot(device_id, sub)
 
     # NOTE: Called from worker thread pool
     def on_device_connect(self, device_id, connected, ip_addr=None):
@@ -201,7 +195,7 @@ class MoxieServer:
 
     # Fallback, we missed the connect message but robot is connected
     def check_device_connect(self, device_id, info="Missing"):
-        if not self._robot_data.is_connected(device_id):
+        if self._robot_data.connect_init_needed(device_id):
             logger.info(f"Unconnected robot {device_id} location {info}.  Connecting now.")
             self._worker_queue.submit(self.on_device_connect, device_id, True, "State")
 
