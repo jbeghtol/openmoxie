@@ -4,6 +4,9 @@ import concurrent.futures
 from ..models import SinglePromptChat
 from ..automarkup import process as automarkup_process
 from ..automarkup import initialize_rules as automarkup_initialize_rules
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ChatSession:
     def __init__(self, max_history=20):
@@ -86,13 +89,17 @@ class SingleContextChatSession(ChatSession):
             # clone, add new input, official history comes from notify
             history = copy.deepcopy(self._history)
             self.add_history('user', speech, history)
-        client = OpenAI()
-        resp = client.chat.completions.create(
-                    model=self._model,
-                    messages=self._context + history,
-                    max_tokens=self._max_tokens,
-                    temperature=self._temperature
-                ).choices[0].message.content
+        try:
+            client = OpenAI()
+            resp = client.chat.completions.create(
+                        model=self._model,
+                        messages=self._context + history,
+                        max_tokens=self._max_tokens,
+                        temperature=self._temperature
+                    ).choices[0].message.content
+        except Exception as e:
+            logger.warning(f'Exception attempting inference: {e}')
+            resp = "Oh no.  I have run into a bug"
         if of:
             resp += " " + self._exit_line
         if self._auto_history:
@@ -118,7 +125,6 @@ class RemoteChat:
         self._modules_info = { "modules": [], "version": "openmoxie_v1" }
         self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=5)
         self._automarkup_rules = automarkup_initialize_rules()
-        self.update_from_database()
 
     def register_module(self, module_id, content_id, cname):
         self._modules[f'{module_id}/{content_id}'] = cname

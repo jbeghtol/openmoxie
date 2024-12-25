@@ -2,7 +2,7 @@
 import json
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
-from ...models import MoxieSchedule, SinglePromptChat
+from ...models import MoxieSchedule, SinglePromptChat, HiveConfiguration
 from ...mqtt.robot_data import RobotData
 import os
 

@@ -56,6 +56,12 @@ class RobotData:
             self._robot_map[robot_id] = {}
         return needed
     
+    def device_online(self, robot_id):
+        return robot_id in self._robot_map
+    
+    def connected_list(self):
+        return list(self._robot_map.keys())
+    
     def init_from_db(self, robot_id):
         device, created = MoxieDevice.objects.get_or_create(device_id=robot_id)
         if created:

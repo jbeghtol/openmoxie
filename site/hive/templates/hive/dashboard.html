@@ -1,11 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="p-3">
 <h2>Devices</h2>
 <a class="btn btn-primary btn-sm" role="button" href="{% url 'hive:endpoint_qr' %}">Migration QR Code</a>
 <table class="table table-striped">
-  <tr><th>Moxie Devices</th><th>Permission</th><th>Schedule</th></tr>
+  <tr><th>Status</th><th>Moxie Devices</th><th>Schedule</th></tr>
   {% for device in recent_devices %}
-  <tr><td>{{device.device_id}}</td><td>{{device.permit}}</td><td>{{device.schedule}}</td></tr>
+  <tr><td>
+    {% if device.device_id in live %}
+    <span class="badge text-bg-success">Online</span>
+    {% else %}
+    <span class="badge text-bg-secondary">Offline</span>
+    {% endif %}
+  </td><td><a href="{% url 'hive:moxie' device.pk %}">{{device}}</a></td><td>{{device.schedule}}</td></tr>
   {% endfor %}
 </table>
 <br>
@@ -24,4 +31,5 @@
   <tr><td>{{s.module_id}}</td><td>{{s.content_id}}</td><td><a href="{% url 'hive:interact' s.pk %}">Interact</a></td></tr>
   {% endfor %}
 </table>
+</div>
 {% endblock %}

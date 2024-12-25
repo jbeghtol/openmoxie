@@ -6,6 +6,7 @@ import re
 import logging
 import base64
 import ssl
+import openai
 from datetime import datetime, timedelta, timezone
 from .robot_credentials import RobotCredentials
 from .robot_data import RobotData
@@ -15,7 +16,7 @@ from .protos.embodied.logging.Log_pb2 import ProtoSubscribe
 from .protos.embodied.logging.Cloud2_pb2 import ServiceConfiguration2
 from .protos.embodied.wifiapp.QRCommands_pb2 import QRCommand
 from .zmq_stt_handler import STTHandler
-
+from ..models import HiveConfiguration
 
 _BASIC_FORMAT = '{1}'
 _MOXIE_SERVICE_INSTANCE = None
@@ -60,6 +61,7 @@ class MoxieServer:
         self._connect_pattern = r"connected from (.*) as (d_[a-f0-9-]+)"
         self._disconnect_pattern = r"Client (d_[a-f0-9-]+) (closed its connection|disconnected)"
         self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=5)
+        self.update_from_database()
 
     def connect(self, start = False):
         jwt_token = self._robot.create_jwt(self._mqtt_project_id)
@@ -109,11 +111,11 @@ class MoxieServer:
         elif fromdevice == "clients":
             self.on_client_metrics(basetype, msg)
         elif fromdevice == "log":
-            self.on_log_message(basetype, msg)
+            self.on_sys_log_message(basetype, msg)
         else:
             logger.debug(f"Rx UNK topic: {dec}")
 
-    def on_log_message(self, basetype, msg):
+    def on_sys_log_message(self, basetype, msg):
         if basetype == "N": # Notifications
             line = msg.payload.decode('utf-8')
             match = re.search(self._connect_pattern, line)
@@ -243,13 +245,20 @@ class MoxieServer:
     
     def remote_chat(self):
         return self._remote_chat
-    
-    def get_endpoint_qr_base64(self):
+
+    def robot_data(self):
+        return self._robot_data
+
+    def update_from_database(self):
+        hive_config = HiveConfiguration.objects.filter(name="default").first()
+        openai.api_key = hive_config.openai_api_key if hive_config else None
+        self._remote_chat.update_from_database()
+
+    def get_endpoint_qr_data(self):
+        hiveconfig = HiveConfiguration.objects.filter(name="default").first()
         scfg = ServiceConfiguration2()
         scfg.gcp_project = self._mqtt_project_id
-        scfg.mqtt_host = self._mqtt_endpoint
-        # Currently not aren't supporting any direct web services
-        #scfg.webservice_root = "https://moxie.duranaki.com"
+        scfg.mqtt_host = hiveconfig.external_host if hiveconfig and hiveconfig.external_host else self._mqtt_endpoint
         scfg.override_port = self._port
         scfg.disable_verify = not self._cert_required
         # Serialize to bytes, then bytes to base64 string
@@ -257,7 +266,7 @@ class MoxieServer:
         # Now make QR debug object, just in JSON
         qr = { "debug": { "command": "om", "param": scfg_base64}}
         return json.dumps(qr)
-    
+
 def cleanup_instance():
     global _MOXIE_SERVICE_INSTANCE
     if _MOXIE_SERVICE_INSTANCE:
