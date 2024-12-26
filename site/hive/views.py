@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 from django.views import generic
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
@@ -27,6 +28,12 @@ def root_view(request):
 class SetupView(generic.TemplateView):
     template_name = "hive/setup.html"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        User = get_user_model()
+        context['needs_admin'] = not User.objects.filter(is_superuser=True).exists()
+        return context
+
 @require_http_methods(["POST"])
 def hive_configure(request):
     cfg, created = HiveConfiguration.objects.get_or_create(name='default')
@@ -34,6 +41,18 @@ def hive_configure(request):
     cfg.external_host = request.POST['hostname']
     cfg.allow_unverified_bots = request.POST.get('allowall') == "on"
     cfg.save()
+
+    # Create Admin User if data exists and we dont have one
+    User = get_user_model()
+    if not User.objects.filter(is_superuser=True).exists():
+        admin = request.POST.get("admin")
+        adminPassword = request.POST.get("adminPassword")
+        if admin and adminPassword:
+            User.objects.create_superuser(admin, None, adminPassword)
+            logger.info(f"Created superuser '{admin}'")
+        else:
+            logger.warn(f"Couldn't create missing superuser")
+
     logger.info("Updated default Hive Configuration")
     # reload any cached db objects
     get_instance().update_from_database()

@@ -1,6 +1,7 @@
 from openai import OpenAI
 import copy
 import concurrent.futures
+from .ai_factory import create_openai
 from ..models import SinglePromptChat
 from ..automarkup import process as automarkup_process
 from ..automarkup import initialize_rules as automarkup_initialize_rules
@@ -90,7 +91,7 @@ class SingleContextChatSession(ChatSession):
             history = copy.deepcopy(self._history)
             self.add_history('user', speech, history)
         try:
-            client = OpenAI()
+            client = create_openai()
             resp = client.chat.completions.create(
                         model=self._model,
                         messages=self._context + history,

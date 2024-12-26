@@ -49,7 +49,6 @@ class MoxieLogs(models.Model):
     tag = models.CharField(max_length=80)
     message = models.TextField()
 
-
 class HiveConfiguration(models.Model):
     name = models.CharField(max_length=200)
     openai_api_key = models.TextField(null=True, blank=True, default='')
@@ -58,3 +57,22 @@ class HiveConfiguration(models.Model):
 
     def __str__(self):
         return self.name
+
+class MentorBehavior(models.Model):
+    device = models.ForeignKey(MoxieDevice, on_delete=models.CASCADE)
+    # Fields for MBH
+    module_id = models.CharField(max_length=80, null=True, blank=True)
+    content_id = models.CharField(max_length=80, null=True, blank=True)
+    content_day = models.CharField(max_length=80, null=True, blank=True)
+    timestamp = models.BigIntegerField()
+    action = models.CharField(max_length=80, null=True, blank=True)
+    instance_id = models.BigIntegerField()
+    ended_reason = models.CharField(max_length=80, null=True, blank=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['device', 'timestamp'], name='device_timestamp_idx'),
+        ]
+
+    def __str__(self):
+        return f'{self.timestamp}-{self.device}/{self.module_id}-{self.action}'

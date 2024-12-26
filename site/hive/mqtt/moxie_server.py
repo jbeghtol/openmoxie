@@ -8,6 +8,7 @@ import base64
 import ssl
 import openai
 from datetime import datetime, timedelta, timezone
+from .ai_factory import set_openai_key
 from .robot_credentials import RobotCredentials
 from .robot_data import RobotData
 from .moxie_remote_chat import RemoteChat
@@ -20,11 +21,13 @@ from ..models import HiveConfiguration
 
 _BASIC_FORMAT = '{1}'
 _MOXIE_SERVICE_INSTANCE = None
+_OPENAI_APIKEY=None
 
 def now_ms():
     return time.time_ns() // 1_000_000
 
 logger = logging.getLogger(__name__)
+
 
 class MoxieServer:
     _robot : any
@@ -148,6 +151,7 @@ class MoxieServer:
                 # REMOTE CHAT CONVERSATION ENDPOINT
                 self._remote_chat.handle_request(device_id, rcr)
         elif eventname == "client-service-activity-log":
+            # Topic originally for reporting activities, but extended with subtopics
             csa = json.loads(msg.payload)
             if csa.get("subtopic") == "query":
                 if csa.get("query") == "schedule":
@@ -157,11 +161,14 @@ class MoxieServer:
                     schedule = self._robot_data.get_schedule(device_id)
                     self.send_command_to_bot_json(device_id, 'query_result', { 'command': 'query_result', 'request_id': req_id, 'schedule': schedule} )
                 elif csa.get("query") == "mentor_behaviors":
-                    # MENTOR BEHAVIOR REQUEST
+                    # MENTOR BEHAVIOR REQUEST - Robot asking what user has done before
                     logger.debug("Rx MBH request.")
                     req_id = csa.get('request_id')
-                    mbh = self._robot_data.get_mbh(device_id)
-                    self.send_command_to_bot_json(device_id, 'query_result', { 'command': 'query_result', 'request_id': req_id, 'mentor_behaviors': mbh} )
+                    self._worker_queue.submit(self.provide_mentor_behaviors, req_id, device_id)
+            elif 'mentor_behavior' in csa:
+                # MENTOR BEHAVIOR REPORT - Robot informing what user has done
+                self._worker_queue.submit(self.ingest_mentor_behavior, device_id, csa['mentor_behavior'])
+
         elif eventname == "zmq":
             # ZMQ BRIDGE INCOMING
             colon_index = msg.payload.find(b':')
@@ -176,6 +183,16 @@ class MoxieServer:
             # These are per-client log messages
             logrec = json.loads(msg.payload)
             logger.debug(f'{device_id}[{logrec["tag"]}] - {logrec["message"]}')
+
+    # NOTE: Called from worker thread pool
+    def ingest_mentor_behavior(self, device_id, mbh):
+        self._robot_data.add_mbh(device_id, mbh)
+
+    # NOTE: Called from worker thread pool
+    def provide_mentor_behaviors(self, req_id, device_id):
+        mbh = self._robot_data.get_mbh(device_id)
+        logger.info(f'Providing {len(mbh)} MBH records to {device_id}')
+        self.send_command_to_bot_json(device_id, 'query_result', { 'command': 'query_result', 'request_id': req_id, 'mentor_behaviors': mbh} )
 
     # NOTE: Called from worker thread pool
     def on_device_connect(self, device_id, connected, ip_addr=None):
@@ -251,7 +268,7 @@ class MoxieServer:
 
     def update_from_database(self):
         hive_config = HiveConfiguration.objects.filter(name="default").first()
-        openai.api_key = hive_config.openai_api_key if hive_config else None
+        set_openai_key(hive_config.openai_api_key if hive_config else None)
         self._remote_chat.update_from_database()
 
     def get_endpoint_qr_data(self):

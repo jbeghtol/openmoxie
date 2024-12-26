@@ -97,7 +97,7 @@ DATABASES = {
 }
 
 MQTT_ENDPOINT = {
-    'host': 'mosquitto',
+    'host': 'duranaki.com',
     'port': 8883,
     'project': 'openmoxie',
     'cert_required': False,

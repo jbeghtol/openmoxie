@@ -2,8 +2,9 @@ import json
 import logging
 from django.db import connections
 from django.db import transaction
-from ..models import MoxieDevice, MoxieSchedule
+from ..models import MoxieDevice, MoxieSchedule, MentorBehavior
 from django.conf import settings
+from django.forms.models import model_to_dict
 
 root_path = settings.BASE_DIR
 
@@ -12,8 +13,7 @@ logger = logging.getLogger(__name__)
 def run_db_atomic(functor, *args, **kwargs):
     with connections['default'].cursor() as cursor:
         with transaction.atomic():
-            functor(*args, **kwargs)
-            pass
+            return functor(*args, **kwargs)
 
 DEFAULT_ROBOT_CONFIG = { 
   "paired_status": "paired",
@@ -85,9 +85,26 @@ class RobotData:
         logger.info(f'Providing config {cfg} to {robot_id}')
         return cfg
 
+    def extract_mbh_atomic(self, robot_id):
+        device = MoxieDevice.objects.get(device_id=robot_id)
+        mbh_list = []
+        for mbh in MentorBehavior.objects.filter(device=device).order_by('timestamp'):
+            mbh_list.append(model_to_dict(mbh, exclude=['device']))
+        return mbh_list
+
+    def insert_mbh_atomic(self, robot_id, mbh):
+        device = MoxieDevice.objects.get(device_id=robot_id)
+        rec = MentorBehavior(device=device)
+        rec.__dict__.update(mbh)
+        rec.save()
+
+    def add_mbh(self, robot_id, mbh):
+        run_db_atomic(self.insert_mbh_atomic, robot_id, mbh)
+
     def get_mbh(self, robot_id):
-        robot_rec = self._robot_map.get(robot_id, {})
-        return robot_rec.get("mentor_behaviors", DEFAULT_MBH)
+        return run_db_atomic(self.extract_mbh_atomic, robot_id)
+        # robot_rec = self._robot_map.get(robot_id, {})
+        # return robot_rec.get("mentor_behaviors", DEFAULT_MBH)
 
     def get_schedule(self, robot_id):
         robot_rec = self._robot_map.get(robot_id, {})

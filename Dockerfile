@@ -8,7 +8,7 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install Mosquitto MQTT service and other dependencies
+# PIP for installing python dep
 RUN apt-get update && apt-get install -y \
     python3-pip \
     python3-dev
@@ -22,10 +22,6 @@ VOLUME /app/site/work
 
 # Expose the Mosquitto MQTT port and Django development server port
 EXPOSE 8000
-
-ENV DJANGO_SUPERUSER_USERNAME=admin
-ENV DJANGO_SUPERUSER_PASSWORD=moxie4ever
-ENV DJANGO_SUPERUSER_EMAIL=admin@example.com
 
 # Run Django development server
 # - Does data migrations and ensure stock data available, then runs the service

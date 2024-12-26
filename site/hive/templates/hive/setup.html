@@ -41,6 +41,21 @@
       <input type="text" class="form-control" name="hostname" id="hostname" aria-describedby="hostnameHelp" placeholder="Enter computer name">
       <div id="hostnameHelp" class="form-text text-light">The local network name of this computer, either your computer name or LAN network address.</div>
     </div>
+    {% if needs_admin %}
+    <h3>Database Administrator</h3>
+    <div class="row mb-3">
+      <label for="adminUser" class="col-sm-2 col-form-label">Admin User</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="adminUser" name="adminUser" value="admin">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="inputPassword3" class="col-sm-2 col-form-label">Admin Password</label>
+      <div class="col-sm-10">
+        <input type="password" class="form-control" id="inputPassword3" name="adminPassword">
+      </div>
+    </div>
+    {% endif %}
 <!--
     <div class="mb-3 form-check">
       <input type="checkbox" class="form-check-input" name="allowall" id="allowall" aria-describedby="allowHelp">

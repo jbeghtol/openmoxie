@@ -6,7 +6,7 @@ import io
 import time
 import logging
 import concurrent.futures
-from openai import OpenAI
+from .ai_factory import create_openai
 
 LOG_WAV=False
 OPENAI_MODEL='whisper-1'
@@ -49,7 +49,7 @@ class STTSession:
         resp.timestamp = now_ms()
 
         try:
-            client = OpenAI()
+            client = create_openai()
             transcript = client.audio.transcriptions.create(
                 file=('test.wav', wav_bytes),
                 model=OPENAI_MODEL,
