@@ -19,6 +19,14 @@ Currently this project contains the following:
 * This project needs an external MQTT broker.  This is currently based on mosquitto MQTT service.
 * STT and chat inferences are serviced through OpenAI.  You must export a valid OPENAI_API_KEY into your environment before running
 
+# Running your own - DOCKER edition
+
+1. Clone project
+2. Install docker
+3. run `docker-compose up --build -d`
+4. Visit http://localhost:8001/hive
+5. Depending on your PC firewall, expose port 8883
+
 # Running your own instance
 
 1. Clone project
@@ -45,7 +53,7 @@ python3 site/manage.py init_data
 7. Edit `site\openmoxie\settings.py` and edit this block with your own MQTT host
 ```
 MQTT_ENDPOINT = {
-    'host': 'duranaki.com',
+    'host': 'HOSTHERE',
     'port': 8883,
     'project': 'openmoxie',
     'cert_required': True,

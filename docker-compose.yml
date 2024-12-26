@@ -1,9 +1,10 @@
+
 services:
 
   mosquitto:
     image: eclipse-mosquitto:latest
     ports:
-      - "1883:8883"
+      - "8883:8883"
     volumes:
       - ./site/data/openmoxie.conf:/mosquitto/config/mosquitto.conf
       - ./local/work:/mosquitto/log
