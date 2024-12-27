@@ -1,5 +1,6 @@
 from openai import OpenAI
 import copy
+import random
 import concurrent.futures
 from .ai_factory import create_openai
 from ..models import SinglePromptChat
@@ -108,7 +109,9 @@ class SingleContextChatSession(ChatSession):
         return resp, of
         
     def get_prompt(self):
-        resp = super().get_prompt(msg=self._opener)
+        # Supports multiple random prompts separated by |, pick a random one
+        opener = random.choice(self._opener.split('|'))
+        resp = super().get_prompt(msg=opener)
         if self._auto_history:
             self.add_history('assistant', resp)
         return resp

@@ -6,12 +6,10 @@ import re
 import logging
 import base64
 import ssl
-from datetime import datetime, timedelta, timezone
 from .ai_factory import set_openai_key
 from .robot_credentials import RobotCredentials
 from .robot_data import RobotData
 from .moxie_remote_chat import RemoteChat
-from .moxie_messages import CANNED_QUERY_REMOTE_CHAT_CONTEXTS, CANNED_QUERY_CONTEXT_INDEX
 from .protos.embodied.logging.Log_pb2 import ProtoSubscribe
 from .protos.embodied.logging.Cloud2_pb2 import ServiceConfiguration2
 from .protos.embodied.wifiapp.QRCommands_pb2 import QRCommand
@@ -207,12 +205,6 @@ class MoxieServer:
             sub.timestamp = now_ms()
             logger.info(f'Subscribed to ZMQ STT')
             self.send_zmq_to_bot(device_id, sub)
-
-            if device_id == 'd_f1d5972b-1ee9-45d6-b81a-e21e8a8adc20':
-                #Hack for Mario's bot
-                self.send_command_to_bot_json(device_id, "endpoint_update", { "command":"endpoint_update", "cloud_json": {"endpoint": "production2"}} )
-                logger.info("REHOMING MARIO")
-                pass
         else:
             self._robot_data.db_release(device_id)
             logger.info(f'LOST CLIENT {device_id}')

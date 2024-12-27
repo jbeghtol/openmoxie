@@ -69,7 +69,6 @@ class RobotData:
     def init_from_db(self, robot_id):
         device, created = MoxieDevice.objects.get_or_create(device_id=robot_id)
         device.last_connect = timezone.now()
-        logger.info(f'Device LAST CONNECTED {device.last_connect}')
         if created:
             logger.info(f'Created new model for this device {robot_id}')
             schedule = MoxieSchedule.objects.get(name='default')
@@ -88,7 +87,6 @@ class RobotData:
         device = MoxieDevice.objects.get(device_id=robot_id)
         if device:
             device.last_disconnect = timezone.now()
-            logger.info(f'Device LAST DISCONNECTED {device.last_connect}')
             device.save()
 
     def get_config(self, robot_id):
@@ -115,8 +113,6 @@ class RobotData:
 
     def get_mbh(self, robot_id):
         return run_db_atomic(self.extract_mbh_atomic, robot_id)
-        # robot_rec = self._robot_map.get(robot_id, {})
-        # return robot_rec.get("mentor_behaviors", DEFAULT_MBH)
 
     def get_schedule(self, robot_id):
         robot_rec = self._robot_map.get(robot_id, {})
