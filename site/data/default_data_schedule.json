@@ -1,17 +1,37 @@
 {
     "provided_schedule": [
         {
-        "module_id": "OPENMOXIE_CHAT",
-        "content_id": "default"
+          "module_id": "ENROLLCONVO"
         },
         {
-        "module_id": "AB"
+          "module_id": "EVENTSANDHOLIDAYS"
         },
         {
-        "module_id": "OPENMOXIE_CHAT",
-        "content_id": "default"
-        }
+          "module_id": "TNT"
+        },
+        {
+          "module_id": "SYSTEMSCHECK"
+        },
+        {
+          "module_id": "OPENMOXIE_CHAT",
+          "content_id": "short"
+        },
+        {
+          "module_id": "DM"
+        }       
     ],
+    "generate": {
+      "chat_count": 2,
+      "module_count": 6,
+      "chat_modules": [ 
+        {
+          "module_id": "OPENMOXIE_CHAT",
+          "content_id": "short"
+        }
+      ],
+      "extra_modules": [],
+      "excluded_module_ids": []
+    },
     "chat_request":
     {
       "module_id": "OPENMOXIE_CHAT",

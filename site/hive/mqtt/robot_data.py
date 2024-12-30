@@ -7,6 +7,7 @@ from ..models import MoxieDevice, MoxieSchedule, MentorBehavior
 from django.conf import settings
 from django.forms.models import model_to_dict
 from django.utils import timezone
+from .scheduler import expand_schedule
 
 root_path = settings.BASE_DIR
 
@@ -21,7 +22,11 @@ DEFAULT_ROBOT_CONFIG = {
   "pairing_status": "paired",
   "audio_volume": "0.6",
   "screen_brightness": "1.0",
-  "audio_wake_set": "off"
+  "audio_wake_set": "off",
+  "child_pii": {
+      "nickname": "Pat",
+      "input_speed": 0.0
+  }
 }
 
 DEFAULT_MBH = []
@@ -95,6 +100,12 @@ class RobotData:
         logger.info(f'Providing config {cfg} to {robot_id}')
         return cfg
 
+    def put_state(self, robot_id, state):
+        rec = self._robot_map.get(robot_id)
+        if rec:
+            # only add to a non-empty (initialized) record
+            rec["state"] = state
+
     def extract_mbh_atomic(self, robot_id):
         device = MoxieDevice.objects.get(device_id=robot_id)
         mbh_list = []
@@ -117,6 +128,8 @@ class RobotData:
     def get_schedule(self, robot_id):
         robot_rec = self._robot_map.get(robot_id, {})
         s = robot_rec.get("schedule", DEFAULT_SCHEDULE)
+        # do any custom schedule automatic generation
+        s = expand_schedule(s, robot_id)
         logger.info(f'Providing schedule {s} to {robot_id}')
         return s
 

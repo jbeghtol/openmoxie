@@ -101,19 +101,23 @@ class MoxieServer:
             ch(self, rc) 
 
     def on_message(self, client, userdata, msg):
-        dec = msg.topic.split('/')
-        fromdevice = dec[2]
-        basetype = dec[3]
-        if basetype == "events":
-            self.on_device_event(fromdevice, dec[4], msg)
-        elif basetype == "state":
-            self.on_device_state(fromdevice, msg)
-        elif fromdevice == "clients":
-            self.on_client_metrics(basetype, msg)
-        elif fromdevice == "log":
-            self.on_sys_log_message(basetype, msg)
-        else:
-            logger.debug(f"Rx UNK topic: {dec}")
+        try:
+            dec = msg.topic.split('/')
+            fromdevice = dec[2]
+            basetype = dec[3]
+            if basetype == "events":
+                self.on_device_event(fromdevice, dec[4], msg)
+            elif basetype == "state":
+                self.on_device_state(fromdevice, msg)
+            elif fromdevice == "clients":
+                self.on_client_metrics(basetype, msg)
+            elif fromdevice == "log":
+                self.on_sys_log_message(basetype, msg)
+            else:
+                logger.debug(f"Rx UNK topic: {dec}")
+        except Exception as e:
+            logger.warning(f"Error handling mqtt messsage: {e}")
+    
 
     def on_sys_log_message(self, basetype, msg):
         if basetype == "N": # Notifications
@@ -152,11 +156,10 @@ class MoxieServer:
             csa = json.loads(msg.payload)
             if csa.get("subtopic") == "query":
                 if csa.get("query") == "schedule":
-                    # SCHEDULE REQUEST
+                    # SCHEDULE REQUEST - Robot asking what schedule to follow this session
                     logger.debug("Rx Schedule request.")
                     req_id = csa.get('request_id')
-                    schedule = self._robot_data.get_schedule(device_id)
-                    self.send_command_to_bot_json(device_id, 'query_result', { 'command': 'query_result', 'request_id': req_id, 'schedule': schedule} )
+                    self._worker_queue.submit(self.provide_schedule, req_id, device_id)
                 elif csa.get("query") == "mentor_behaviors":
                     # MENTOR BEHAVIOR REQUEST - Robot asking what user has done before
                     logger.debug("Rx MBH request.")
@@ -179,7 +182,12 @@ class MoxieServer:
         elif eventname == "device-logs":
             # These are per-client log messages
             logrec = json.loads(msg.payload)
-            logger.debug(f'{device_id}[{logrec["tag"]}] - {logrec["message"]}')
+            logger.debug(f'{device_id}[{logrec.get("tag")}] - {logrec.get("message")}')
+
+    # NOTE: Called from worker thread pool
+    def provide_schedule(self, req_id, device_id):
+        schedule = self._robot_data.get_schedule(device_id)
+        self.send_command_to_bot_json(device_id, 'query_result', { 'command': 'query_result', 'request_id': req_id, 'schedule': schedule} )
 
     # NOTE: Called from worker thread pool
     def ingest_mentor_behavior(self, device_id, mbh):
@@ -195,9 +203,9 @@ class MoxieServer:
     def on_device_connect(self, device_id, connected, ip_addr=None):
         if connected:
             logger.info(f'NEW CLIENT {device_id} from {ip_addr}')
-            # Sleep to avoid sending sub before client is ready
-            time.sleep(1.0)
             self._robot_data.db_connect(device_id)
+            # Sleep to avoid sending sub/config before client is ready
+            time.sleep(1.0)
             self.send_config_to_bot_json(device_id, self._robot_data.get_config(device_id))
             # subscripe to ZMQ STT
             sub = ProtoSubscribe()
@@ -213,11 +221,12 @@ class MoxieServer:
     def check_device_connect(self, device_id, info="Missing"):
         if self._robot_data.connect_init_needed(device_id):
             logger.info(f"Unconnected robot {device_id} location {info}.  Connecting now.")
-            self._worker_queue.submit(self.on_device_connect, device_id, True, "State")
+            self._worker_queue.submit(self.on_device_connect, device_id, True, info)
 
     def on_device_state(self, device_id, msg):
-        logger.debug("Rx STATE topic: " + msg.payload.decode('utf-8'))
+        logger.debug(f"Rx STATE topic for device {device_id}")
         self.check_device_connect(device_id, "State")
+        self._robot_data.put_state(device_id, json.loads(msg.payload))
 
     def send_config_to_bot_json(self, device_id, payload: dict):
         self._client.publish(f"/devices/{device_id}/config", payload=json.dumps(payload))

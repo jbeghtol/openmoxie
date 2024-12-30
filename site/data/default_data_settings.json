@@ -5,7 +5,7 @@
       "doa_range": "80",
       "target_all": "1",
       "gcp_upload_disable": "1",
-      "local_stt": "off",
+      "local_stt": "on",
       "max_enroll": "0",
       "audio_wake": "1",
       "audio_wake_set": "off",
