@@ -40,6 +40,10 @@ class MoxieDevice(models.Model):
     name = models.CharField(max_length=200, null=True, blank=True)
     last_connect = models.DateTimeField(null=True, blank=True)
     last_disconnect = models.DateTimeField(null=True, blank=True)
+    state = models.JSONField(null=True, blank=True)
+    state_updated = models.DateTimeField(null=True, blank=True)
+    robot_config = models.JSONField(null=True, blank=True)
+    robot_settings = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return self.name if self.name else self.device_id
@@ -56,6 +60,9 @@ class HiveConfiguration(models.Model):
     openai_api_key = models.TextField(null=True, blank=True, default='')
     external_host = models.CharField(max_length=255, null=True, blank=True, default='')
     allow_unverified_bots = models.BooleanField(default=False)
+    google_api_key = models.TextField(null=True, blank=True, default='')
+    common_config = models.JSONField(null=True, blank=True)
+    common_settings = models.JSONField(null=True, blank=True)
 
     def __str__(self):
         return self.name

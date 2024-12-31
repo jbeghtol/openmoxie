@@ -32,12 +32,20 @@ class SetupView(generic.TemplateView):
         context = super().get_context_data(**kwargs)
         User = get_user_model()
         context['needs_admin'] = not User.objects.filter(is_superuser=True).exists()
+        curr_cfg = HiveConfiguration.objects.filter(name='default').first()
+        if curr_cfg:
+            context['object'] = curr_cfg
         return context
 
 @require_http_methods(["POST"])
 def hive_configure(request):
     cfg, created = HiveConfiguration.objects.get_or_create(name='default')
-    cfg.openai_api_key =  request.POST['apikey']
+    openai = request.POST['apikey']
+    if openai:
+        cfg.openai_api_key = openai
+    google = request.POST['googleapikey']
+    if google:
+        cfg.google_api_key = google
     cfg.external_host = request.POST['hostname']
     cfg.allow_unverified_bots = request.POST.get('allowall') == "on"
     cfg.save()
