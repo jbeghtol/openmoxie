@@ -4,24 +4,29 @@
 <h1>Welcome to OpenMoxie!</h1>
 <p>
     The OpenMoxie service allows this computer to act as a replacement for Moxie's cloud infrastructure.
-    There are a few requirements to setup before you can use this with your Moxie.  The primary requirement
-    is your own personal API key from OpenAI.
 </p>
-<p>
-    This API key will be used for:
-    <ul>
-        <li>Speech to Text - Using OpenAI's Whisper model</li>
-        <li>OpenAI Chat Inferences - Using one of OpenAI's conversational models</li>
-    </ul>
-    These services are not free and you will be responsible for managing your OpenAI account to ensure
-    it has sufficient credits, however Whisper is very inexpensive and the default conversational model
-    (3.5 turbo) is a very economical model.
-</p>
-<div class="alert alert-warning">
-  This implementation has minimal security and should always be operated on a LAN behind a firewall that protects
-  ports 8883 and 8001 from the Internet.
+<div class="half text-bg-danger p-3">
+  <p>
+    <strong>Please read carefully!</strong> This implementation has minimal security and should always be operated on a LAN behind a firewall that protects
+  ports <strong>8883</strong> and <strong>8001</strong> from the Internet.  API keys and service accounts are stored
+  unencrypted in the host file system.
+  </p>
+  <ul>
+    <li>Once you add API keys, devices connecting to port <strong>8001</strong> will
+  be able to perform chat inferences to OpenAI that will incur charges.</li>
+    <li>Devices connected on port <strong>8883</strong> will be able to perform chat inferences and use Speech-to-Text services that will incur charges.</li>
+    <li>If you connect a Google Service Account Key, the key itself will be shared with devices connecting on port <strong>8883</strong>.</li>
+  </ul>
 </div>
-<h3>Getting Your Own API Key</h3>
+<p></p>
+<h3>Getting Your Own OpenAI API Key</h3>
+<p>
+  There are a few requirements to setup before you can use this with your Moxie.  The primary requirement
+  is your own personal API key from OpenAI to use for Moxie Chat and the default Speech-to-Text processing.
+  These services are not free and you will be responsible for managing your OpenAI account to ensure
+  it has sufficient credits, however Whisper is very inexpensive and the default conversational model
+  (3.5 turbo) is a very economical model.
+</p>
 <p>
     You will need to visit OpenAI's website, create an account, add your credit card, and purchase some credits.  We recommend
     starting with a small amount such as $10 and keeping an eye on your usage until you understand the costs, though they are typically modest.
@@ -32,6 +37,16 @@
     Next, travel to the <a class="link-light" href="https://platform.openai.com/settings/organization/api-keys">OpenAI API Keys</a> to create a unique
     API key for use with Open Moxie.  Give it a nice name like "Moxie Services" and save the API key to paste into the form below.
 </p>
+<h3>Using Google Speech Instead</h3>
+<p>
+  OpenMoxie is configured to use OpenAI Whisper for Speech-to-Text by default for simplicity and lower cost, but Google Speech is more
+  responsive and generally works better with Moxie's internal speech processing.  Google also offers free credits when you sign-up.
+  If you would rather use Google for Speech-to-Text services
+  you can include a service account key with permissions to use Google Speech here.  This key will be provided to Moxie and used if you
+  set <kbd>"stt": "0"</kbd> in the robot settings.  Visit <a class="link-light" href="https://cloud.google.com/">Google Cloud Platform</a> for details
+  on Google's offering.
+</p>
+<hr>
 <h1>Configuration</h1>
 <form id="hive_edit" action="{% url 'hive:hive_configure' %}" method="post">
     {% csrf_token %}
@@ -42,15 +57,6 @@
     </div>
     <div class="mb-3">
       <label for="googleapikey" class="form-label fw-bold fs-5">(OPTIONAL) Google Service Account Key</label>
-      <p>
-        OpenMoxie is configured to use OpenAI Whisper for Speech-to-Text by default for simplicity.  If you would rather use Google for Speech-to-Text services
-        you can include a service account key with permissions to use Google Speech here.  This key will be provided to Moxie and used if you
-        set <kbd>"stt": "0"</kbd> in the robot settings.  Visit <a class="link-light" href="https://cloud.google.com/">Google Cloud Platform</a> for details.
-      </p>
-      <div class="alert alert-warning">
-        Extra care should be taken when adding this key.  It is provided to remote clients (Moxies) for their direct use, making it
-        possible for a rogue agent on your network to steal this key.
-      </div>
       <input type="text" class="form-control" name="googleapikey" id="googleapikey" aria-describedby="googleapiHelp" placeholder="{% if object.google_api_key %}[Key exists and will be kept unless overridden.]{% else %}Paste Google Service Account key.{% endif %}">
       <div id="googleapiHelp" class="form-text text-light">
         This be be stored in your local database and provided to connecting Moxie.
