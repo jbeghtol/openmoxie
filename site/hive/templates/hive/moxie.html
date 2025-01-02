@@ -6,8 +6,14 @@
   <table class="table">
     <tr><th>Name</th><td>{{object.name}}</td></tr>
     <tr><th>Device ID</th><td>{{object.device_id}}</td></tr>
+    <tr><th>Mentor Name</th><td>{{active_config.child_pii.nickname}}</td></tr>
+    <tr><th>OTA Version</th><td>{{object.state.robot_firmware_version}}</td></tr>
     <tr><th>Last Connect</th><td>{{object.last_connect}}</td></tr>
     <tr><th>Last Disconnect</th><td>{{object.last_disconnect}}</td></tr>
+    <tr><th>Battery</th><td>{{object.state.battery_level}}</td></tr>
+    <tr><th>Screen Brightness</th><td>{{active_config.screen_brightness}}</td></tr>
+    <tr><th>Audio Volume</th><td>{{active_config.audio_volume}}</td></tr>
+    <tr><th>Mode</th><td>{{object.state.mode}}</td></tr>
   </table>
 </div>
 </div>

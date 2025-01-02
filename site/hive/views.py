@@ -7,12 +7,15 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse,HttpResponseRedirect
+from django.conf import settings
 import qrcode
 from PIL import Image
 from io import BytesIO
 
 from .models import SinglePromptChat, MoxieDevice, MoxieSchedule, HiveConfiguration
 from .mqtt.moxie_server import get_instance
+from .mqtt.robot_data import DEFAULT_ROBOT_CONFIG, DEFAULT_ROBOT_SETTINGS
+import json
 import uuid
 import logging
 
@@ -48,6 +51,11 @@ def hive_configure(request):
         cfg.google_api_key = google
     cfg.external_host = request.POST['hostname']
     cfg.allow_unverified_bots = request.POST.get('allowall') == "on"
+    # Bootstrap any default data if not present
+    if not cfg.common_config:
+        cfg.common_config = DEFAULT_ROBOT_CONFIG
+    if not cfg.common_settings:
+        cfg.common_settings = DEFAULT_ROBOT_SETTINGS
     cfg.save()
 
     # Create Admin User if data exists and we dont have one
@@ -114,3 +122,9 @@ def endpoint_qr(request):
 class MoxieView(generic.DetailView):
     template_name = "hive/moxie.html"
     model = MoxieDevice
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_config'] = get_instance().robot_data().get_config_for_device(self.object)
+        logger.info(f'ADDED ACTIVE CONFIG={context["active_config"]}')
+        return context

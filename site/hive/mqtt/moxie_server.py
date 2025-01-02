@@ -206,6 +206,10 @@ class MoxieServer:
         self._robot_data.add_mbh(device_id, mbh)
 
     # NOTE: Called from worker thread pool
+    def ingest_robot_state(self, device_id, statedata):
+        self._robot_data.put_state(device_id, statedata)
+
+    # NOTE: Called from worker thread pool
     def provide_mentor_behaviors(self, req_id, device_id):
         mbh = self._robot_data.get_mbh(device_id)
         logger.info(f'Providing {len(mbh)} MBH records to {device_id}')
@@ -238,7 +242,8 @@ class MoxieServer:
     def on_device_state(self, device_id, msg):
         logger.debug(f"Rx STATE topic for device {device_id}")
         self.check_device_connect(device_id, "State")
-        self._robot_data.put_state(device_id, json.loads(msg.payload))
+        self._worker_queue.submit(self.ingest_robot_state, device_id, json.loads(msg.payload))
+        #self._robot_data.put_state(device_id, json.loads(msg.payload))
 
     def send_config_to_bot_json(self, device_id, payload: dict):
         self._client.publish(f"/devices/{device_id}/config", payload=json.dumps(payload))

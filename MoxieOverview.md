@@ -11,8 +11,8 @@ Moxie follows this general life cycle in its software stack.
 1. Boot
 2. Wifi App (QR codes, wifi credentials, cloud connectivity/configuration check)
 3. Running (Sleep, In-session)
-4. Light Sleep
-5. Suspend
+4. Light Sleep (Screen off, network active)
+5. Suspend (Screen off, disconnected, suspended)
 
 Cloud connectivity is key to get past step 2.  And cloud connectivity means WiFi connected,
 connected to an MQTTS service that tells Moxie is ready and cleared for use. Without this

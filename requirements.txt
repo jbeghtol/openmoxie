@@ -12,3 +12,4 @@ django-bootstrap5
 qrcode
 Pillow
 unidecode
+deepmerge
