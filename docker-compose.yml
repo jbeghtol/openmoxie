@@ -1,15 +1,14 @@
 
 services:
 
-  mosquitto:
-    image: eclipse-mosquitto:latest
+  mqtt:
+    build:
+      context: ./
+      dockerfile: ./mqtt.Dockerfile
     ports:
       - "8883:8883"
     volumes:
-      - ./site/data/openmoxie.conf:/mosquitto/config/mosquitto.conf
       - ./local/work:/mosquitto/log
-      - ./keys:/mosquitto/config/keys
-    command: mosquitto -c /mosquitto/config/mosquitto.conf
 
   openmoxie:
     build: .
@@ -18,4 +17,4 @@ services:
     volumes:
       - ./local/work:/app/site/work
     depends_on:
-      - mosquitto
+      - mqtt
