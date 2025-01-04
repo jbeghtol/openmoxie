@@ -12,12 +12,12 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         rdata = RobotData()
         print("Initializing core database records.")
-        # Check that we have a default schedule
-        def_sched, created = MoxieSchedule.objects.get_or_create(name='default', schedule=rdata.get_schedule(robot_id='noid'))
-        if created:
-            print("Creating default schedule from json source.")
-        else:
+        try:
+            def_sched = MoxieSchedule.objects.get(name='default')
             print("Default schedule already exists.")
+        except MoxieSchedule.DoesNotExist:
+            print("No record with name 'default' found.  Creating...")
+            MoxieSchedule.objects.create(name='default', schedule=rdata.get_schedule(robot_id='noid', expand=False))
 
         # Default free form chat, with no volley limit - talk forever
         def_chat, created = SinglePromptChat.objects.get_or_create(module_id='OPENMOXIE_CHAT', content_id='default')

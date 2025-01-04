@@ -126,5 +126,28 @@ class MoxieView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['active_config'] = get_instance().robot_data().get_config_for_device(self.object)
-        logger.info(f'ADDED ACTIVE CONFIG={context["active_config"]}')
+        context['schedules'] = MoxieSchedule.objects.all()
         return context
+    
+@require_http_methods(["POST"])
+def moxie_edit(request, pk):
+    logger.info(f'POST -> {request.POST}')
+    try:
+        device = MoxieDevice.objects.get(pk=pk)
+        # changes to base model
+        device.name = request.POST["moxie_name"]
+        device.schedule = MoxieSchedule.objects.get(pk=request.POST["schedule"])
+        # changes to json field inside config
+        if device.robot_config == None:
+           # robot_config optional, create a new one to hold these
+           device.robot_config = {}
+        device.robot_config["screen_brightness"] = float(request.POST["screen_brightness"])
+        device.robot_config["audio_volume"] = float(request.POST["audio_volume"])
+        if "child_pii" in device.robot_config:
+            device.robot_config["child_pii"]["nickname"] = request.POST["nickname"]
+        else:
+            device.robot_config["child_pii"] = { "nickname": request.POST["nickname"] }
+        device.save()
+    except MoxieDevice.DoesNotExist as e:
+        logger.warning("Moxie update for unfound pk {pk}")
+    return HttpResponseRedirect(reverse("hive:dashboard"))

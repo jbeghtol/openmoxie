@@ -25,7 +25,17 @@ def now_ms():
 
 logger = logging.getLogger(__name__)
 
+'''
+MoxieServer provides cloud services to client Moxies.  Because this is MQTT, services are
+provided using TOPICS.  With the exception of the ZMQ, all topics communicate using JSON
+message paylods.  Moxie Server notably:
+- Subscribes to the event, state, and log topics produced by ALL moxie devices
+- Sends responses to device command topics to provide services and control Moxies
 
+As implemented there is a singleton MoxieService created using the instance creation method
+near the end of this file.  It connects to the MQTT broker, which cooredinates all exchanges
+of topics between Moxie's and MoxieServer.
+'''
 class MoxieServer:
     _robot : any
     _remote_chat : any
@@ -44,7 +54,6 @@ class MoxieServer:
         self._mqtt_endpoint = mqtt_host
         self._port = mqtt_port
         self._cert_required = cert_required
-        #self._mqtt_client_id = _IOT_CLIENT_ID_FORMAT.format(self._mqtt_project_id, self._robot.device_id)
         self._mqtt_client_id = _BASIC_FORMAT.format(self._mqtt_project_id, self._robot.device_id)
         logger.info(f"Creating client with id: {self._mqtt_client_id}")
         self._client = mqtt.Client(client_id=self._mqtt_client_id, transport="tcp")
@@ -218,7 +227,7 @@ class MoxieServer:
     # NOTE: Called from worker thread pool
     def on_device_connect(self, device_id, connected, ip_addr=None):
         if connected:
-            logger.info(f'NEW CLIENT {device_id} from {ip_addr}')
+            logger.info(f'Moxie CONNECTED {device_id} from {ip_addr}')
             self._robot_data.db_connect(device_id)
             # Sleep to avoid sending sub/config before client is ready
             time.sleep(1.0)
@@ -227,11 +236,11 @@ class MoxieServer:
             sub = ProtoSubscribe()
             sub.protos.append('embodied.perception.audio.zmqSTTRequest')
             sub.timestamp = now_ms()
-            logger.info(f'Subscribed to ZMQ STT')
+            logger.debug(f'Subscribed to ZMQ STT')
             self.send_zmq_to_bot(device_id, sub)
         else:
             self._robot_data.db_release(device_id)
-            logger.info(f'LOST CLIENT {device_id}')
+            logger.info(f'Moxie DISCONNECTED {device_id}')
 
     # Fallback, we missed the connect message but robot is connected
     def check_device_connect(self, device_id, info="Missing"):

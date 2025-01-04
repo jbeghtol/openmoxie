@@ -37,8 +37,10 @@ _RECOMMENDABLE_MODULES = [
 _TNT_CIDS = 9
 _SYSTEMSCHECK_CIDS = 4
 
-# Quick and dirty auto-scheduler; attempts to pick a random set of modules avoiding adjacencies
-# and preferring a broad range of categories
+'''
+Quick and dirty auto-scheduler; attempts to pick a random set of modules avoiding adjacencies
+and preferring a broad range of categories
+'''
 def ransac_select(modules, count):
     count = len(modules) if count > len(modules) else count
     best_list = []
@@ -66,6 +68,7 @@ def ransac_select(modules, count):
 
     return best_list
 
+# mix list2 elements into list1
 def distribute_elements(list2, list1):
     # swap lists so list2 is always larger
     if len(list1) > len(list2):
@@ -78,9 +81,11 @@ def distribute_elements(list2, list1):
         offset += gap + 1
     return result
 
-# A bit hokey, but these "training" (first time user experience) modules have content IDs in order but
-# the robot internal scheduler switches to a random cid once they exhaust, so they have to be removed
-# or TNT and SYSTEMSCHECK will still be in every session
+'''
+A bit hokey, but these "training" (first time user experience) modules have content IDs in order but
+the robot internal scheduler switches to a random cid once they exhaust, so they have to be removed
+or TNT and SYSTEMSCHECK will still be in every session
+'''
 def ftue_remove(device_id):
     purge_list = []
     try:
@@ -92,6 +97,10 @@ def ftue_remove(device_id):
         logger.warning(f'Error checking FTUE completions {e}')
     return purge_list
 
+'''
+Schedule Generation - generates a set of additional modules according to the generate key
+to make a random schedule for the session.
+'''
 def expand_schedule(schedule, device_id):
     if 'generate' in schedule:
         logger.info("Using generative schedule")

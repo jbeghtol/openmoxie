@@ -13,4 +13,5 @@ urlpatterns = [
     path("reload_database", views.reload_database, name="reload_database"),
     path('endpoint/', views.endpoint_qr, name='endpoint_qr'),
     path("moxie/<int:pk>", views.MoxieView.as_view(), name="moxie"),
+    path("moxie_edit/<int:pk>", views.moxie_edit, name="moxie_edit"),
 ]

@@ -5,13 +5,15 @@ services:
     build:
       context: ./
       dockerfile: ./mqtt.Dockerfile
+    image: openmoxie/openmoxie-mqtt:latest
     ports:
       - "8883:8883"
     volumes:
       - ./local/work:/mosquitto/log
 
-  openmoxie:
+  server:
     build: .
+    image: openmoxie/openmoxie-server:latest
     ports:
       - "8001:8000"
     volumes:

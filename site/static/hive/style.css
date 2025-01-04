@@ -16,3 +16,14 @@
   .chat-title {
     margin: 10px;
   }
+
+  .moxheader {
+    background-color: black;
+    color:white;
+    font-size: 2em;
+    font-weight: bold;
+  }
+
+  .moximage {
+    height: 1.5em;
+  }

@@ -1,4 +1,7 @@
 
+'''
+Base class for ZMQ message handlers, with hooks to reply (or send)
+'''
 class ZMQHandler:
     def __init__(self, server):
         self._server = server

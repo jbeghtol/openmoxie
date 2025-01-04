@@ -127,7 +127,7 @@ class RobotData:
     def get_config(self, robot_id):
         robot_rec = self._robot_map.get(robot_id, {})
         cfg = robot_rec.get("config", DEFAULT_COMBINED_CONFIG)
-        logger.info(f'Providing config {cfg} to {robot_id}')
+        logger.debug(f'Providing config {cfg} to {robot_id}')
         return cfg
 
     def put_state(self, robot_id, state):
@@ -139,6 +139,9 @@ class RobotData:
 
     def update_state_atomic(self, robot_id, state):
         device = MoxieDevice.objects.get(device_id=robot_id)
+        if "battery_level" not in state and "battery_level" in device.state:
+            # sometimes state is missing the battery key, use the previous one if it isnt included
+            state["battery_level"] = device.state["battery_level"]
         device.state = state
         device.state_updated = timezone.now()
         device.save()
@@ -162,12 +165,13 @@ class RobotData:
     def get_mbh(self, robot_id):
         return run_db_atomic(self.extract_mbh_atomic, robot_id)
 
-    def get_schedule(self, robot_id):
+    def get_schedule(self, robot_id, expand=True):
         robot_rec = self._robot_map.get(robot_id, {})
         s = robot_rec.get("schedule", DEFAULT_SCHEDULE)
-        # do any custom schedule automatic generation
-        s = expand_schedule(s, robot_id)
-        logger.info(f'Providing schedule {s} to {robot_id}')
+        if expand:
+            # do any custom schedule automatic generation
+            s = expand_schedule(s, robot_id)
+        logger.debug(f'Providing schedule {s} to {robot_id}')
         return s
 
 
