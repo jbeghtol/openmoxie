@@ -5,7 +5,7 @@ services:
     build:
       context: ./
       dockerfile: ./mqtt.Dockerfile
-    image: openmoxie/openmoxie-mqtt:latest
+    image: openmoxie/openmoxie-mqtt:v0.1
     ports:
       - "8883:8883"
     volumes:
@@ -13,7 +13,7 @@ services:
 
   server:
     build: .
-    image: openmoxie/openmoxie-server:latest
+    image: openmoxie/openmoxie-server:v0.1
     ports:
       - "8001:8000"
     volumes:
