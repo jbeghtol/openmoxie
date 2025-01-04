@@ -124,6 +124,13 @@ class RobotData:
         curr_cfg = HiveConfiguration.objects.filter(name='default').first()
         return self.build_config(device, curr_cfg)
     
+    # Update an active device config, and return if the device is connected and needs the config provided
+    def config_update_live(self, device):
+        if self.device_online(device.device_id):
+            self._robot_map[device.device_id]["config"] = self.get_config_for_device(device)
+            return True
+        return False
+    
     def get_config(self, robot_id):
         robot_rec = self._robot_map.get(robot_id, {})
         cfg = robot_rec.get("config", DEFAULT_COMBINED_CONFIG)

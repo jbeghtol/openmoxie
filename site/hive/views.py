@@ -131,7 +131,6 @@ class MoxieView(generic.DetailView):
     
 @require_http_methods(["POST"])
 def moxie_edit(request, pk):
-    logger.info(f'POST -> {request.POST}')
     try:
         device = MoxieDevice.objects.get(pk=pk)
         # changes to base model
@@ -148,6 +147,7 @@ def moxie_edit(request, pk):
         else:
             device.robot_config["child_pii"] = { "nickname": request.POST["nickname"] }
         device.save()
+        get_instance().handle_config_updated(device)
     except MoxieDevice.DoesNotExist as e:
         logger.warning("Moxie update for unfound pk {pk}")
     return HttpResponseRedirect(reverse("hive:dashboard"))

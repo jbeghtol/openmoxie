@@ -254,6 +254,15 @@ class MoxieServer:
         self._worker_queue.submit(self.ingest_robot_state, device_id, json.loads(msg.payload))
         #self._robot_data.put_state(device_id, json.loads(msg.payload))
 
+    # Callback when a moxie config has changed and may need to be provided
+    def handle_config_updated(self, device):
+        # Update if connected
+        if self._robot_data.config_update_live(device):
+            logger.info(f'Moxie device {device.device_id} updated, sending updated config.')
+            self.send_config_to_bot_json(device.device_id, self._robot_data.get_config(device.device_id))
+        else:
+            logger.info(f'Moxie device {device.device_id} updated, but device offline')
+
     def send_config_to_bot_json(self, device_id, payload: dict):
         self._client.publish(f"/devices/{device_id}/config", payload=json.dumps(payload))
 
