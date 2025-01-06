@@ -127,9 +127,12 @@ def expand_schedule(schedule, device_id):
             generated_chats = list(numpy.random.choice(chat_modules, size=chat_count, replace=True))
             generated = distribute_elements(generated, generated_chats)
 
-        # add the gen list to the end
-        provided.extend(generated)
-        # assign it back just in case we created the list
-        schedule['provided_schedule'] = provided
+        # make a copy, so we don't alter the original
+        new_sched = schedule.copy()
+        # and assign the new provided schedule
+        new_sched['provided_schedule'] = provided + generated
+        # remove the generation tag from the result
+        del new_sched['generate']
+        return new_sched
 
     return schedule
