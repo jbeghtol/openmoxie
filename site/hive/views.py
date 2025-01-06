@@ -119,6 +119,21 @@ def endpoint_qr(request):
     buffer.seek(0)
     return HttpResponse(buffer, content_type='image/png')
 
+class WifiQREditView(generic.TemplateView):
+    template_name = "hive/wifi.html"
+
+@require_http_methods(["POST"])
+def wifi_qr(request):
+    ssid = request.POST['ssid']
+    password = request.POST['password']
+    band_id = request.POST['frequency']
+    hidden = 'hidden' in request.POST
+    img = qrcode.make(get_instance().get_wifi_qr_data(ssid, password, band_id, hidden))
+    buffer = BytesIO()
+    img.save(buffer, 'PNG')
+    buffer.seek(0)
+    return HttpResponse(buffer, content_type='image/png')
+
 class MoxieView(generic.DetailView):
     template_name = "hive/moxie.html"
     model = MoxieDevice

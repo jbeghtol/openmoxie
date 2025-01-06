@@ -12,7 +12,7 @@ from .robot_data import RobotData
 from .moxie_remote_chat import RemoteChat
 from .protos.embodied.logging.Log_pb2 import ProtoSubscribe
 from .protos.embodied.logging.Cloud2_pb2 import ServiceConfiguration2
-from .protos.embodied.wifiapp.QRCommands_pb2 import QRCommand
+from .protos.embodied.wifiapp.QRCommands_pb2 import StartPairingQR
 from .zmq_stt_handler import STTHandler
 from ..models import HiveConfiguration
 
@@ -325,6 +325,16 @@ class MoxieServer:
         # Now make QR debug object, just in JSON
         qr = { "debug": { "command": "om", "param": scfg_base64}}
         return json.dumps(qr)
+
+    def get_wifi_qr_data(self, ssid, password, band_id, hidden):
+        wificreds = StartPairingQR()
+        wificreds.wifi_only = True
+        wificreds.ssid = ssid
+        wificreds.password = password
+        wificreds.is_hidden = hidden
+        wificreds.band_select = int(band_id)
+        wifi_base64 = "PA" + base64.b64encode(wificreds.SerializeToString()).decode('utf-8')
+        return wifi_base64
 
 def cleanup_instance():
     global _MOXIE_SERVICE_INSTANCE

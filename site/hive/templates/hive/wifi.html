@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="moxheader"><a href="{% url 'hive:dashboard' %}"><img class="moximage" src="{% static 'hive/openmoxie_logo.svg' %}"></a>OpenMoxie</div>
+<div class="p-3">
+<h1>WiFi Credentials Code</h1>
+<form id="wifi_code" action="{% url 'hive:wifi_qr' %}" method="post">
+    {% csrf_token %}
+    <div class="row mb-3">
+      <label for="ssid" class="col-sm-2 col-form-label">SSID</label>
+      <div class="col-sm-10">
+        <input type="text" class="form" id="ssid" name="ssid">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+      <div class="col-sm-10">
+        <input type="password" class="form" id="inputPassword3" name="password">
+      </div>
+    </div>
+    <div class="row mb-3">
+        <label for="frequency" class="col-sm-2 col-form-label">Frequency</label>
+        <div class="col-sm-10">
+          <select id="frequency" name="frequency">
+              <option value="0" selected>Any</option>
+              <option value="1">Only 5G</option>
+              <option value="2">Only 2.4G</option>
+          </select>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label for="isHidden" class="col-sm-2 col-form-label">Is Hidden</label>
+        <div class="col-sm-10">
+          <input type="checkbox" id="isHidden" name="hidden">
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Generate</button>
+  </form>
+</div>
+{% endblock %}

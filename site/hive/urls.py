@@ -12,6 +12,8 @@ urlpatterns = [
     path("interact_update", views.interact_update, name="interact_update"),
     path("reload_database", views.reload_database, name="reload_database"),
     path('endpoint/', views.endpoint_qr, name='endpoint_qr'),
+    path('wifi_edit/', views.WifiQREditView.as_view(), name='wifi_edit'),
+    path('wifi_qr/', views.wifi_qr, name='wifi_qr'),
     path("moxie/<int:pk>", views.MoxieView.as_view(), name="moxie"),
     path("moxie_edit/<int:pk>", views.moxie_edit, name="moxie_edit"),
 ]
