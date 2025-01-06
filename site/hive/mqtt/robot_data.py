@@ -51,8 +51,12 @@ class RobotData:
     def __init__(self):
         global DEFAULT_SCHEDULE, DEFAULT_ROBOT_CONFIG, DEFAULT_ROBOT_SETTINGS
         self._robot_map = {}
-        with open(settings.BASE_DIR / 'data/default_schedules.json') as f:
-            DEFAULT_SCHEDULE = json.load(f)[0]["schedule"]
+        db_default = MoxieSchedule.objects.filter(name="default").first()
+        if db_default:
+            logger.info("Using 'default' schedule from database as schedule fallback")
+            DEFAULT_SCHEDULE = db_default.schedule
+        else:
+            logger.error("Missing 'default' schedule from database.")
         DEFAULT_ROBOT_CONFIG['settings'] = DEFAULT_ROBOT_SETTINGS
 
 
