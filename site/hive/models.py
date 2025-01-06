@@ -23,7 +23,8 @@ class SinglePromptChat(models.Model):
 class MoxieSchedule(models.Model):
     name = models.CharField(max_length=200)
     schedule = models.JSONField()
-
+    source_version = models.IntegerField(default=1)
+    
     def __str__(self):
         return self.name
 

@@ -51,8 +51,8 @@ class RobotData:
     def __init__(self):
         global DEFAULT_SCHEDULE, DEFAULT_ROBOT_CONFIG, DEFAULT_ROBOT_SETTINGS
         self._robot_map = {}
-        with open(settings.BASE_DIR / 'data/default_data_schedule.json') as f:
-            DEFAULT_SCHEDULE = json.load(f)
+        with open(settings.BASE_DIR / 'data/default_schedules.json') as f:
+            DEFAULT_SCHEDULE = json.load(f)[0]["schedule"]
         DEFAULT_ROBOT_CONFIG['settings'] = DEFAULT_ROBOT_SETTINGS
 
 

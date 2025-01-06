@@ -2,22 +2,31 @@
 import json
 from django.core.management.base import BaseCommand
 from django.contrib.auth import get_user_model
+from django.conf import settings
 from ...models import MoxieSchedule, SinglePromptChat
-from ...mqtt.robot_data import RobotData
-import os
 
 class Command(BaseCommand):
     help = 'Import data to bootstrap database with initial data.'
 
     def handle(self, *args, **options):
-        rdata = RobotData()
-        print("Initializing core database records.")
-        try:
-            def_sched = MoxieSchedule.objects.get(name='default')
-            print("Default schedule already exists.")
-        except MoxieSchedule.DoesNotExist:
-            print("No record with name 'default' found.  Creating...")
-            MoxieSchedule.objects.create(name='default', schedule=rdata.get_schedule(robot_id='noid', expand=False))
+
+        with open(settings.BASE_DIR / 'data/default_schedules.json') as f:
+            def_schedules = json.load(f)
+        s_updated = 0
+        for rec in def_schedules:
+            try:
+                def_sched = MoxieSchedule.objects.get(name=rec["name"])
+                if def_sched.source_version < rec["source_version"]:
+                    print(f'Updated schedule {def_sched.name} as source version has changed.')
+                    def_sched.source_version = rec["source_version"]
+                    def_sched.schedule = rec["schedule"]
+                    def_sched.save()
+                    s_updated += 1
+            except MoxieSchedule.DoesNotExist:
+                print(f'Creating missing schedule {rec["name"]} with version {rec["source_version"]}')
+                MoxieSchedule.objects.create(name=rec["name"], schedule=rec["schedule"], source_version=rec["source_version"])
+                s_updated += 1
+        print(f'Default schedules checked.  Updated {s_updated} of {len(def_schedules)} factory schedules.')
 
         # Default free form chat, with no volley limit - talk forever
         def_chat, created = SinglePromptChat.objects.get_or_create(module_id='OPENMOXIE_CHAT', content_id='default')
