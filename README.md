@@ -13,7 +13,7 @@ A local network hub that Moxie can connect with and a local network service that
 and services to make Moxie function to the extent it can using the internal software of the robot.  Much of the
 Moxie content is supported like Daily Missions, Reading, and Wild Workout; but some of the newer modules like Ocean
 Explorer, Animal Faces, and Story Maker are missing.  On the plus side, you will be able to control the schedule,
-exclude modules your child dislikes, and write your own simple converations to have with Moxie.
+exclude modules your child dislikes, and write your own simple conversations to have with Moxie.
 
 There's no parent app, all configuration is done through the web interface to OpenMoxie.
 

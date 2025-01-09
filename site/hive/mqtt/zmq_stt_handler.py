@@ -16,6 +16,12 @@ logger = logging.getLogger(__name__)
 def now_ms():
     return time.time_ns() // 1_000_000
 
+
+'''
+An STT Session is a stream of contiguous audio coming out of the Robot's voice activity detector (VAD). This
+is a very simple implementation tuned to OpenAI Whisper.  Their API doesn't support streaming, so we simply
+accumulate the audio frames, then transcribe them when complete.
+'''
 class STTSession:
     def __init__(self, parent, device_id, session_id):
         self._parent = parent
@@ -73,8 +79,14 @@ class STTSession:
             logfile = f'{self._session_id}.wav'
             with open(logfile, 'wb') as f:
                 f.write(wav_bytes)
-                print(f'Wrote WAV data to {logfile}')
+                logger.info(f'Wrote WAV data to {logfile}')
 
+'''
+This is the handler for all Speech data packets.  By default, the Robot uses stt:4, which begins sending
+audio data during session to be transcribed.  If Robot is using stt:0, no STT packets will arrive here.
+This is also very simple.  We create unique sessions for each device_id / session pair, pass them all the
+data inline, and when a session hits end-of-speech, queue transcription to run in the background.
+'''
 class STTHandler(ZMQHandler):
 
     def __init__(self, server):

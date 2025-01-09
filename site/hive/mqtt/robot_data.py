@@ -1,3 +1,11 @@
+'''
+ROBOT DATA - Manages data interfaces for Robots
+
+The general design is to store 'active' robots data in memory.  We load
+pertinent data from the database when robots connect, and unload them when
+they disconnect, and provide various APIs to access data like schedule, config,
+and state.
+'''
 import json
 import logging
 import deepmerge
@@ -12,7 +20,7 @@ from .util import run_db_atomic
 
 logger = logging.getLogger(__name__)
 
-
+# System default robot settings, which may be overridden by the database values
 DEFAULT_ROBOT_SETTINGS = {
     "props": {
       "touch_wake": "1",
@@ -29,6 +37,7 @@ DEFAULT_ROBOT_SETTINGS = {
     }
 }
 
+# System default robot configuration, which may be overridden by the database values
 DEFAULT_ROBOT_CONFIG = { 
   "pairing_status": "paired",
   "audio_volume": "0.6",
@@ -58,6 +67,7 @@ class RobotData:
         else:
             logger.error("Missing 'default' schedule from database.")
 
+    # Called when Robot connects to the MQTT network from a worker thread
     def db_connect(self, robot_id):
         if robot_id in self._robot_map:
             # Known only when cache record isnt empty
@@ -67,6 +77,7 @@ class RobotData:
         logger.info(f'Device {robot_id} is LOADING.')
         run_db_atomic(self.init_from_db, robot_id)
 
+    # Called when a Robot disconnects from the MQTT network from a worker thread
     def db_release(self, robot_id):
         if robot_id in self._robot_map:
             logger.info(f'Releasing device data for {robot_id}')
@@ -81,12 +92,15 @@ class RobotData:
             self._robot_map[robot_id] = {}
         return needed
     
+    # Check if a device is online
     def device_online(self, robot_id):
         return robot_id in self._robot_map
     
+    # Get a list of online robots
     def connected_list(self):
         return list(self._robot_map.keys())
     
+    # Build a configuration record for a robot
     def build_config(self, device, hive_cfg):
         # Robot config is base config and settings merged with robot config and settings
         # NOTE: Uses copies of everything, to avoid altering db records when merging in settings
@@ -96,6 +110,7 @@ class RobotData:
         robot_cfg["settings"] = device.robot_settings if device.robot_settings else {}
         return deepmerge.always_merger.merge(base_cfg, robot_cfg)
 
+    # Load/create records for a Robot
     def init_from_db(self, robot_id):
         device, created = MoxieDevice.objects.get_or_create(device_id=robot_id)
         curr_cfg = HiveConfiguration.objects.filter(name='default').first()
@@ -116,12 +131,14 @@ class RobotData:
         self._robot_map[robot_id]["config"] = self.build_config(device, curr_cfg)
         device.save()
 
+    # Finalize device record on disconnect
     def release_to_db(self, robot_id):
         device = MoxieDevice.objects.get(device_id=robot_id)
         if device:
             device.last_disconnect = timezone.now()
             device.save()
 
+    # Get the active configuration for a device from the database objects
     def get_config_for_device(self, device):
         curr_cfg = HiveConfiguration.objects.filter(name='default').first()
         return self.build_config(device, curr_cfg)
@@ -133,12 +150,14 @@ class RobotData:
             return True
         return False
     
+    # Get the cached config record for a robot
     def get_config(self, robot_id):
         robot_rec = self._robot_map.get(robot_id, {})
         cfg = robot_rec.get("config", DEFAULT_COMBINED_CONFIG)
         logger.debug(f'Providing config {cfg} to {robot_id}')
         return cfg
 
+    # Save robot state data
     def put_state(self, robot_id, state):
         run_db_atomic(self.update_state_atomic, robot_id, state)
         rec = self._robot_map.get(robot_id)
@@ -146,6 +165,7 @@ class RobotData:
             # only add to a non-empty (initialized) record
             rec["state"] = state
 
+    # Update the device record with the state data
     def update_state_atomic(self, robot_id, state):
         device = MoxieDevice.objects.get(device_id=robot_id)
         if "battery_level" not in state and "battery_level" in device.state:
@@ -155,25 +175,30 @@ class RobotData:
         device.state_updated = timezone.now()
         device.save()
 
+    # Get all the mentor behaviors for a specific robot, in most recent first order
     def extract_mbh_atomic(self, robot_id):
         device = MoxieDevice.objects.get(device_id=robot_id)
         mbh_list = []
-        for mbh in MentorBehavior.objects.filter(device=device).order_by('timestamp'):
-            mbh_list.append(model_to_dict(mbh, exclude=['device']))
+        for mbh in MentorBehavior.objects.filter(device=device).order_by('-timestamp'):
+            mbh_list.append(model_to_dict(mbh, exclude=['device', 'id']))
         return mbh_list
 
+    # Add a new mentor behavior for a robot, called inside a lock
     def insert_mbh_atomic(self, robot_id, mbh):
         device = MoxieDevice.objects.get(device_id=robot_id)
         rec = MentorBehavior(device=device)
         rec.__dict__.update(mbh)
         rec.save()
 
+    # Add a new mentor behavior
     def add_mbh(self, robot_id, mbh):
         run_db_atomic(self.insert_mbh_atomic, robot_id, mbh)
 
+    # Get mentor behaviors
     def get_mbh(self, robot_id):
         return run_db_atomic(self.extract_mbh_atomic, robot_id)
 
+    # Get the current schedule for the robot, typically expanded when including a generate block
     def get_schedule(self, robot_id, expand=True):
         robot_rec = self._robot_map.get(robot_id, {})
         s = robot_rec.get("schedule", DEFAULT_SCHEDULE)

@@ -1,3 +1,6 @@
+'''
+MOXIE SERVER - Primary service handler for Moxie
+'''
 import concurrent
 import paho.mqtt.client as mqtt
 import json
@@ -31,6 +34,7 @@ provided using TOPICS.  With the exception of the ZMQ, all topics communicate us
 message paylods.  Moxie Server notably:
 - Subscribes to the event, state, and log topics produced by ALL moxie devices
 - Sends responses to device command topics to provide services and control Moxies
+- Listens to system topics from mosquitto MQTT to detect devices connecting and disconnecting
 
 As implemented there is a singleton MoxieService created using the instance creation method
 near the end of this file.  It connects to the MQTT broker, which cooredinates all exchanges
@@ -73,6 +77,7 @@ class MoxieServer:
         self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=5)
         self.update_from_database()
 
+    # Connect to the broker - the jwt stuff left in place, but isn't required
     def connect(self, start = False):
         jwt_token = self._robot.create_jwt(self._mqtt_project_id)
         self._client.username_pw_set(username='unknown', password=jwt_token)
@@ -81,15 +86,19 @@ class MoxieServer:
         if start:
             self.start()
 
+    # For any external monitoring of connections to the broker
     def add_connect_handler(self, callback):
         self._connect_handlers.append(callback)
 
+    # Bind a listener to a specific proto on the ZMQ topic
     def add_zmq_handler(self, protoname, callback):
         self._zmq_handlers[protoname] = callback
 
+    # This is left-over client code, supervisor doesn't get a config
     def add_config_handler(self, callback):
         self.add_command_handler("config", callback)
 
+    # This is left-over client code, supervisor doesn't rx commands
     def add_command_handler(self, topic, callback):
         if not self._topic_handlers:
             self._topic_handlers = dict()
@@ -99,6 +108,7 @@ class MoxieServer:
         else:
             self._topic_handlers[topic] = [ callback ]
 
+    # Callback when we connect to the mqtt broker, subscribe to everything we care about
     def on_connect(self, client, userdata, flags, rc):
         logger.info(f"Connected with result code {rc}")
         # The only two supported in IOT - commands for a wildcard of commands, config for our robot configuration
@@ -110,6 +120,7 @@ class MoxieServer:
         for ch in self._connect_handlers:
             ch(self, rc) 
 
+    # Entry point for ALL incoming messages, extract params about source and route
     def on_message(self, client, userdata, msg):
         try:
             dec = msg.topic.split('/')
@@ -129,6 +140,7 @@ class MoxieServer:
             logger.warning(f"Error handling mqtt messsage: {e}")
     
 
+    # Handle messages FROM mosquitto syslog topic, looking for connect/disconnects
     def on_sys_log_message(self, basetype, msg):
         if basetype == "N": # Notifications
             line = msg.payload.decode('utf-8')
@@ -139,15 +151,14 @@ class MoxieServer:
                     self._worker_queue.submit(self.on_device_connect, match.group(2), True, match.group(1))
             elif match2:
                 self._worker_queue.submit(self.on_device_connect, match2.group(1), False)
-            # else:
-            #     logger.info(f'LOGMSG->{line}')
 
+    # Handles metrics from mosquitto
     def on_client_metrics(self, basetype, msg):
         self._client_metrics[basetype] = int(msg.payload.decode('utf-8'))
 
     # ALL EVENTS FROM-DEVICE ARRIVE HERE
     def on_device_event(self, device_id, eventname, msg):
-        #logger.debug(f"Rx EVENT topic: {eventname}")
+        # Check the connection in case we missed this device connecting
         self.check_device_connect(device_id, "Event")
         if eventname == "remote-chat" or eventname == "remote-chat-staging":
             rcr = json.loads(msg.payload)
@@ -248,11 +259,11 @@ class MoxieServer:
             logger.info(f"Unconnected robot {device_id} location {info}.  Connecting now.")
             self._worker_queue.submit(self.on_device_connect, device_id, True, info)
 
+    # Moxie reporting its own state information
     def on_device_state(self, device_id, msg):
         logger.debug(f"Rx STATE topic for device {device_id}")
         self.check_device_connect(device_id, "State")
         self._worker_queue.submit(self.ingest_robot_state, device_id, json.loads(msg.payload))
-        #self._robot_data.put_state(device_id, json.loads(msg.payload))
 
     # Callback when a moxie config has changed and may need to be provided
     def handle_config_updated(self, device):
@@ -263,12 +274,19 @@ class MoxieServer:
         else:
             logger.info(f'Moxie device {device.device_id} updated, but device offline')
 
+    # For Robots using wake_button_enabled, wake them from screen off
+    def send_wakeup_to_bot(self, device_id):
+        self.send_command_to_bot_json(device_id, 'wakeup', {'command': 'wakeup'})
+
+    # Send Moxie its configuration data
     def send_config_to_bot_json(self, device_id, payload: dict):
         self._client.publish(f"/devices/{device_id}/config", payload=json.dumps(payload))
 
+    # Send a Command (JSON) to Moxie
     def send_command_to_bot_json(self, device_id, command, payload: dict):
         self._client.publish(f"/devices/{device_id}/commands/{command}", payload=json.dumps(payload))
 
+    # Send a binary ZMQ message to Moxie
     def send_zmq_to_bot(self, device_id, msgobject):
         payload = (msgobject.DESCRIPTOR.full_name + ":").encode('utf-8') + msgobject.SerializeToString()
         self._client.publish(f"/devices/{device_id}/commands/zmq", payload=payload)
@@ -287,32 +305,40 @@ class MoxieServer:
         else:
             logger.warning(f"Warning! Invalid canned message: {canned_data}")
 
+    # Print out client metrics, called periodically in the background
     def print_metrics(self):
         logger.info(f"Client Metrics: {self._client_metrics}")
 
+    # Start client connection loop
     def start(self):
         self._client.loop_start()
 
+    # Stop client connection loop
     def stop(self):
         self._client.loop_stop()
 
+    # Get's a chat session object for use in the web chat
     def get_web_session_for_module(self, device_id, module_id, content_id):
         sess = self._remote_chat.get_web_session_for_module(device_id, module_id, content_id)
         sess.set_auto_history(True)
         return sess
     
+    # Accessor to remote chat
     def remote_chat(self):
         return self._remote_chat
 
+    # Accessor to robot data
     def robot_data(self):
         return self._robot_data
 
+    # Reload records from the database
     def update_from_database(self):
         hive_config = HiveConfiguration.objects.filter(name="default").first()
         set_openai_key(hive_config.openai_api_key if hive_config else None)
         self._google_service_account = hive_config.google_api_key if hive_config else None
         self._remote_chat.update_from_database()
 
+    # Get the endppint / moxie relocate QR code to move a Moxie to this service
     def get_endpoint_qr_data(self):
         hiveconfig = HiveConfiguration.objects.filter(name="default").first()
         scfg = ServiceConfiguration2()
@@ -326,6 +352,7 @@ class MoxieServer:
         qr = { "debug": { "command": "om", "param": scfg_base64}}
         return json.dumps(qr)
 
+    # Get a QR code for wifi credentials to show to Moxie
     def get_wifi_qr_data(self, ssid, password, band_id, hidden):
         wificreds = StartPairingQR()
         wificreds.wifi_only = True
@@ -333,19 +360,23 @@ class MoxieServer:
         wificreds.password = password
         wificreds.is_hidden = hidden
         wificreds.band_select = int(band_id)
+        # Pairing codes have two char header PA followed by a base64 coded serialized pairing proto
         wifi_base64 = "PA" + base64.b64encode(wificreds.SerializeToString()).decode('utf-8')
         return wifi_base64
 
+# Instance method, disconnect and destroy
 def cleanup_instance():
     global _MOXIE_SERVICE_INSTANCE
     if _MOXIE_SERVICE_INSTANCE:
         _MOXIE_SERVICE_INSTANCE._client.disconnect()
         _MOXIE_SERVICE_INSTANCE = None
 
+# Instance method, accessor
 def get_instance():
     global _MOXIE_SERVICE_INSTANCE
     return _MOXIE_SERVICE_INSTANCE
 
+# Instance method, create singleton service
 def create_service_instance(project_id, host, port, cert_required=True):
     global _MOXIE_SERVICE_INSTANCE
     if not _MOXIE_SERVICE_INSTANCE:
