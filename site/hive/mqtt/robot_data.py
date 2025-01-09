@@ -25,6 +25,7 @@ DEFAULT_ROBOT_SETTINGS = {
     "props": {
       "touch_wake": "1",
       "wake_alarms": "1",
+      "wake_button": "1",
       "doa_range": "80",
       "target_all": "1",
       "gcp_upload_disable": "1",

@@ -178,3 +178,13 @@ def moxie_edit(request, pk):
     except MoxieDevice.DoesNotExist as e:
         logger.warning("Moxie update for unfound pk {pk}")
     return HttpResponseRedirect(reverse("hive:dashboard"))
+
+# WAKE UP A MOXIE THAT IS USING WAKE BUTTON
+def moxie_wake(request, pk):
+    try:
+        device = MoxieDevice.objects.get(pk=pk)
+        logger.info(f'Waking up {device}')
+        get_instance().send_wakeup_to_bot(device.device_id)
+    except MoxieDevice.DoesNotExist as e:
+        logger.warning("Moxie wake for unfound pk {pk}")
+    return HttpResponseRedirect(reverse("hive:dashboard"))

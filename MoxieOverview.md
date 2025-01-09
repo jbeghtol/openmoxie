@@ -167,6 +167,7 @@ These can also be dangerous.  Settings are stored inside a props key and are all
     "props": {
       "touch_wake": "1", <-- CAN WAKE UP MOXIE FROM TOUCH ALONE (also requires touch_wake_enabled in config)
       "wake_alarms": "1", <-- CAN WAKE FROM SCHEDULED ALARMS
+      "wake_button": "1", <-- SET TRUE TO ENABLE WAKE BUTTON SUPPORT (still needs wake_button_enabled)
       "doa_range": "80", <-- ASSUME TARGETS ARE IN FRONT 80 degrees
       "target_all": "1", <-- MOXIE WILL LISTEN TO ANYONE, "1" is ON, "0" is OFF
       "gcp_upload_disable": "1", <-- WILL NOT WORK, DO NOT CHANGE

@@ -16,4 +16,5 @@ urlpatterns = [
     path('wifi_qr/', views.wifi_qr, name='wifi_qr'),
     path("moxie/<int:pk>", views.MoxieView.as_view(), name="moxie"),
     path("moxie_edit/<int:pk>", views.moxie_edit, name="moxie_edit"),
+    path("moxie_wake/<int:pk>", views.moxie_wake, name="moxie_wake"),
 ]

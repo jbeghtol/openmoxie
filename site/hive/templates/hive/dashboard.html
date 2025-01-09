@@ -9,7 +9,7 @@
 <a title="Configure System" class="btn btn-secondary btn-sm" href="{% url 'hive:setup' %}">Setup</a>
 <a title="Administer Database" class="btn btn-secondary btn-sm" href="{% url 'admin:index' %}">Admin</a>
 <table class="table table-striped">
-  <tr><th class="w-25">Status</th><th>Moxie Devices</th><th>Schedule</th></tr>
+  <tr><th class="w-25">Status</th><th>Moxie Devices</th><th>Schedule</th><th>Actions</th></tr>
   {% for device in recent_devices %}
   <tr><td>
     {% if device.device_id in live %}
@@ -17,7 +17,13 @@
     {% else %}
     <span class="badge text-bg-secondary">Offline</span> {{device.last_disconnect|timesince}}
     {% endif %}
-  </td><td><a href="{% url 'hive:moxie' device.pk %}">{{device}}</a></td><td>{{device.schedule}}</td></tr>
+  </td><td><a href="{% url 'hive:moxie' device.pk %}">{{device}}</a></td><td>{{device.schedule}}</td>
+  <td>
+    {% if device.robot_config.wake_button_enabled == "1" and device.device_id in live %}
+    <a class="btn btn-success btn-sm" href="{% url 'hive:moxie_wake' device.pk %}">Wake</a>
+    {% endif %}
+  </td>
+  </tr>
   {% endfor %}
 </table>
 <br>
