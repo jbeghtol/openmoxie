@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.views import generic
@@ -83,6 +83,9 @@ class DashboardView(generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        alert_message = kwargs.get('alert_message', None)
+        if alert_message:
+            context['alert'] = alert_message
         context['recent_devices'] = MoxieDevice.objects.all()
         context['conversations'] = SinglePromptChat.objects.all()
         context['schedules'] = MoxieSchedule.objects.all()
@@ -117,7 +120,7 @@ def interact_update(request):
 # RELOAD - Reload any records initialized from the database
 def reload_database(request):
     get_instance().update_from_database()
-    return HttpResponseRedirect(reverse("hive:dashboard"))
+    return redirect('hive:dashboard_alert', alert_message='Updated from database.')
 
 # ENDPOINT - Render QR code to migrate Moxie
 def endpoint_qr(request):
@@ -184,7 +187,8 @@ def moxie_wake(request, pk):
     try:
         device = MoxieDevice.objects.get(pk=pk)
         logger.info(f'Waking up {device}')
-        get_instance().send_wakeup_to_bot(device.device_id)
+        alert_msg = "Wake message sent!" if get_instance().send_wakeup_to_bot(device.device_id) else 'Moxie was offline.'
+        return redirect('hive:dashboard_alert', alert_message=alert_msg)
     except MoxieDevice.DoesNotExist as e:
         logger.warning("Moxie wake for unfound pk {pk}")
-    return HttpResponseRedirect(reverse("hive:dashboard"))
+        return redirect('hive:dashboard_alert', alert_message='No such Moxie')

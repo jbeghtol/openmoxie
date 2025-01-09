@@ -276,7 +276,10 @@ class MoxieServer:
 
     # For Robots using wake_button_enabled, wake them from screen off
     def send_wakeup_to_bot(self, device_id):
-        self.send_command_to_bot_json(device_id, 'wakeup', {'command': 'wakeup'})
+        if self._robot_data.device_online(device_id):
+            self.send_command_to_bot_json(device_id, 'wakeup', {'command': 'wakeup'})
+            return True
+        return False
 
     # Send Moxie its configuration data
     def send_config_to_bot_json(self, device_id, payload: dict):
