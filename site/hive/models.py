@@ -16,6 +16,7 @@ class SinglePromptChat(models.Model):
     model = models.CharField(max_length=200, default="gpt-3.5-turbo")
     max_tokens = models.IntegerField(default=70)
     temperature = models.FloatField(default=0.5)
+    source_version = models.IntegerField(default=1)
     
     def __str__(self):
         return self.name

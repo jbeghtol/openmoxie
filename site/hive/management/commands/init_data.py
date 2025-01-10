@@ -10,6 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
+        # Update any needed factory default schedules
         with open(settings.BASE_DIR / 'data/default_schedules.json') as f:
             def_schedules = json.load(f)
         s_updated = 0
@@ -28,26 +29,22 @@ class Command(BaseCommand):
                 s_updated += 1
         print(f'Default schedules checked.  Updated {s_updated} of {len(def_schedules)} factory schedules.')
 
-        # Default free form chat, with no volley limit - talk forever
-        def_chat, created = SinglePromptChat.objects.get_or_create(module_id='OPENMOXIE_CHAT', content_id='default')
-        if created:
-            def_chat.prompt="You are a robot named Moxie who comes from the Global Robotics Laboratory. You are having a conversation with a person who is your friend. Chat about a topic that the person finds interesting and fun. Share short facts and opinions about the topic, one fact or opinion at a time. You are curious and love learning what the person thinks."
-            def_chat.opener="I love to chat.  What's on your mind?|Let's talk! What's a good topic?"
-            def_chat.name = "Open chat with Moxie, Long"
-            def_chat.save()
-            print("Creating default OPENMOXIE_CHAT")
-        else:
-            print("Default chat OPENMOXIE_CHAT already exists.")
-
-        # Short free form chat, 20 max volleys - have a short chat and move on
-        def_chat, created = SinglePromptChat.objects.get_or_create(module_id='OPENMOXIE_CHAT', content_id='short')
-        if created:
-            def_chat.prompt="You are a robot named Moxie who comes from the Global Robotics Laboratory. You are having a conversation with a person who is your friend. Chat about a topic that the person finds interesting and fun. Share short facts and opinions about the topic, one fact or opinion at a time. You are curious and love learning what the person thinks."
-            def_chat.opener="I love to chat.  What's on your mind?|Let's talk! What's a good topic?"
-            def_chat.max_volleys=20
-            def_chat.name = "Open chat with Moxie, Short"
-            def_chat.save()
-            print("Creating short OPENMOXIE_CHAT")
-        else:
-            print("Short chat OPENMOXIE_CHAT already exists.")
-
+        # Update any needed factory default conversations
+        with open(settings.BASE_DIR / 'data/default_conversations.json') as f:
+            def_conversations = json.load(f)
+        c_updated = 0
+        for rec in def_conversations:
+            try:
+                def_chat = SinglePromptChat.objects.get(module_id=rec["module_id"], content_id=rec["content_id"])
+                if def_chat.source_version < rec["source_version"]:
+                    print(f'Updated conversation {def_chat.module_id}/{def_chat.content_id} as source version has changed.')
+                    def_chat.__dict__.update(rec)
+                    def_chat.save()
+                    c_updated += 1
+            except SinglePromptChat.DoesNotExist:
+                print(f'Creating missing conversation {rec["module_id"]}/{rec["content_id"]} with version {rec["source_version"]}')
+                def_chat = SinglePromptChat.objects.create(module_id=rec["module_id"], content_id=rec["content_id"])
+                def_chat.__dict__.update(rec)
+                def_chat.save()
+                c_updated += 1
+        print(f'Default conversations checked.  Updated {c_updated} of {len(def_conversations)} factory conversations.')
