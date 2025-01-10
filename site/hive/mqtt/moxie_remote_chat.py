@@ -13,6 +13,7 @@ even when the user provides input in multiple speech windows before hearing a re
 from openai import OpenAI
 import copy
 import random
+import re
 import concurrent.futures
 from .ai_factory import create_openai
 from ..models import SinglePromptChat
@@ -101,6 +102,7 @@ class SingleContextChatSession(ChatSession):
         self._temperature = temperature
         self._exit_line = exit_line
         self._auto_history = False
+        self._exit_requested = False
 
     # For web-based, we have no Moxie and no Notify channel, so auto-history is used
     def set_auto_history(self, val):
@@ -108,7 +110,7 @@ class SingleContextChatSession(ChatSession):
     
     # Check if we exceed max volleys for a conversation
     def overflow(self):
-        return self._total_volleys >= self._max_volleys
+        return self._total_volleys >= self._max_volleys or self._exit_requested
     
     # Get the next thing we should say, given the user speech and the history
     def next_response(self, speech):
@@ -129,6 +131,13 @@ class SingleContextChatSession(ChatSession):
                         max_tokens=self._max_tokens,
                         temperature=self._temperature
                     ).choices[0].message.content
+            # detect <exit> request from AI
+            self._exit_requested = self._exit_requested or '<exit>' in resp
+            if self._exit_requested:
+                logger.info("Exit tag detected in response.")
+                of = True
+            # remove any random xml like tags
+            resp = re.sub(r'<.*?>', '', resp)
         except Exception as e:
             logger.warning(f'Exception attempting inference: {e}')
             resp = "Oh no.  I have run into a bug"
