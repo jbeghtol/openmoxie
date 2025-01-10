@@ -34,7 +34,8 @@ DEFAULT_ROBOT_SETTINGS = {
       "audio_wake": "1",
       "cloud_schedule_reset_threshold": "5",
       "debug_whiteboard": "0",
-      "brain_entrances_available": "1"
+      "brain_entrances_available": "1",
+      "mqtt_files": "0"
     }
 }
 

@@ -204,7 +204,8 @@ class RemoteChat:
         if not _DEMO_GLOBAL_COMMANDS:
             return None
         
-        if rcr["speech"]:
+        # only check packets with non-empty speech
+        if rcr.get('speech'):
             if rcr["speech"].lower() == "time":
                 # Play the time if the user says only 'time'
                 resp = self.make_response(rcr, output_type='GLOBAL_COMMAND')
