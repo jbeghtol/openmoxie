@@ -1,9 +1,12 @@
 [
   { 
     "name": "default",
-    "source_version": 2,
+    "source_version": 3,
     "schedule": {
         "provided_schedule": [
+            {
+              "module_id": "WELCOME"
+            },
             {
               "module_id": "ENROLLCONVO"
             },

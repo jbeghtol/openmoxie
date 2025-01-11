@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="moxheader"><a href="{% url 'hive:dashboard' %}"><img class="moximage" src="{% static 'hive/openmoxie_logo.svg' %}"></a>OpenMoxie<span class="moxversion">{{moxie_version}}</span></div>
+<div class="p-3">
+<h2>Moxie Updated Completed Missions</h2>
+<p>Check any mission sets below to mark them completed so Moxie will not present them again.</p>
+<div class="moxie-window">
+  <form id="moxie_edit" action="{% url 'hive:mission_edit' object.pk %}" method="post">
+  {% csrf_token %}
+  <table class="table">
+    <tr><th>Name</th><td>{{object.name}}</td></tr>
+    <tr><th>Device ID</th><td>{{object.device_id}}</td></tr>
+    <tr><th>Force These Missions Complete</th><td>
+        {% for option in mission_sets %}
+        <input type="checkbox" name="mission_sets" value="{{ option.0 }}" id="mission_set_{{ option.0 }}">
+        <label for="mission_set_{{ option.0 }}">{{ option.1 }}</label>
+        <br>
+        {% endfor %}
+     </td></tr>
+  </table>
+  <button type="submit" class="btn btn-primary">Complete</button>
+</form>
+</div>
+</div>
+{% endblock %}

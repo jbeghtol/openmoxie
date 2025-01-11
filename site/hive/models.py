@@ -86,4 +86,4 @@ class MentorBehavior(models.Model):
         ]
 
     def __str__(self):
-        return f'{self.timestamp}-{self.device}/{self.module_id}-{self.action}'
+        return f'{self.timestamp}-{self.device}-{self.module_id}/{self.content_id}-{self.action}'

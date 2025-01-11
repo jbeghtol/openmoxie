@@ -3,39 +3,9 @@ import logging
 import numpy
 from .util import run_db_atomic
 from ..models import MoxieDevice,MentorBehavior
+from ..content.data import RECOMMENDABLE_MODULES, TNT_CIDS, SYSTEMSCHECK_CIDS
 
 logger = logging.getLogger(__name__)
-
-# All the native/chatscript based modules that can be added to the schedule
-_RECOMMENDABLE_MODULES = [
-{'module_id': 'AFFIRM', 'category': 'REGULATION'},
-{'module_id': 'AB', 'category': 'REGULATION'},
-{'module_id': 'ANIMALEXERCISE', 'category': 'MOVEMENT'},
-{'module_id': 'BODYSCAN', 'category': 'REGULATION'},
-{'module_id': 'RDL', 'category': 'FUN_TIDBIT'},
-{'module_id': 'BREATHINGSHAPES', 'category': 'REGULATION'},
-{'module_id': 'COMPOSING', 'category': 'CREATIVITY'},
-{'module_id': 'FACES', 'category': 'PLAYFUL_GAME'},
-{'module_id': 'FF', 'category': 'FUN_TIDBIT'},
-{'module_id': 'GUIDEDVIS', 'category': 'REGULATION'},
-{'module_id': 'JOKE', 'category': 'FUN_TIDBIT'},
-{'module_id': 'JUKEBOX', 'category': 'LISTENING'},
-{'module_id': 'MENTORSAYS', 'category': 'PLAYFUL_GAME'},
-{'module_id': 'NONSENSE', 'category': 'FUN_TIDBIT'},
-{'module_id': 'DANCE', 'category': 'MOVEMENT'},
-{'module_id': 'DRAW', 'category': 'CREATIVITY'},
-{'module_id': 'STORYTELLING', 'category': 'CREATIVITY'},
-{'module_id': 'PASSWORDGAME', 'category': 'PUZZLE_GAME'},
-{'module_id': 'READ', 'category': 'READING'},
-{'module_id': 'SCAVENGERHUNT', 'category': 'PLAYFUL_GAME'},
-{'module_id': 'STORY', 'category': 'LISTENING'},
-{'module_id': 'AUDMED', 'category': 'REGULATION'},
-{'module_id': 'WHIMSY', 'category': 'FUN_TIDBIT'},
-]
-
-# Number of content IDs inside these FTUE modules
-_TNT_CIDS = 9
-_SYSTEMSCHECK_CIDS = 4
 
 '''
 Quick and dirty auto-scheduler; attempts to pick a random set of modules avoiding adjacencies
@@ -84,15 +54,19 @@ def distribute_elements(list2, list1):
 '''
 A bit hokey, but these "training" (first time user experience) modules have content IDs in order but
 the robot internal scheduler switches to a random cid once they exhaust, so they have to be removed
-or TNT and SYSTEMSCHECK will still be in every session
+or TNT and SYSTEMSCHECK will still be in every session.  WELCOME is also removed once you complete
+anything.
 '''
 def ftue_remove(device_id):
     purge_list = []
     try:
-        if MentorBehavior.objects.filter(device__device_id=device_id, module_id="TNT", action="COMPLETED").count() >= _TNT_CIDS:
+        if MentorBehavior.objects.filter(device__device_id=device_id, module_id="TNT", action="COMPLETED").count() >= TNT_CIDS:
             purge_list.append("TNT")
-        if MentorBehavior.objects.filter(device__device_id=device_id, module_id="SYSTEMSCHECK", action="COMPLETED").count() >= _SYSTEMSCHECK_CIDS:
+        if MentorBehavior.objects.filter(device__device_id=device_id, module_id="SYSTEMSCHECK", action="COMPLETED").count() >= SYSTEMSCHECK_CIDS:
             purge_list.append("SYSTEMSCHECK")
+        if purge_list or MentorBehavior.objects.filter(device__device_id=device_id, action="COMPLETED").first():
+            purge_list.append("WELCOME")
+
     except Exception as e:
         logger.warning(f'Error checking FTUE completions {e}')
     return purge_list
@@ -118,7 +92,7 @@ def expand_schedule(schedule, device_id):
             provided = [item for item in provided if item.get('module_id') not in ftue_remove_list]
 
         # modules we can pick from, all recommmended unless excluded, plus any user defined extra modules
-        auto_modules = [item for item in _RECOMMENDABLE_MODULES if item['module_id'] not in excluded_module_ids]
+        auto_modules = [item for item in RECOMMENDABLE_MODULES if item['module_id'] not in excluded_module_ids]
         auto_modules.extend(extra_modules)
         generated = ransac_select(auto_modules, module_count)
 

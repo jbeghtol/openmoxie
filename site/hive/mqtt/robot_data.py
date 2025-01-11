@@ -16,7 +16,7 @@ from django.conf import settings
 from django.forms.models import model_to_dict
 from django.utils import timezone
 from .scheduler import expand_schedule
-from .util import run_db_atomic
+from .util import run_db_atomic, now_ms
 
 logger = logging.getLogger(__name__)
 
@@ -195,6 +195,24 @@ class RobotData:
     # Add a new mentor behavior
     def add_mbh(self, robot_id, mbh):
         run_db_atomic(self.insert_mbh_atomic, robot_id, mbh)
+
+    # Add a set of completions for content IDs in a module
+    def add_mbh_completion_bulk(self, robot_id, module_id, content_id_list):
+        device = MoxieDevice.objects.get(device_id=robot_id)
+        last_mbh = MentorBehavior.objects.filter(device=device).order_by('-timestamp').first()
+        inst_id = last_mbh.instance_id if last_mbh else 1
+        recs = []
+        for cid in content_id_list:
+            recs.append(MentorBehavior(device=device,
+                                 instance_id=inst_id,
+                                 action="COMPLETED",
+                                 module_id=module_id,
+                                 content_id=cid,
+                                 content_day=last_mbh.content_day if last_mbh else "1",
+                                 timestamp=last_mbh.timestamp+1 if last_mbh else now_ms()
+                    ))
+            inst_id += 1
+        MentorBehavior.objects.bulk_create(recs)
 
     # Get mentor behaviors
     def get_mbh(self, robot_id):

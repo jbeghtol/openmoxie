@@ -13,6 +13,7 @@ from PIL import Image
 from io import BytesIO
 
 from .models import SinglePromptChat, MoxieDevice, MoxieSchedule, HiveConfiguration
+from .content.data import DM_MISSION_CONTENT_IDS
 from .mqtt.moxie_server import get_instance
 from .mqtt.robot_data import DEFAULT_ROBOT_CONFIG, DEFAULT_ROBOT_SETTINGS
 import json
@@ -181,6 +182,31 @@ def moxie_edit(request, pk):
     except MoxieDevice.DoesNotExist as e:
         logger.warning("Moxie update for unfound pk {pk}")
     return HttpResponseRedirect(reverse("hive:dashboard"))
+
+# MOXIE - View Moxie Mission Sets to Complete
+class MoxieMissionsView(generic.DetailView):
+    template_name = "hive/missions.html"
+    model = MoxieDevice
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # list of tupes (key,prettykey)
+        context['mission_sets'] = [ (key, key.replace("_", " ")) for key in DM_MISSION_CONTENT_IDS.keys() ]
+        return context
+
+# MOXIE-POST - Save changes to a Moxie record
+@require_http_methods(["POST"])
+def mission_edit(request, pk):
+    try:
+        device = MoxieDevice.objects.get(pk=pk)
+        # handle any mission complete forced reporting
+        mission_sets = request.POST.getlist("mission_sets")
+        dm_cid_list = [cid for ms in mission_sets for cid in DM_MISSION_CONTENT_IDS.get(ms, [])]
+        get_instance().robot_data().add_mbh_completion_bulk(device.device_id, module_id="DM", content_id_list=dm_cid_list)
+        return redirect('hive:dashboard_alert', alert_message=f'Completed {len(dm_cid_list)} Daily Missions for {device}')
+    except MoxieDevice.DoesNotExist as e:
+        logger.warning("Moxie update for unfound pk {pk}")
+        return redirect('hive:dashboard_alert', alert_message='No such Moxie')
 
 # WAKE UP A MOXIE THAT IS USING WAKE BUTTON
 def moxie_wake(request, pk):
