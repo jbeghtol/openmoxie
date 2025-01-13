@@ -12,7 +12,7 @@ import qrcode
 from PIL import Image
 from io import BytesIO
 
-from .models import SinglePromptChat, MoxieDevice, MoxieSchedule, HiveConfiguration
+from .models import SinglePromptChat, MoxieDevice, MoxieSchedule, HiveConfiguration, MentorBehavior
 from .content.data import DM_MISSION_CONTENT_IDS
 from .mqtt.moxie_server import get_instance
 from .mqtt.robot_data import DEFAULT_ROBOT_CONFIG, DEFAULT_ROBOT_SETTINGS
@@ -199,11 +199,26 @@ class MoxieMissionsView(generic.DetailView):
 def mission_edit(request, pk):
     try:
         device = MoxieDevice.objects.get(pk=pk)
-        # handle any mission complete forced reporting
-        mission_sets = request.POST.getlist("mission_sets")
-        dm_cid_list = [cid for ms in mission_sets for cid in DM_MISSION_CONTENT_IDS.get(ms, [])]
-        get_instance().robot_data().add_mbh_completion_bulk(device.device_id, module_id="DM", content_id_list=dm_cid_list)
-        return redirect('hive:dashboard_alert', alert_message=f'Completed {len(dm_cid_list)} Daily Missions for {device}')
+
+        mission_action = request.POST["mission_action"]
+        if mission_action == "reset":
+            # Delete all MBH to start fresh
+            MentorBehavior.objects.filter(device=device).delete()
+            msg = f'Reset ALL progress for {device}'
+        else:
+            # Handle mission set actions... get all the CIDs for the selected sets
+            mission_sets = request.POST.getlist("mission_sets")
+            dm_cid_list = [cid for ms in mission_sets for cid in DM_MISSION_CONTENT_IDS.get(ms, [])]
+            if mission_action == "forget":
+                # Delete any records with these module/content ID (completed, quit)
+                MentorBehavior.objects.filter(device=device, module_id='DM', content_id__in=dm_cid_list).delete()
+                msg = f'Forgot {len(mission_sets)} Daily Mission Sets ({len(dm_cid_list)} missions) for {device}'
+            else: # == "complete"
+                # Create new completions for all these mission content IDs
+                get_instance().robot_data().add_mbh_completion_bulk(device.device_id, module_id="DM", content_id_list=dm_cid_list)
+                msg = f'Completed {len(mission_sets)} Daily Mission Sets ({len(dm_cid_list)} missions) for {device}'
+
+        return redirect('hive:dashboard_alert', alert_message=msg)
     except MoxieDevice.DoesNotExist as e:
         logger.warning("Moxie update for unfound pk {pk}")
         return redirect('hive:dashboard_alert', alert_message='No such Moxie')

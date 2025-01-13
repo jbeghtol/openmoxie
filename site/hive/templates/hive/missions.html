@@ -3,15 +3,30 @@
 {% block content %}
 <div class="moxheader"><a href="{% url 'hive:dashboard' %}"><img class="moximage" src="{% static 'hive/openmoxie_logo.svg' %}"></a>OpenMoxie<span class="moxversion">{{moxie_version}}</span></div>
 <div class="p-3">
-<h2>Moxie Updated Completed Missions</h2>
-<p>Check any mission sets below to mark them completed so Moxie will not present them again.</p>
+<h2>Modify Missions and Completed Content</h2>
+<p>
+Update progress data for Missions and other content here.  These actions cannot be undone.
+<ul>
+  <li>Using <b>Set Mission Complete</b> will mark all these missions as complete so they will not be offered again.</li>
+  <li>Using <b>Clear Missions Complete</b> will forgot that these mission sets were completed so they can be offered again.</li>
+  <li>Using <b>Reset ALL Progress</b> will forget all completion data for all modules and begin all content over again.</li>
+</ul>
+</p>
 <div class="moxie-window">
   <form id="moxie_edit" action="{% url 'hive:mission_edit' object.pk %}" method="post">
   {% csrf_token %}
   <table class="table">
     <tr><th>Name</th><td>{{object.name}}</td></tr>
     <tr><th>Device ID</th><td>{{object.device_id}}</td></tr>
-    <tr><th>Force These Missions Complete</th><td>
+    <tr><th>Action</th><td>
+      <input type="radio" id="option1" name="mission_action" value="complete" checked>
+      <label for="option1">Set Missions Complete</label><br>
+      <input type="radio" id="option2" name="mission_action" value="forget">
+      <label for="option2">Clear Missions Complete</label><br>
+      <input type="radio" id="option3" name="mission_action" value="reset">
+      <label for="option3">Reset ALL Progress</label>
+    </td></tr>
+    <tr><th>Mission Sets to Change</th><td>
         {% for option in mission_sets %}
         <input type="checkbox" name="mission_sets" value="{{ option.0 }}" id="mission_set_{{ option.0 }}">
         <label for="mission_set_{{ option.0 }}">{{ option.1 }}</label>
@@ -19,7 +34,7 @@
         {% endfor %}
      </td></tr>
   </table>
-  <button type="submit" class="btn btn-primary">Complete</button>
+  <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 </div>
 </div>

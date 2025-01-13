@@ -201,6 +201,9 @@ class RobotData:
         device = MoxieDevice.objects.get(device_id=robot_id)
         last_mbh = MentorBehavior.objects.filter(device=device).order_by('-timestamp').first()
         inst_id = last_mbh.instance_id if last_mbh else 1
+        # Make sorting easy by giving them all unique timestamps, it seems weird to use future times
+        # so go back 1s to start and add 1 each time
+        rec_ts = now_ms() - 1000
         recs = []
         for cid in content_id_list:
             recs.append(MentorBehavior(device=device,
@@ -209,9 +212,10 @@ class RobotData:
                                  module_id=module_id,
                                  content_id=cid,
                                  content_day=last_mbh.content_day if last_mbh else "1",
-                                 timestamp=last_mbh.timestamp+1 if last_mbh else now_ms()
+                                 timestamp=rec_ts
                     ))
             inst_id += 1
+            rec_ts += 1
         MentorBehavior.objects.bulk_create(recs)
 
     # Get mentor behaviors

@@ -25,7 +25,7 @@
     {% if device.robot_config.wake_button_enabled and device.device_id in live %}
     <a class="btn btn-success btn-sm" href="{% url 'hive:moxie_wake' device.pk %}">Wake</a>
     {% endif %}
-    <a title="Bootstrap previously completed missions." class="btn btn-secondary btn-sm" href="{% url 'hive:moxie_missions' device.pk %}">Init Missions</a>
+    <a title="Modify completed missions or reset content progress" class="btn btn-secondary btn-sm" href="{% url 'hive:moxie_missions' device.pk %}">Content Progress</a>
   </td>
   </tr>
   {% endfor %}
