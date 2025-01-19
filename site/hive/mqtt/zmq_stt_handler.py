@@ -62,8 +62,8 @@ class STTSession:
                 response_format="verbose_json",
                 timestamp_granularities=["word"])
             resp.speech = transcript.text
-            min_start = min(d.start for d in transcript.words)
-            max_end = max(d.end for d in transcript.words)
+            min_start = min(d.start for d in transcript.words) if transcript.words else 0
+            max_end = max(d.end for d in transcript.words) if transcript.words else 0
             resp.start_timestamp = self._start_ts + int(min_start*1000)
             resp.end_timestamp = self._start_ts + int(max_end*1000)
             logger.info(f'STT-FINAL: {transcript.text}')
