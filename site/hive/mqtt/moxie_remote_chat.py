@@ -160,7 +160,7 @@ class SingleContextChatSession(ChatSession):
 class SinglePromptDBChatSession(SingleContextChatSession):
     def __init__(self, pk):
         source = SinglePromptChat.objects.get(pk=pk)
-        super().__init__(max_history=source.max_history, max_volleys=source.max_volleys, prompt=source.prompt, opener=source.opener, max_tokens=source.max_tokens, temperature=source.temperature)
+        super().__init__(max_history=source.max_history, max_volleys=source.max_volleys, model=source.model, prompt=source.prompt, opener=source.opener, max_tokens=source.max_tokens, temperature=source.temperature)
 
 '''
 RemoteChat is the plugin to the MoxieServer that handles all remote module requests.  It
