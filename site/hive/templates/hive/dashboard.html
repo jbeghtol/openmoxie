@@ -26,6 +26,7 @@
     <a class="btn btn-success btn-sm" href="{% url 'hive:moxie_wake' device.pk %}">Wake</a>
     {% endif %}
     <a title="Modify completed missions or reset content progress" class="btn btn-secondary btn-sm" href="{% url 'hive:moxie_missions' device.pk %}">Content Progress</a>
+    <a title="Customize Moxie's Face" class="btn btn-secondary btn-sm" href="{% url 'hive:face' device.pk %}">Edit Face</a>
   </td>
   </tr>
   {% endfor %}

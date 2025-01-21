@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="moxheader"><a href="{% url 'hive:dashboard' %}"><img class="moximage" src="{% static 'hive/openmoxie_logo.svg' %}"></a>OpenMoxie<span class="moxversion">{{moxie_version}}</span></div>
+<div class="p-3">
+<h2>Customize Moxie's Face</h2>
+<div class="moxie-window">
+  <form id="moxie_face" action="{% url 'hive:face_edit' object.pk %}" method="post">
+  {% csrf_token %}
+  <table class="table">
+    <tr><th>Name</th><td>{{object.name}}</td></tr>
+    <tr><th>Device ID</th><td>{{object.device_id}}</td></tr>
+    {% for layer in assets %}
+      <tr><th>{{layer.layer}}</th><td>
+        <select name="asset_{{layer.layer}}">
+        <option value="--">Default</option>
+        {% for item in layer.labels %}
+        <option value="{{item.label}}" {% if item.label in face_options %}selected{% endif %}>
+          {{ item.name }}
+        </option>
+        {% endfor %}
+        </select>
+      </td></tr>      
+    {% endfor %}
+  </table>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+</div>
+</div>
+{% endblock %}

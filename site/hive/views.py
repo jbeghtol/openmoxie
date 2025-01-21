@@ -13,7 +13,7 @@ from PIL import Image
 from io import BytesIO
 
 from .models import SinglePromptChat, MoxieDevice, MoxieSchedule, HiveConfiguration, MentorBehavior
-from .content.data import DM_MISSION_CONTENT_IDS
+from .content.data import DM_MISSION_CONTENT_IDS, get_moxie_customization_groups
 from .mqtt.moxie_server import get_instance
 from .mqtt.robot_data import DEFAULT_ROBOT_CONFIG, DEFAULT_ROBOT_SETTINGS
 import json
@@ -183,6 +183,40 @@ def moxie_edit(request, pk):
     except MoxieDevice.DoesNotExist as e:
         logger.warning("Moxie update for unfound pk {pk}")
     return HttpResponseRedirect(reverse("hive:dashboard"))
+
+# MOXIE - Edit Moxie Face Customizations
+class MoxieFaceView(generic.DetailView):
+    template_name = "hive/face.html"
+    model = MoxieDevice
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['assets'] = get_moxie_customization_groups()
+        context['face_options'] = get_instance().robot_data().get_config_for_device(self.object).get('child_pii', {}).get('face_options', [])
+        return context
+
+# FACE-POST - Save changes to a Moxie Face
+@require_http_methods(["POST"])
+def face_edit(request, pk):
+    try:
+        device = MoxieDevice.objects.get(pk=pk)
+        new_face = []
+        for key in request.POST.keys():
+            if key.startswith('asset_'):
+                val = request.POST[key]
+                if val != '--':
+                    new_face.append(val)
+        device.robot_config
+        if "child_pii" in device.robot_config:
+            device.robot_config["child_pii"]["face_options"] = new_face
+        else:
+            device.robot_config["child_pii"] = { "face_options": new_face }
+        device.save()
+        get_instance().handle_config_updated(device)
+        return redirect('hive:dashboard_alert', alert_message=f'Updated face for {device}')
+    except MoxieDevice.DoesNotExist as e:
+        logger.warning("Moxie update for unfound pk {pk}")
+        return redirect('hive:dashboard_alert', alert_message='No such Moxie')
 
 # MOXIE - View Moxie Mission Sets to Complete
 class MoxieMissionsView(generic.DetailView):

@@ -18,6 +18,8 @@ urlpatterns = [
     path("moxie/<int:pk>", views.MoxieView.as_view(), name="moxie"),
     path("moxie_missions/<int:pk>", views.MoxieMissionsView.as_view(), name="moxie_missions"),
     path("mission_edit/<int:pk>", views.mission_edit, name="mission_edit"),
+    path("face/<int:pk>", views.MoxieFaceView.as_view(), name="face"),
+    path("face_edit/<int:pk>", views.face_edit, name="face_edit"),
     path("moxie_edit/<int:pk>", views.moxie_edit, name="moxie_edit"),
     path("moxie_wake/<int:pk>", views.moxie_wake, name="moxie_wake"),
 ]
