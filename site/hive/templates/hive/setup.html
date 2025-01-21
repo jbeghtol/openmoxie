@@ -65,12 +65,19 @@
     </div>
     <div class="mb-3">
       <label for="hostname" class="form-label fw-bold fs-5">Hostname</label>
+      <div class="half text-bg-warning p-3" style="margin-bottom: 5px;">
+        <strong>Important! </strong>Hostname is the address Moxie will use to talk to your PC.  It is best to use your computer name, 
+        but if your router does not provide LAN DNS services, you may need to use your LAN IP address here.
+      </div>
       <input type="text" class="form-control" name="hostname" id="hostname" aria-describedby="hostnameHelp" placeholder="Enter computer name" value="{{object.external_host}}">
       <div id="hostnameHelp" class="form-text text-light">The local network name of this computer, either your computer name or LAN network address.</div>
     </div>
     {% if needs_admin %}
     <h3>Database Administrator</h3>
     <p>Setup the local database administrator password.  This is the superuser password for your local SQLite database and is used when accessing the Admin page for this project.</p>
+    <div class="half text-bg-warning p-3" style="margin-bottom: 5px;">
+      <strong>Important! </strong>You will need this password to access the Admin section later!
+    </div>
     <div class="row mb-3">
       <label for="adminUser" class="col-sm-2 col-form-label">Admin User</label>
       <div class="col-sm-10">
@@ -78,9 +85,9 @@
       </div>
     </div>
     <div class="row mb-3">
-      <label for="inputPassword3" class="col-sm-2 col-form-label">Admin Password</label>
+      <label for="adminPassword" class="col-sm-2 col-form-label">Admin Password</label>
       <div class="col-sm-10">
-        <input type="password" class="form-control" id="inputPassword3" name="adminPassword">
+        <input type="password" class="form-control" id="adminPassword" name="adminPassword">
       </div>
     </div>
     {% endif %}
@@ -94,4 +101,49 @@
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>
 </div>
+<script>
+$(document).ready(function() {
+  $('#hive_edit').submit(function(event) {
+    var validated = true;
+    var err_msg = "Setup Cannot Complete:";
+
+    var hostname = $('#hostname').val().trim();
+    var googleApiKey = $('#googleapikey').val().trim();
+    {% if needs_admin %}
+    var adminUser = $('#adminUser').val().trim();
+    var adminPassword = $('#adminPassword').val().trim();
+    if (adminUser === '') {
+      err_msg += '\n-Admin User cannot be empty';
+      validated = false;
+    }
+    if (adminPassword === '') {
+      err_msg += '\n-Admin Password cannot be empty';
+      validated = false;
+    }
+    {% endif %}
+    if (hostname === '') {
+      err_msg += '\n-Hostname cannot be empty';
+      validated = false;
+    }
+    if (googleApiKey !== '' && !isValidJSON(googleApiKey)) {
+      err_msg += '\n-Google API Key must be a valid JSON string';
+      validated = false;
+    }
+
+    if (!validated) {
+      alert(err_msg);
+      event.preventDefault();
+    }
+  });
+});
+
+function isValidJSON(jsonString) {
+  try {
+    JSON.parse(jsonString);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
+</script>
 {% endblock %}

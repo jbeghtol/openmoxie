@@ -52,7 +52,8 @@ def hive_configure(request):
         cfg.openai_api_key = openai
     google = request.POST['googleapikey']
     if google:
-        cfg.google_api_key = google
+        # Moxie likes compact json, so rewrite json input to be safe
+        cfg.google_api_key = json.dumps(json.loads(google))
     cfg.external_host = request.POST['hostname']
     cfg.allow_unverified_bots = request.POST.get('allowall') == "on"
     # Bootstrap any default data if not present

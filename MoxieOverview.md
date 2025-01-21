@@ -149,6 +149,56 @@ making changes, as violating the schema may cause your robot to reject the confi
 }
 ```
 
+### Child Record Details
+
+The "child_pii" record is the decrypted record about the child using Moxie.  Apologies, but for simplicity
+I'm using the google protocol buffer schema (which is what the robot uses).  I have omitted fields that
+have no function.
+
+```
+message child_pii {
+	string first_name = 1;
+	string last_name = 2;
+	string nickname = 3;
+	string birthday = 4;									// as an ISO8601 timestamp, midnight on bday in parent app timezone
+	repeated string volume_preference = 10;					// volume_preference in {nohud,nosoundfx,novisualfx,lessmotion,slowoutput,slowinput}
+	repeated string calendar_events = 11;					// a list of active non-holiday calendar events 
+	repeated string holiday_events = 13;					// a list of active holiday events
+	repeated string face_options = 17;
+	float input_speed = 19;
+}
+```
+
+The `birthday` is pertinent if you want the BIRTHDAY module to play on the mentor's birthday.  A timestamp
+is in ISO8601 format specifically.  Example: `2023-10-27T10:00:00-07:00`
+
+The `volume_preference` is a list of strings repesenting accessibility options previously available in the parent app. They are enabled by being added to the list.  The names are shown in the comment.
+
+The `face_options` value is a list of strings representing custom face option assets.  There are a number of these and most of them require a single value per layer (e.g. one eye color, one face color, etc.).
+
+#### Face Option Assets (Partial)
+
+* Face colors
+```
+  yellow: 'MX_020_Face_Colors_Yellow'
+  green: 'MX_020_Face_Colors_Green'
+  teal: 'MX_020_Face_Colors_Teal'
+  pink: 'MX_020_Face_Colors_Pink'
+  purple: 'MX_020_Face_Colors_Purple'
+```
+
+* Eye Colors
+```
+  brown: 'MX_010_Eyes_Brown'
+  gold: 'MX_010_Eyes_Gold'
+  hazel: 'MX_010_Eyes_Hazel'
+  purple: 'MX_010_Eyes_Purple'
+  turquoise: 'MX_010_Eyes_Turquoise'
+  light_blue: 'MX_010_Eyes_LightBlue'
+  blue: 'MX_010_Eyes_LightBlue'
+  teal: 'MX_010_Eyes_Turquoise'
+```
+
 ### Extra Config Items of Note
 
 ```
