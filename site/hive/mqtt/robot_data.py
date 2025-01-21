@@ -35,7 +35,8 @@ DEFAULT_ROBOT_SETTINGS = {
       "cloud_schedule_reset_threshold": "5",
       "debug_whiteboard": "0",
       "brain_entrances_available": "1",
-      "mqtt_files": "0"
+      "mqtt_files": "0",
+      "file_sync_wait": "0"
     }
 }
 

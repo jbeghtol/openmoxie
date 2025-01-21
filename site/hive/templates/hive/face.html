@@ -4,6 +4,11 @@
 <div class="moxheader"><a href="{% url 'hive:dashboard' %}"><img class="moximage" src="{% static 'hive/openmoxie_logo.svg' %}"></a>OpenMoxie<span class="moxversion">{{moxie_version}}</span></div>
 <div class="p-3">
 <h2>Customize Moxie's Face</h2>
+<div class="half text-bg-danger p-3">
+    <strong>Caution!</strong> Aside from Eye color and Face color, other custom assets have had little testing
+    and may cause Moxie to be unstable.  Use at your own risk.  If you experience issues, undo any changes
+    and check the Reset Child ID checkbox below.
+</div>
 <div class="moxie-window">
   <form id="moxie_face" action="{% url 'hive:face_edit' object.pk %}" method="post">
   {% csrf_token %}
@@ -22,6 +27,10 @@
         </select>
       </td></tr>      
     {% endfor %}
+    <tr><th>Emergency Recovery</th><td>
+      <input type="checkbox" name="child_recover" id="child_recover">
+      <label for="child_recover">Reset Child ID</label>
+    </td></tr>
   </table>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

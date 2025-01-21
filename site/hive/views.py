@@ -206,14 +206,22 @@ def face_edit(request, pk):
                 val = request.POST[key]
                 if val != '--':
                     new_face.append(val)
-        device.robot_config
+
         if "child_pii" in device.robot_config:
             device.robot_config["child_pii"]["face_options"] = new_face
         else:
             device.robot_config["child_pii"] = { "face_options": new_face }
+
+        # Moxie-Unity keeps a cached record of face textture keyed by the 'id' field.  This
+        # Sets a new unique id to invalidate any old/corrupt cached record
+        suffix = ''
+        if request.POST.get('child_recover'):
+            device.robot_config["child_pii"]["id"] = str(uuid.uuid4())
+            suffix = " - Created new child ID"
+
         device.save()
         get_instance().handle_config_updated(device)
-        return redirect('hive:dashboard_alert', alert_message=f'Updated face for {device}')
+        return redirect('hive:dashboard_alert', alert_message=f'Updated face for {device}{suffix}')
     except MoxieDevice.DoesNotExist as e:
         logger.warning("Moxie update for unfound pk {pk}")
         return redirect('hive:dashboard_alert', alert_message='No such Moxie')
