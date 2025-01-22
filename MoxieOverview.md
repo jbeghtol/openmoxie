@@ -178,6 +178,11 @@ The `face_options` value is a list of strings representing custom face option as
 
 #### Face Option Assets (Partial)
 
+There are a number of face options. Face color and eye color were well tested and visible previously.  There are
+a bunch of custom face assets created but they are not well tested!  In testing, found some would crash Unity,
+and these were not listed, but many of them are listed and usable in the face editor.  Use them with caution
+and undo if you run into any issues.
+
 * Face colors
 ```
   yellow: 'MX_020_Face_Colors_Yellow'
