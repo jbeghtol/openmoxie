@@ -7,7 +7,9 @@
 <div class="half text-bg-danger p-3">
     <strong>Caution!</strong> Aside from Eye color and Face color, other custom assets have had little testing
     and may cause Moxie to be unstable.  Use at your own risk.  If you experience issues, undo any changes
-    and check the Reset Child ID checkbox below.
+    and check the Reset Child ID checkbox below.  Instability may take many forms, such as causing background
+    services inside Moxie that process audio to stop running.  Not all combinations have been tested and not
+    all of these may work.
 </div>
 <div class="moxie-window">
   <form id="moxie_face" action="{% url 'hive:face_edit' object.pk %}" method="post">
