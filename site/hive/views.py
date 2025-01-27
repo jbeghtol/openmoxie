@@ -226,6 +226,45 @@ def face_edit(request, pk):
         logger.warning("Moxie update for unfound pk {pk}")
         return redirect('hive:dashboard_alert', alert_message='No such Moxie')
 
+# MOXIE - Puppeteer Moxie
+class MoxiePuppetView(generic.DetailView):
+    template_name = "hive/puppet.html"
+    model = MoxieDevice
+
+# PUPPET API - Handle AJAX calls from puppet view
+@csrf_exempt
+def puppet_api(request, pk):
+    try:
+        device = MoxieDevice.objects.get(pk=pk)
+        if request.method == 'GET':
+            # Handle GET request
+            result = { 
+                "online": get_instance().robot_data().device_online(device.device_id),
+                "puppet_state": get_instance().robot_data().get_puppet_state(device.device_id),
+                "puppet_enabled": device.robot_config.get("moxie_mode") == "TELEHEALTH"
+            }
+            return JsonResponse(result)
+        elif request.method == 'POST':
+            # Handle COMMANDS request
+            cmd = request.POST['command']
+            if cmd == "enable":
+                device.robot_config["moxie_mode"] = "TELEHEALTH"
+                device.save()
+                get_instance().handle_config_updated(device)
+            elif cmd == "disable":
+                device.robot_config.pop("moxie_mode", None)
+                device.save()
+                get_instance().handle_config_updated(device)
+            elif cmd == "interrupt":
+                get_instance().send_telehealth_interrupt(device.device_id)
+            elif cmd == "speak":
+                get_instance().send_telehealth_speech(device.device_id, request.POST['speech'], 
+                                                      request.POST['mood'], float(request.POST['intensity']))
+        return JsonResponse({'result': True})
+    except MoxieDevice.DoesNotExist as e:
+        logger.warning("Moxie puppet speak for unfound pk {pk}")
+        return HttpResponseBadRequest()
+    
 # MOXIE - View Moxie Mission Sets to Complete
 class MoxieMissionsView(generic.DetailView):
     template_name = "hive/missions.html"

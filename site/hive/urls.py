@@ -22,4 +22,6 @@ urlpatterns = [
     path("face_edit/<int:pk>", views.face_edit, name="face_edit"),
     path("moxie_edit/<int:pk>", views.moxie_edit, name="moxie_edit"),
     path("moxie_wake/<int:pk>", views.moxie_wake, name="moxie_wake"),
+    path("puppet/<int:pk>", views.MoxiePuppetView.as_view(), name="puppet"),
+    path("puppet_api/<int:pk>", views.puppet_api, name="puppet_api"),
 ]

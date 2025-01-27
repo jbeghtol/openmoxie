@@ -51,6 +51,8 @@ class MoxieServer:
     _zmq_handlers: dict
     _client_metrics: dict
     _google_service_account: str
+    _robot_data: RobotData
+    _remote_chat: RemoteChat
     def __init__(self, robot, rbdata, project_id, mqtt_host, mqtt_port, cert_required=True):
         self._robot = robot
         self._robot_data = rbdata
@@ -200,6 +202,12 @@ class MoxieServer:
             elif 'mentor_behavior' in csa:
                 # MENTOR BEHAVIOR REPORT - Robot informing what user has done
                 self._worker_queue.submit(self.ingest_mentor_behavior, device_id, csa['mentor_behavior'])
+            elif csa.get("subtopic") == "telehealth":
+                # ROBOT TELEHEALTH INTERFACE
+                logger.info(f'Rx TELEHEALTH: {csa.get("message")}')
+                th_state = csa["message"].get("state")
+                if th_state:
+                    self._robot_data.put_puppet_state(device_id, th_state)
 
         elif eventname == "zmq":
             # ZMQ BRIDGE INCOMING
@@ -293,6 +301,21 @@ class MoxieServer:
     def send_zmq_to_bot(self, device_id, msgobject):
         payload = (msgobject.DESCRIPTOR.full_name + ":").encode('utf-8') + msgobject.SerializeToString()
         self._client.publish(f"/devices/{device_id}/commands/zmq", payload=payload)
+
+    # Send Telehealth message to Moxie
+    def send_telehealth(self, device_id, msg):
+        self.send_command_to_bot_json(device_id, "telehealth", payload={ "command": "telehealth", "message": msg })
+
+    # Send Telehealth - PLAY message to Moxie
+    def send_telehealth_speech(self, device_id, speech:str, mood:str, intensity:float):
+        markup = self._remote_chat.make_markup(speech, (mood, intensity))
+        tmsg = { "action": "PLAY_OUTPUT", "output": { "text": speech, "markup": markup } }
+        self.send_telehealth(device_id, tmsg)
+
+    # Send Telehealth - INTERRUPT Moxie speaking
+    def send_telehealth_interrupt(self, device_id):
+        tmsg = { "action": "INTERRUPT" }
+        self.send_telehealth(device_id, tmsg)
 
     def long_topic(self, topic_name):
         return "/devices/" + self._robot.device_id + "/events/" + topic_name

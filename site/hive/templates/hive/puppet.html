@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="moxheader"><a href="{% url 'hive:dashboard' %}"><img class="moximage" src="{% static 'hive/openmoxie_logo.svg' %}"></a>OpenMoxie<span class="moxversion">{{moxie_version}}</span></div>
+<div class="p-3">
+<h2>Puppet Moxie</h2>
+<p>
+  When Puppet Mode is activated, Moxie will automatically wake into a mode where it only produces outputs from this page.
+  It will remain in this mode until you stop Puppet Mode.
+</p>
+<button id="puppet_button" type="button" class="btn btn-success">Start Puppet Mode</button>
+<table class="table">
+  <tr><th>Name</th><td>{{object.name}}</td></tr>
+  <tr><th>Device ID</th><td>{{object.device_id}}</td></tr>
+  <tr><th>Moxie State</th><td><span class="badge text-bg-success" id="moxie_state">Online</span></td></tr>
+  <tr><th>Puppet State</th><td><span class="badge text-bg-success" id="puppet_state">READY</span></td></tr>
+</table>
+<h3 class="chat-title">History</h3>
+<div id="chat_window" class="chat-window">
+  <ul id="chat_history" class="list-group">
+    <!-- Populated by AJAX -->
+  </ul>
+</div>
+<div id="chat_input" class="chat-window">
+  <form id="chat_form">
+    <div class="mb-3">
+      Mood <select id="mood" name="mood">
+        <option value="neutral">Neutral</option>
+        <option value="happy">Happy</option>
+        <option value="positive">Positive</option>
+        <option value="angry">Angry</option>
+        <option value="sad">Sad</option>
+        <option value="negative">Negative</option>
+        <option value="shy">Shy</option>
+        <option value="afraid">Afraid</option>
+        <option value="concerned">Concerned</option>
+        <option value="confused">Confused</option>
+        <option value="curious">Curious</option>
+        <option value="embarrassed">Embarrassed</option>
+      </select>
+      Intensity<input type="range" min="0.0" max="1.0" step="0.1" id="intensity" name="intensity" value="0.5"></td>
+    </div>
+    <div class="mb-3">
+      <input id="user_input" name="user_input" class="form-control" placeholder="Say something..."></input>
+    </div>
+    <div class="mb-3">
+      <button title="Stop Moxie's current speech" id="interrupt_button" type="button" class="btn btn-secondary">Interrupt</button>
+    </div>
+  </form>
+</div>
+</div>
+<script>
+  function add_to_history(cname, badge, prefix, text) {
+    $("#chat_history").append("<li class='" + cname + "'><span class='badge rounded-pill " + badge + "'>" + prefix + "</span>&nbsp;" + text + "</li>");
+    $('#chat_window').scrollTop($('#chat_window')[0].scrollHeight);
+  }
+
+  function set_puppet_state(val) {
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'hive:puppet_api' object.pk %}", 
+        data: {'command': val ? "enable" : "disable" },
+        dataType: 'json'
+    }).always(function() {
+      window.setTimeout("refresh_view()", 1);
+    });
+  }
+
+  function puppet_speak(speech, mood, intensity) {
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'hive:puppet_api' object.pk %}", 
+        data: {
+          'command': "speak",
+          'speech': speech,
+          'mood': mood,
+          'intensity': intensity
+        },
+        dataType: 'json'
+      })
+      .done(function(data, textStatus, jqXHR) {
+        add_to_history('list-group-item list-group-item-primary chat-line', 'bg-primary', 'Moxie', speech)
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.log("Failed speech: " + errorThrown);
+      })
+      .always(function() {
+        $('#user_input').val('');
+      });
+  }
+
+  function puppet_interrupt() {
+    console.log("Interrupting Moxie");
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'hive:puppet_api' object.pk %}", 
+        data: { 'command': "interrupt" },
+        dataType: 'json'
+      })
+      .done(function(data, textStatus, jqXHR) {
+        add_to_history('list-group-item list-group-item-primary chat-line', 'bg-primary', 'System', '--Interrupt--')
+      })
+      .fail(function(jqXHR, textStatus, errorThrown) {
+        console.log("Failed interrupt: " + errorThrown);
+      })
+  }
+
+  function refresh_view() {
+    $.ajax({
+        type: 'GET',
+        url: "{% url 'hive:puppet_api' object.pk %}",
+        dataType: "json"
+    }).done(function(data, textStatus, jqXHR) {
+        console.log(data);
+        if (data["online"]) {
+          $("#moxie_state")
+            .removeClass("text-bg-danger")
+            .addClass("text-bg-success")
+            .text("Online");
+        } else {
+          $("#moxie_state")
+            .removeClass("text-bg-success")
+            .addClass("text-bg-danger")
+            .text("Offline");
+        }
+
+        if (data["puppet_state"] != null) {
+          $("#puppet_state")
+            .removeClass("text-bg-warning")
+            .addClass("text-bg-success")
+            .text(data["puppet_state"]);
+        } else {
+          $("#puppet_state")
+            .removeClass("text-bg-success")
+            .addClass("text-bg-warning")
+            .text("PENDING");
+        }
+
+        if (data["puppet_enabled"]) {
+          $("#puppet_button")
+            .removeClass("btn-success")
+            .addClass("btn-danger")
+            .text("Stop Puppet Mode")
+            .off("click").on("click", function() { set_puppet_state(false); });
+        } else {
+          $("#puppet_button")
+            .removeClass("btn-danger")
+            .addClass("btn-success")
+            .text("Start Puppet Mode")
+            .off("click").on("click", function() { set_puppet_state(true); });
+        }
+    }).always(function() {
+      window.setTimeout("refresh_view()", 2000);
+    });
+  }
+
+  $(document).ready(function() {
+    $('#chat_form').submit(function(e) {
+      e.preventDefault(); // Prevent form submission
+      puppet_speak($('#user_input').val(), $('#mood').val(), $('#intensity').val());
+      });
+
+    $("#interrupt_button").on("click", function() { puppet_interrupt(); });
+
+    refresh_view();
+  });
+
+</script>
+{% endblock %}

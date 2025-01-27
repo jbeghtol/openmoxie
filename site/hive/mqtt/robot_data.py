@@ -171,6 +171,16 @@ class RobotData:
             # only add to a non-empty (initialized) record
             rec["state"] = state
 
+    def put_puppet_state(self, robot_id, state):
+        rec = self._robot_map.get(robot_id)
+        if rec:
+            # only add to a live record
+            rec["puppet_state"] = state
+
+    def get_puppet_state(self, robot_id):
+        rec = self._robot_map.get(robot_id)
+        return rec.get("puppet_state") if rec else None
+    
     # Update the device record with the state data
     def update_state_atomic(self, robot_id, state):
         device = MoxieDevice.objects.get(device_id=robot_id)

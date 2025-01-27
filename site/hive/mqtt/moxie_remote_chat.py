@@ -278,8 +278,8 @@ class RemoteChat:
         return resp
 
     # Markup text      
-    def make_markup(self, text):
-        return automarkup_process(text, self._automarkup_rules)
+    def make_markup(self, text, mood_and_intensity = None):
+        return automarkup_process(text, self._automarkup_rules, mood_and_intensity=mood_and_intensity)
 
     # Add a named response action to a response, with optional params
     def add_response_action(self, resp, action_name, module_id=None, content_id=None, output_type='GLOBAL_RESPONSE'):
