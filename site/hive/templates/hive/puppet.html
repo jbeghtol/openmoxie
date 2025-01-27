@@ -79,7 +79,7 @@
         dataType: 'json'
       })
       .done(function(data, textStatus, jqXHR) {
-        add_to_history('list-group-item list-group-item-primary chat-line', 'bg-primary', 'Moxie', speech)
+        add_to_history('list-group-item list-group-item-primary chat-line', 'bg-primary', 'Moxie (' + mood + ')', speech)
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         console.log("Failed speech: " + errorThrown);
