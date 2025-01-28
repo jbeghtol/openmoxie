@@ -242,3 +242,59 @@ These can also be dangerous.  Settings are stored inside a props key and are all
   "stt": "4", <-- IF USING A GOOGLE SERVICE ACCOUNT KEY, SET TO "0", "4" USES ZMQ VIA MOXIE SERVER
   "no_reprompt": "1", <-- SET TO "0" to PREVENT MOXIE FROM AUTOMATICALLY REPROMPTING ONCE AFTER 10s
 ```
+
+# Special Modes - Telehealth (Puppet Mode)
+
+Moxie's software stack does have a special mode created for remote control.  This state is controlled through
+a config option `moxie_mode` which when set to `TELEHEALTH` puts Moxie into an awake mode that doesn't use
+the schedule or run any autonomous control.  In this mode, Moxie simple plays outputs by request.
+
+In this mode, special messages arrive on the `telehealth` subtopic and may be send on the `telehealth` command topic. 
+Reference code for this is in the Puppet Mode interaction.  The bulk of the fancy things you can do require more intimate
+knowlege of Moxie's markup xml language, so a simple pure-automatic method is shown where an emotional state can be picked to go with the speech.
+
+Almost all JSON data coming from and going to Moxie is parsed using Google Protocol buffers, which enforce that the data
+conform to the schema.  Below is the schema for Telehealth messages.  All fields are optional in the schema, and some
+are included only in robot->cloud and some only in cloud->robot.
+
+The "session" convention serves little function in OpenMoxie, but practically it enables STT services that are ignored so
+unless you have need to use them, it's better to stay out of session for local puppeteering to reduce STT cost.
+
+```
+message Output {
+  string text = 3;        // text to say, used only if markup is empty
+  string markup = 4;      // marked-up text to say, used by default
+}
+
+enum Action {
+  UNKNOWN_ACTION = 0;     // specifically including UNKNOWN as the default enum
+
+  START_SESSION = 1;      // direct moxie into session
+  PLAY_OUTPUT = 2;        // say something
+  END_SESSION = 3;        // direct moxie out of session
+  UPDATE_STATE = 4;       // moxie state updates
+  INTERRUPT = 5;          // interrupt current moxie playback
+}
+
+enum RobotState {
+  UNKNOWN_STATE = 0;      // specifically including UNKNOWN as the default enum
+
+  READY = 1;              // Moxie is ready to receive telehealth commands
+  IN_SESSION = 2;         // Moxie has transitioned into active use
+  EXITING = 3;            // Moxie is leaving telehealth state
+}
+
+message TelehealthMessage {
+  uint64 timestamp = 1;
+  Action action = 2;              // an action to process
+  Output output = 3;              // optional attached output block
+  RobotState state = 4;           // optional attached state
+  string session_id = 5;          // optional, session id
+}
+```
+
+An example of a simple playback message:
+
+```
+tmsg = { "action": "PLAY_OUTPUT", "output": { "text": "Moxie loves you!" } }
+```
