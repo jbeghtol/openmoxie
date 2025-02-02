@@ -47,6 +47,11 @@ class MoxieDevice(models.Model):
     robot_config = models.JSONField(null=True, blank=True)
     robot_settings = models.JSONField(null=True, blank=True)
 
+    def is_paired(self):
+        if self.robot_config:
+            return not (self.robot_config.get('pairing_status') == 'unpairing')
+        return True
+
     def __str__(self):
         return self.name if self.name else self.device_id
 

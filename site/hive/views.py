@@ -178,6 +178,8 @@ def moxie_edit(request, pk):
             device.robot_config["child_pii"]["nickname"] = request.POST["nickname"]
         else:
             device.robot_config["child_pii"] = { "nickname": request.POST["nickname"] }
+        # pairing/unpairing
+        device.robot_config["pairing_status"] = request.POST["pairing_status"]
         device.save()
         get_instance().handle_config_updated(device)
     except MoxieDevice.DoesNotExist as e:

@@ -20,7 +20,11 @@
     {% else %}
     <span class="badge text-bg-secondary">Offline</span> {{device.last_disconnect|timesince}}
     {% endif %}
-  </td><td><a href="{% url 'hive:moxie' device.pk %}">{{device}}</a></td><td>{{device.schedule}}</td>
+  </td><td><a href="{% url 'hive:moxie' device.pk %}">{{device}}</a>
+    {% if not device.is_paired %}
+    <span class="badge text-bg-danger">Unpaired</span>
+    {% endif %}
+  </td><td>{{device.schedule}}</td>
   <td>
     {% if device.robot_config.wake_button_enabled and device.device_id in live %}
     <a class="btn btn-success btn-sm" href="{% url 'hive:moxie_wake' device.pk %}">Wake</a>
