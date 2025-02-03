@@ -92,3 +92,23 @@ class MentorBehavior(models.Model):
 
     def __str__(self):
         return f'{self.timestamp}-{self.device}-{self.module_id}/{self.content_id}-{self.action}'
+
+
+class GlobalAction(Enum):
+    RESPONSE = 1
+    LAUNCH = 2
+    CONFIRM_LAUNCH = 3
+    METHOD = 4
+
+class GlobalResponse(models.Model):
+    name = models.TextField()      # common name
+    pattern = models.TextField()   # regex pattern to match speech
+    action = models.IntegerField(choices=[(tag.value, tag.name) for tag in GlobalAction],default=GlobalAction.RESPONSE.value)
+    response_text = models.TextField(null=True, blank=True)  # plaintext response
+    response_markup = models.TextField(null=True, blank=True)  # markup override response
+    module_id = models.CharField(max_length=80, null=True, blank=True)  # for launches, module ID to target
+    content_id = models.CharField(max_length=80, null=True, blank=True) # for launches, content ID to target
+    code = models.TextField(null=True, blank=True) # Python code for METHOD, w/ def get_response(request, response):
+
+    def __str__(self):
+        return self.name
