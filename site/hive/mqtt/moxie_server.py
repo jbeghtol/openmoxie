@@ -349,6 +349,10 @@ class MoxieServer:
         sess.set_auto_history(True)
         return sess
     
+    # Check global commands for interactive web
+    def get_web_session_global_response(self, speech):
+        return self._remote_chat.get_web_session_global_response(speech)
+    
     # Accessor to remote chat
     def remote_chat(self):
         return self._remote_chat

@@ -1,5 +1,6 @@
 from enum import Enum
 from django.db import models
+from django.core.validators import validate_comma_separated_integer_list
 
 class AIVendor(Enum):
     OPEN_AI = 1
@@ -103,12 +104,14 @@ class GlobalAction(Enum):
 class GlobalResponse(models.Model):
     name = models.TextField()      # common name
     pattern = models.TextField()   # regex pattern to match speech
+    entity_groups = models.CharField(max_length=255, validators=[validate_comma_separated_integer_list], null=True, blank=True)
     action = models.IntegerField(choices=[(tag.value, tag.name) for tag in GlobalAction],default=GlobalAction.RESPONSE.value)
     response_text = models.TextField(null=True, blank=True)  # plaintext response
     response_markup = models.TextField(null=True, blank=True)  # markup override response
     module_id = models.CharField(max_length=80, null=True, blank=True)  # for launches, module ID to target
     content_id = models.CharField(max_length=80, null=True, blank=True) # for launches, content ID to target
-    code = models.TextField(null=True, blank=True) # Python code for METHOD, w/ def get_response(request, response):
+    code = models.TextField(null=True, blank=True) # Python code for METHOD, w/ def get_response(request, response, entities):
+    sort_key = models.IntegerField(default=1) # in case ordering matters, they order desc so high goes first
 
     def __str__(self):
         return self.name

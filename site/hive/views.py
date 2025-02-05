@@ -116,7 +116,11 @@ def interact_update(request):
     if not speech:
         line,overflow = session.get_prompt(),False
     else:
-        line,overflow = session.next_response(speech)
+        gresp = get_instance().get_web_session_global_response(speech)
+        if gresp:
+            line,overflow = gresp,False
+        else:
+            line,overflow = session.next_response(speech)
     return JsonResponse({'message': line, 'overflow': overflow})
 
 # RELOAD - Reload any records initialized from the database

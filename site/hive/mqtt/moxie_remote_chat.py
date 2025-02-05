@@ -21,14 +21,11 @@ from ..automarkup import process as automarkup_process
 from ..automarkup import initialize_rules as automarkup_initialize_rules
 import logging
 from datetime import datetime
+from .global_responses import GlobalResponses
+from .rchat import make_response,add_launch_or_exit,debug_response_string
 
 # Turn on to enable global commands in the cloud
-_DEMO_GLOBAL_COMMANDS = False
-
-def get_current_time():
-    now = datetime.now()
-    current_time = now.strftime("The time is %I %M %p")
-    return current_time
+_ENABLE_GLOBAL_COMMANDS = True
 
 logger = logging.getLogger(__name__)
 
@@ -169,6 +166,7 @@ from local modules.  It also manages auto-markup, which renders plaintext into a
 language with animated gestures.
 '''
 class RemoteChat:
+    _global_responses: GlobalResponses
     def __init__(self, server):
         self._server = server
         self._device_sessions = {}
@@ -176,6 +174,7 @@ class RemoteChat:
         self._modules_info = { "modules": [], "version": "openmoxie_v1" }
         self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=5)
         self._automarkup_rules = automarkup_initialize_rules()
+        self._global_responses = GlobalResponses()
 
     def register_module(self, module_id, content_id, cname):
         self._modules[f'{module_id}/{content_id}'] = cname
@@ -205,36 +204,12 @@ class RemoteChat:
             mlist.append(modinfo)
         self._modules_info["modules"] = mlist
         self._modules = new_modules
+        self._global_responses.update_from_database()
     
-    # For code-demonstration purposes.  These are global speech phrases that take priority over both
-    # remote chat responses AND local responses on the robot.  If enabled, these should work almost
-    # everywhere when robot is in session.  We use GLOBAL_COMMAND output type, which is the highest.
+    # Handle GLOBAL patterns, available inside (almost) any module
     def check_global(self, rcr):
-        if not _DEMO_GLOBAL_COMMANDS:
-            return None
+        return self._global_responses.check_global(rcr) if _ENABLE_GLOBAL_COMMANDS else None
         
-        # only check packets with non-empty speech
-        if rcr.get('speech'):
-            if rcr["speech"].lower() == "time":
-                # Play the time if the user says only 'time'
-                resp = self.make_response(rcr, output_type='GLOBAL_COMMAND')
-                resp['output']['text'] = get_current_time()
-                resp['output']['markup'] = self.make_markup(resp['output']['text'])
-                return resp
-            if rcr["speech"].lower() == "short":
-                # Launch into the short chat if user says only 'short'
-                resp = self.make_response(rcr, output_type='GLOBAL_COMMAND')
-                resp['output']['text'] = "You like short?"
-                resp['output']['markup'] = self.make_markup(resp['output']['text'])
-                self.add_response_action(resp, "launch", output_type='GLOBAL_COMMAND', module_id='OPENMOXIE_CHAT', content_id="short")
-                return resp
-            if rcr["speech"].lower() == "confirm":
-                # Launch into the short chat if user says only 'confirm' and then agrees
-                resp = self.make_response(rcr, output_type='GLOBAL_COMMAND')
-                resp['output']['text'] = "You like short?" # Line won't play
-                self.add_response_action(resp, "launch_if_confirmed", output_type='GLOBAL_COMMAND', module_id='OPENMOXIE_CHAT', content_id="short")
-                return resp
-        return None
 
     # Get the current or a new session for this device for this module/content ID pair
     def get_session(self, device_id, id, maker):
@@ -254,51 +229,20 @@ class RemoteChat:
         maker = self._modules.get(id)
         return self.get_session(device_id, id, maker) if maker else None
 
-    # Create a generic base response object matching a request object
-    def make_response(self, rcr, res=0, output_type='GLOBAL_RESPONSE'):
-        resp = { 
-            'command': 'remote_chat',
-            'result': res,
-            'backend': rcr['backend'],
-            'event_id': rcr['event_id'],
-            'output': { },
-            'response_actions': [
-                {
-                    'output_type': output_type
-                }
-            ],
-            'fallback': False,
-            'response_action': {
-                'output_type': output_type
-            }
-        }
-
-        if 'speech' in rcr:
-            resp['input_speech'] = rcr['speech']
-        return resp
+    def get_web_session_global_response(self, speech):
+        req = { "speech": speech, "backend": "router", "event_id": "fake" }
+        global_functor = self.check_global(req)
+        if global_functor:
+            resp = global_functor()
+            if isinstance(resp, str):
+                return resp
+            else:
+                return debug_response_string(resp)
+        return None
 
     # Markup text      
     def make_markup(self, text, mood_and_intensity = None):
         return automarkup_process(text, self._automarkup_rules, mood_and_intensity=mood_and_intensity)
-
-    # Add a named response action to a response, with optional params
-    def add_response_action(self, resp, action_name, module_id=None, content_id=None, output_type='GLOBAL_RESPONSE'):
-        action = { 'action': action_name, 'output_type': output_type }
-        if module_id:
-            action['module_id'] = module_id
-        if content_id:
-            action['content_id'] = content_id
-        resp['response_actions'] = [ action ]
-        resp['response_action'] = action
-
-    # Create launch to the next thing (better) or an exit (not as good)
-    def add_launch_or_exit(self, rcr, resp):
-        if 'recommend' in rcr and 'exits' in rcr['recommend'] and len(rcr['recommend']['exits']) > 0:
-            self.add_response_action(resp, 'launch',
-                                     module_id=rcr['recommend']['exits'][0].get('module_id'),
-                                     content_id=rcr['recommend']['exits'][0].get('content_id'))
-        else:
-            self.add_response_action(resp, 'exit_module')
 
     # Get the next response to a chat
     def next_session_response(self, device_id, sess, rcr, resp):
@@ -307,7 +251,7 @@ class RemoteChat:
         resp['output']['text'] = text
         resp['output']['markup'] = self.make_markup(text)
         if overflow:
-            self.add_launch_or_exit(rcr, resp)
+            add_launch_or_exit(rcr, resp)
         self._server.send_command_to_bot_json(device_id, 'remote_chat', resp)
     
     # Get the first prompt for a chat
@@ -317,19 +261,31 @@ class RemoteChat:
         resp['output']['markup'] = self.make_markup(text)
         # Special for prompt-only one-line modules, exit on prompt if max_len=0
         if sess.overflow():
-            self.add_launch_or_exit(rcr, resp)
+            add_launch_or_exit(rcr, resp)
         self._server.send_command_to_bot_json(device_id, 'remote_chat', resp)
+
+    # Produce / execute a global response
+    def global_response(self, device_id, functor):
+        resp = functor()
+        output = resp.get('output')
+        if output.get('text') and not output.get('markup'):
+            # Run automarkup on any text-only responses
+            output['markup'] = self.make_markup(output['text'])
+        self._server.send_command_to_bot_json(device_id, 'remote_chat', resp)
+        pass
 
     # Entry point where all RemoteChatRequests arrive
     def handle_request(self, device_id, rcr):
         id = rcr.get('module_id', '') + '/' + rcr.get('content_id', '')
         cmd = rcr.get('command')
+
         # check any global commands, and use their responses over anything else
-        global_response = self.check_global(rcr)
-        if global_response:
-            logger.debug(f'Global response inside {id}') 
-            self._server.send_command_to_bot_json(device_id, 'remote_chat', global_response)
+        global_functor = self.check_global(rcr)
+        if global_functor:
+            logger.debug(f'Global response inside {id}')
+            self._worker_queue.submit(self.global_response, device_id, global_functor)
             return
+
         maker = self._modules.get(id)
         if maker:
             logger.debug(f'Handling RCR:{cmd} for {id}') 
@@ -337,9 +293,9 @@ class RemoteChat:
             if cmd == 'notify':
                 sess.ingest_notify(rcr)
             elif cmd == "prompt":
-                self._worker_queue.submit(self.first_session_response, device_id, sess, rcr, self.make_response(rcr))
+                self._worker_queue.submit(self.first_session_response, device_id, sess, rcr, make_response(rcr))
             else:
-                self._worker_queue.submit(self.next_session_response, device_id, sess, rcr, self.make_response(rcr))
+                self._worker_queue.submit(self.next_session_response, device_id, sess, rcr, make_response(rcr))
         else:
             session_reset = False
             if device_id in self._device_sessions:
@@ -348,7 +304,7 @@ class RemoteChat:
             if cmd != 'notify':
                 logger.debug(f'Ignoring request for other module: {id} SessionReset:{session_reset}')
                 # Rather than ignoring these, we return a generic FALLBACK response
-                resp = self.make_response(rcr, output_type='FALLBACK')
+                resp = make_response(rcr, output_type='FALLBACK')
                 resp['output']['text'] = resp['output']['markup'] = "I'm sorry. Can  you repeat that?"
                 self._server.send_command_to_bot_json(device_id, 'remote_chat', resp)
 
