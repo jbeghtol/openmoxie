@@ -84,18 +84,19 @@ class GlobalResponses:
         self._patterns = []
 
     def update_from_database(self):
-        logger.info(f'Loading GCs')
         self._patterns = []
         for gr in GlobalResponse.objects.all().order_by('-sort_key'):
             if gr.action == GlobalAction.LAUNCH.value:
+                logger.info(f'Loading GlobalResponse LAUNCH type {gr}')                
                 self._patterns.append(ActionPattern(gr, action="launch"))
             elif gr.action == GlobalAction.CONFIRM_LAUNCH.value:
-                logger.info(f'Loading CONFIRM_LAUNCH type {gr}')                
+                logger.info(f'Loading GlobalResponse CONFIRM_LAUNCH type {gr}')                
                 self._patterns.append(ActionPattern(gr, action="launch_if_confirmed"))
             elif gr.action == GlobalAction.RESPONSE.value:
-                logger.info(f'Loading RESPONSE type {gr}')
+                logger.info(f'Loading GlobalResponse RESPONSE type {gr}')
                 self._patterns.append(ActionPattern(gr))
             elif gr.action == GlobalAction.METHOD.value:
+                logger.info(f'Loading GlobalResponse CUSTOM METHOD type {gr}')
                 self._patterns.append(MethodPattern(gr))
             else:
                 logger.warning(f"Unsupported type {gr.action} in GlobalResponse {gr.name}")

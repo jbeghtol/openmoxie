@@ -1,6 +1,7 @@
 from enum import Enum
 from django.db import models
 from django.core.validators import validate_comma_separated_integer_list
+from django.core.exceptions import ValidationError
 
 class AIVendor(Enum):
     OPEN_AI = 1
@@ -113,5 +114,14 @@ class GlobalResponse(models.Model):
     code = models.TextField(null=True, blank=True) # Python code for METHOD, w/ def get_response(request, response, entities):
     sort_key = models.IntegerField(default=1) # in case ordering matters, they order desc so high goes first
 
+    # Ensure we have all we need
+    def clean(self):
+        if self.action == GlobalAction.METHOD.value and not self.code:
+            raise ValidationError({'code': 'Code is required for METHOD action'})
+        elif (self.action == GlobalAction.LAUNCH.value or self.action == GlobalAction.CONFIRM_LAUNCH.value) and not self.module_id:
+            raise ValidationError({'module_id': 'Module ID is required for LAUNCH actions'})
+        elif self.action != GlobalAction.METHOD.value and not self.response_text:
+            raise ValidationError({'response_text': 'Response Text is required for actions except METHOD'})
+        
     def __str__(self):
         return self.name
