@@ -11,6 +11,7 @@ possible to avoid triggering them when you don't intend to.  Matching uses searc
 but can be constrained to whole sentence matching using ^moxie time$ for instance to 
 catch "moxie time" but ignore "moxie time is something i dont have"
 '''
+from concurrent.futures import ThreadPoolExecutor,TimeoutError
 from ..models import GlobalResponse, GlobalAction
 import re
 import logging
@@ -59,7 +60,10 @@ class MethodPattern(ActionPattern):
             if func:
                 # get_response(request, response, entities)
                 entities = [matches.group(x) for x in self._entity_groups] if self._entity_groups else None
-                result = func(rcr, resp, entities)
+                # run background, limited at 10s
+                with ThreadPoolExecutor(max_workers=1) as executor:
+                    future = executor.submit(func, rcr, resp, entities)
+                    result = future.result(timeout=10.0)
                 if isinstance(result, str):
                     # if string, overwrite text in canned response
                     resp['output']['text'] = result
@@ -68,9 +72,12 @@ class MethodPattern(ActionPattern):
                     return result
             else:
                 resp['output']['text'] = "Script error: Could not locate method get_response"
+        except TimeoutError:
+            logger.error("Method code exceeded time limit.")
+            resp['output']['text'] = f"Script error: Timeout exceeded"
         except Exception as e:
             exc_info = traceback.format_exc()
-            logging.error(exc_info)
+            logger.error(exc_info)
             resp['output']['text'] = f"Script error: {e}"
 
         return resp

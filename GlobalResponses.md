@@ -4,6 +4,10 @@ Remote global responses are "global scope" patterns that can handle inputs in an
 context.  They are the means by which you could add a new global entry pattern like
 "Moxie tell me the time".
 
+*NOTE* All speech is converted to lowercase before matching, so regex expression should always
+use lowercase.  Moxie is often misrecognized as Moxy or Foxy or Roxy, so you may need to use 
+expressions like `moxie|moxy|foxy` to pick up the name and all its weird speech to text quirks.
+
 *WARNING* Global scope can interrupt a lot of great interactions, so any global responses
 should have narrow patterns to match inputs so they don't disrupt conversations.  Take care
 here, as it is a very easy way to break free form chat.
@@ -22,6 +26,9 @@ Global responses can be in one of these action types:
 By far the most powerful and scary, this method allows you to store a custom python method to produce the response.  The
 method must use the following signature, and no global level imports are allowed.
 
+*WARNING* Python is very particular about syntax, including indentation white space, and it is highly recommended that you
+use a code editor of some kind, then pasting the results into the database `code` field and testing in the Interact view (globals can be tested in any chat module).
+
 ```
 # request - the full remote chat request from the robot
 # response - the response object, you should return it filled out OR a simple string with response text
@@ -31,7 +38,7 @@ def get_response(request, response, entities):
     return resp.get(entities[0], "Error")
 ```
 
-The above example is a simple method to pair with a simple regex: `^moxie (what|why|how)$`.  It has a group for the adverb, which is the first and only group.
+The above example is a simple method to pair with a simple regex: `^moxie|moxy (what|why|how)$`.  It has a group for the adverb, which is the first and only group.
 
 ### How this regex works
 
@@ -42,7 +49,7 @@ The above example is a simple method to pair with a simple regex: `^moxie (what|
 
 ### Another Example, ask Moxie the time
 
-* pattern = `^moxie (time|what(?:'s| is) the time|what time is it)$`
+* pattern = `^moxie|moxy (time|what(?:'s| is) the time|what time is it)$`
 * action = `METHOD`
 * code = (see below)
 
@@ -51,18 +58,19 @@ def get_response(request, response, entities):
     def get_current_time():
         from datetime import datetime
         now = datetime.now()
-        current_time = now.strftime("The time is %I %M %p")
+        am_pm = "A.M." if now.hour < 12 else "P.M."
+        current_time = now.strftime(f"The time is %I %M {am_pm}")
         return current_time
     return get_current_time()
 ```
 
 Note: You can use import from within the method scope.  Any exceptions in processing this will produce a response
-with an error and the name of the exception.
+with an error and the name of the exception.  There is a 10s timeout on execution.
 
 ## OMG How does one make a regex anyway?
 
 If you aren't familiar with them, do some googling.  But, AIs are often pretty good if you describe what you want.  I used
-this prompt to generate the time regex above:
+this prompt to generate the time regex above (except I expanded moxie to include moxy by hand):
 
 ```
 i want to write a regular expression to catch phrases like "moxie time" "moxie what's the time" and "moxie what time is it" and i want only whole phrases, not substrings, accepted
