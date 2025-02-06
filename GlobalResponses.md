@@ -6,7 +6,7 @@ context.  They are the means by which you could add a new global entry pattern l
 
 *NOTE* All speech is converted to lowercase before matching, so regex expression should always
 use lowercase.  Moxie is often misrecognized as Moxy or Foxy or Roxy, so you may need to use 
-expressions like `moxie|moxy|foxy` to pick up the name and all its weird speech to text quirks.
+expressions like `(moxie|moxy|foxy)` to pick up the name and all its weird speech to text quirks.
 
 *WARNING* Global scope can interrupt a lot of great interactions, so any global responses
 should have narrow patterns to match inputs so they don't disrupt conversations.  Take care
@@ -38,11 +38,11 @@ def get_response(request, response, entities):
     return resp.get(entities[0], "Error")
 ```
 
-The above example is a simple method to pair with a simple regex: `^moxie|moxy (what|why|how)$`.  It has a group for the adverb, which is the first and only group.
+The above example is a simple method to pair with a simple regex: `^(moxie|moxy) (what|why|how)$`.  It has a group for the adverb, which is the second group.
 
 ### How this regex works
 
-1. User says "moxie what" or "moxie why" or "moxie how", which are all valid.  The regex groups these options inside () which makes them a "group".  It is the first group, so we set `entity_groups=1` in the setup.
+1. User says "moxie what" or "moxie why" or "moxie how", which are all valid.  The regex groups these options inside () which makes them a "group".  The special word is in the second group, so we set `entity_groups=2` in the setup.
 2. The regex matches, and the METHOD is queued to run.  Because we asked to extract groups, the method is passed `entities=['why']` if we say `why`.
 3. The method then looks up a fun response based on the adverb, and returns it as a string
 4. This string is then marked-up and played as the response for the input
@@ -53,7 +53,7 @@ In this example you can ask Moxie the time.  It's worth noting that Moxie can so
 like you'd expect, so AM or A.M. didn't sound right, so I had to use AY M, and if you include a leading 0 like
 09:15 Moxie says the leading 0.  A great way to experiment is using Puppet Mode to see how things sound.
 
-* pattern = `^moxie|moxy (time|what(?:'s| is) the time|what time is it)$`
+* pattern = `^(moxie|moxy) (time|what(?:'s| is) the time|what time is it)$`
 * action = `METHOD`
 * code = (see below)
 
