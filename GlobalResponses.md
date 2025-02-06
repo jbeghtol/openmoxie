@@ -49,6 +49,10 @@ The above example is a simple method to pair with a simple regex: `^moxie|moxy (
 
 ### Another Example, ask Moxie the time
 
+In this example you can ask Moxie the time.  It's worth noting that Moxie can sometimes struggle to say things
+like you'd expect, so AM or A.M. didn't sound right, so I had to use AY M, and if you include a leading 0 like
+09:15 Moxie says the leading 0.  A great way to experiment is using Puppet Mode to see how things sound.
+
 * pattern = `^moxie|moxy (time|what(?:'s| is) the time|what time is it)$`
 * action = `METHOD`
 * code = (see below)
@@ -58,8 +62,9 @@ def get_response(request, response, entities):
     def get_current_time():
         from datetime import datetime
         now = datetime.now()
-        am_pm = "A.M." if now.hour < 12 else "P.M."
-        current_time = now.strftime(f"The time is %I %M {am_pm}")
+        am_pm = "AY M" if now.hour < 12 else "P M" # Moxie speak
+        hour = now.hour % 12 or 12  # Convert to 12-hour format
+        current_time = f"The time is {hour}:{now.strftime('%M')} {am_pm}"
         return current_time
     return get_current_time()
 ```
