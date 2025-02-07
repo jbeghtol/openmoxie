@@ -51,5 +51,14 @@
       "prompt": "Not used",
       "opener": "I just wanted to say this one line.",
       "max_volleys": 0
+    },
+    { 
+      "name": "Wakeup Launcher",
+      "source_version": 1,
+      "module_id": "WAKEUP_LAUNCHER",
+      "content_id": "ftue|more_10|less_10|first_time_today|scheduled",
+      "prompt": "Not used",
+      "opener": ".",
+      "max_volleys": 0
     }
 ]

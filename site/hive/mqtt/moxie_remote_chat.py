@@ -188,13 +188,16 @@ class RemoteChat:
         new_modules = {}
         mod_map = {}
         for chat in SinglePromptChat.objects.all():
-            new_modules[f'{chat.module_id}/{chat.content_id}'] = { 'xtor': SinglePromptDBChatSession, 'params': { 'pk': chat.pk } }
-            logger.debug(f'Registering {chat.module_id}/{chat.content_id}')
-            # Group content IDs under module IDs
-            if chat.module_id in mod_map:
-                mod_map[chat.module_id].append(chat.content_id)
-            else:
-                mod_map[chat.module_id] = [ chat.content_id ]
+            # one module can support many content IDs, separated by | like openers
+            cid_list = chat.content_id.split('|')
+            for content_id in cid_list:
+                new_modules[f'{chat.module_id}/{content_id}'] = { 'xtor': SinglePromptDBChatSession, 'params': { 'pk': chat.pk } }
+                logger.debug(f'Registering {chat.module_id}/{content_id}')
+                # Group content IDs under module IDs
+                if chat.module_id in mod_map:
+                    mod_map[chat.module_id].append(content_id)
+                else:
+                    mod_map[chat.module_id] = [ content_id ]
         # Models/content IDs into the module info schema - bare bones mandatory fields only
         mlist = []
         for mod in mod_map.keys():
@@ -210,6 +213,8 @@ class RemoteChat:
     def check_global(self, rcr):
         return self._global_responses.check_global(rcr) if _ENABLE_GLOBAL_COMMANDS else None
         
+    def on_chat_complete(self, id, device_id, session):
+        logger.info(f'Chat Session Complete: {id}')
 
     # Get the current or a new session for this device for this module/content ID pair
     def get_session(self, device_id, id, maker):
@@ -217,6 +222,8 @@ class RemoteChat:
         if device_id in self._device_sessions:
             if self._device_sessions[device_id]['id'] == id:
                 return self._device_sessions[device_id]['session']
+            else:
+                self.on_chat_complete(device_id, id, self._device_sessions[device_id]['session'])
 
         # new session needed
         new_session = { 'id': id, 'session': maker['xtor'](**maker['params']) }
@@ -299,7 +306,8 @@ class RemoteChat:
         else:
             session_reset = False
             if device_id in self._device_sessions:
-                del self._device_sessions[device_id]
+                session = self._device_sessions.pop(device_id, None)
+                self.on_chat_complete(device_id, id, session)
                 session_reset = True
             if cmd != 'notify':
                 logger.debug(f'Ignoring request for other module: {id} SessionReset:{session_reset}')
