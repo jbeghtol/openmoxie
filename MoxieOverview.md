@@ -105,6 +105,7 @@ to the default schedule, but doesn't have Tips and Tricks or Systems Check modul
 ## Keys
 
 * provided_schedule - a list of module_ids with or without content_ids
+* wake_module - the module ID for an alternate wakeup module (needs all wakeup content IDs)
 * chat_request - the module/content ID when user asks "moxie let's chat"
 * end_of_session - a block describing what to do when the schedule is done, where you do the `end_module` followed by `chat_count` of the `chat_module` before being forced to sleep
 * generate - rules to automatically extend the schedule
@@ -116,6 +117,16 @@ to the default schedule, but doesn't have Tips and Tricks or Systems Check modul
 * module_count - Number of modules to append to the schedule
 * extra_modules - A list of user created module/content IDs that can be scheduled in addition to the default content modules
 * excluded_module_ids - A list of module_id values that should *not* end up in the schedule
+
+### Wakeup Module
+
+If you want to wake Moxie up directly into the schedule, without having to go through the normal
+wakeup routine first, you may create or use a custom module.  A default version is provided called
+WAKEUP_LAUNCHER.  To use this, add this to your schedule:
+
+```
+"wake_module": { "module_id": "WAKEUP_LAUNCHER" },
+```
 
 # Configuration and Settings
 
