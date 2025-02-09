@@ -213,7 +213,7 @@ class RemoteChat:
     def check_global(self, rcr):
         return self._global_responses.check_global(rcr) if _ENABLE_GLOBAL_COMMANDS else None
         
-    def on_chat_complete(self, id, device_id, session):
+    def on_chat_complete(self, device_id, id, session):
         logger.info(f'Chat Session Complete: {id}')
 
     # Get the current or a new session for this device for this module/content ID pair
