@@ -39,7 +39,7 @@ schedules or used in a launch global command.
 
 * Name - Common name of the module/content
 * Module ID - The `module_id` for this piece of content
-* Content ID - The `content_id` for this piece of content
+* Content ID - The `content_id` for this piece of content.  This may include multiple content IDs separated by the `|` character.
 * Opener - A line to play when content starts.  This uses a random line from `|` separated strings, so you can provide multiple openers and hear a random one.
 * Prompt - The prompt itself, the language directing the AI how to have this conversation
 * Max History - this limits how much of the conversation is sent to the AI in each inference. more history, better memory, but also can degrade AI performance and uses more tokens and you can run into token limits if the history gets too long
