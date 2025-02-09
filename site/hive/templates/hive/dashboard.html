@@ -47,9 +47,9 @@
 <br>
 <h2>Conversations</h2><a class="btn btn-primary btn-sm" role="button" href="{% url 'hive:reload_database' %}">Refresh from DB</a>
 <table class="table table-striped">
-  <tr><th>Module ID</th><th>Content ID</th><th></th></tr>
+  <tr><th>Name</th><th>Module ID</th><th>Content ID</th><th></th></tr>
   {% for s in conversations %}
-  <tr><td>{{s.module_id}}</td><td>{{s.content_id}}</td><td><a href="{% url 'hive:interact' s.pk %}">Interact</a></td></tr>
+  <tr><td>{{s}}</td><td>{{s.module_id}}</td><td>{{s.content_id}}</td><td><a href="{% url 'hive:interact' s.pk %}">Interact</a></td></tr>
   {% endfor %}
 </table>
 </div>
