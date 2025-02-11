@@ -111,7 +111,7 @@ def interact_update(request):
     speech = request.POST['speech']
     token = request.POST['token']
     module_id = request.POST['module_id']
-    content_id = request.POST['content_id']
+    content_id = request.POST['content_id'].split('|')[0]
     session = get_instance().get_web_session_for_module(token, module_id, content_id)
     if not speech:
         line,overflow = session.get_prompt(),False

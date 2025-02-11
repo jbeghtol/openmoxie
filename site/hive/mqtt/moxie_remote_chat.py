@@ -26,6 +26,7 @@ from .rchat import make_response,add_launch_or_exit,debug_response_string
 
 # Turn on to enable global commands in the cloud
 _ENABLE_GLOBAL_COMMANDS = True
+_LOG_ALL_RCR = False
 
 logger = logging.getLogger(__name__)
 
@@ -51,6 +52,9 @@ class ChatSession:
             if len(history) > self._max_history:
                 history = history[-self._max_history:]
 
+    def is_empty(self):
+        return len(self._history) == 0
+    
     def reset(self):
         self._history = []
         
@@ -253,12 +257,15 @@ class RemoteChat:
 
     # Get the next response to a chat
     def next_session_response(self, device_id, sess, rcr, resp):
-        speech = rcr["speech"]
+        # from experimentation, hm works best as a reprompt from the AI
+        speech = "hm" if rcr.get("command")=="reprompt" else rcr["speech"]
         text,overflow = sess.next_response(speech)
         resp['output']['text'] = text
         resp['output']['markup'] = self.make_markup(text)
         if overflow:
             add_launch_or_exit(rcr, resp)
+        if _LOG_ALL_RCR:
+            logger.info(f"RemoteChatResponse\n{resp}")
         self._server.send_command_to_bot_json(device_id, 'remote_chat', resp)
     
     # Get the first prompt for a chat
@@ -269,6 +276,8 @@ class RemoteChat:
         # Special for prompt-only one-line modules, exit on prompt if max_len=0
         if sess.overflow():
             add_launch_or_exit(rcr, resp)
+        if _LOG_ALL_RCR:
+            logger.info(f"RemoteChatResponse\n{resp}")
         self._server.send_command_to_bot_json(device_id, 'remote_chat', resp)
 
     # Produce / execute a global response
@@ -283,6 +292,8 @@ class RemoteChat:
 
     # Entry point where all RemoteChatRequests arrive
     def handle_request(self, device_id, rcr):
+        if _LOG_ALL_RCR:
+            logger.info(f"RemoteChatRequest\n{rcr}")
         id = rcr.get('module_id', '') + '/' + rcr.get('content_id', '')
         cmd = rcr.get('command')
 
@@ -299,7 +310,7 @@ class RemoteChat:
             sess = self.get_session(device_id, id, maker)
             if cmd == 'notify':
                 sess.ingest_notify(rcr)
-            elif cmd == "prompt":
+            elif cmd == "prompt" or (cmd == "reprompt" and sess.is_empty()):
                 self._worker_queue.submit(self.first_session_response, device_id, sess, rcr, make_response(rcr))
             else:
                 self._worker_queue.submit(self.next_session_response, device_id, sess, rcr, make_response(rcr))

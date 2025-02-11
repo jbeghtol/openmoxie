@@ -34,8 +34,24 @@ def add_response_action(resp, action_name, module_id=None, content_id=None, outp
         action['module_id'] = module_id
     if content_id:
         action['content_id'] = content_id
-    resp['response_actions'] = [ action ]
-    resp['response_action'] = action
+    # append if there is already an action, otherwise replace
+    if 'response_actions' in resp and 'action' in resp['response_action']:
+        resp['response_actions'].append(action)
+    else:
+        resp['response_actions'] = [ action ]
+        resp['response_action'] = action
+
+# Add an execution action to the response
+def add_execution_action(resp, fname, fparams=None, output_type='GLOBAL_RESPONSE'):
+    action = { 'action': 'execute', 'output_type': output_type, 'function_id': fname }
+    if fparams:
+        action['function_args'] = fparams
+    # append if there is already an action, otherwise replace
+    if 'response_actions' in resp and 'action' in resp['response_action']:
+        resp['response_actions'].append(action)
+    else:
+        resp['response_actions'] = [ action ]
+        resp['response_action'] = action
 
 # Create launch to the next thing (better) or an exit (not as good)
 def add_launch_or_exit(rcr, resp):
@@ -45,6 +61,7 @@ def add_launch_or_exit(rcr, resp):
                                     content_id=rcr['recommend']['exits'][0].get('content_id'))
     else:
         add_response_action(resp, 'exit_module')
+
 
 # Get a paintext string from a remote chat response w/ actions in text
 def debug_response_string(payload):
