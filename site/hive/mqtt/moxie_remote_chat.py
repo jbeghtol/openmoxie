@@ -23,6 +23,7 @@ import logging
 from datetime import datetime
 from .global_responses import GlobalResponses
 from .rchat import make_response,add_launch_or_exit,debug_response_string
+from .volley import Volley
 
 # Turn on to enable global commands in the cloud
 _ENABLE_GLOBAL_COMMANDS = True
@@ -256,29 +257,27 @@ class RemoteChat:
         return automarkup_process(text, self._automarkup_rules, mood_and_intensity=mood_and_intensity)
 
     # Get the next response to a chat
-    def next_session_response(self, device_id, sess, rcr, resp):
+    def next_session_response(self, device_id, sess, volley: Volley):
         # from experimentation, hm works best as a reprompt from the AI
-        speech = "hm" if rcr.get("command")=="reprompt" else rcr["speech"]
+        speech = "hm" if volley.request.get("command")=="reprompt" else volley.request["speech"]
         text,overflow = sess.next_response(speech)
-        resp['output']['text'] = text
-        resp['output']['markup'] = self.make_markup(text)
+        volley.set_output(text, self.make_markup(text))
         if overflow:
-            add_launch_or_exit(rcr, resp)
+            volley.add_launch_or_exit()
         if _LOG_ALL_RCR:
-            logger.info(f"RemoteChatResponse\n{resp}")
-        self._server.send_command_to_bot_json(device_id, 'remote_chat', resp)
+            logger.info(f"RemoteChatResponse\n{volley.response}")
+        self._server.send_command_to_bot_json(device_id, 'remote_chat', volley.response)
     
     # Get the first prompt for a chat
-    def first_session_response(self, device_id, sess, rcr, resp):
+    def first_session_response(self, device_id, sess, volley: Volley):
         text = sess.get_prompt()
-        resp['output']['text'] = text
-        resp['output']['markup'] = self.make_markup(text)
+        volley.set_output(text, self.make_markup(text))
         # Special for prompt-only one-line modules, exit on prompt if max_len=0
         if sess.overflow():
-            add_launch_or_exit(rcr, resp)
+            volley.add_launch_or_exit()
         if _LOG_ALL_RCR:
-            logger.info(f"RemoteChatResponse\n{resp}")
-        self._server.send_command_to_bot_json(device_id, 'remote_chat', resp)
+            logger.info(f"RemoteChatResponse\n{volley.response}")
+        self._server.send_command_to_bot_json(device_id, 'remote_chat', volley.response)
 
     # Produce / execute a global response
     def global_response(self, device_id, functor):
@@ -311,9 +310,9 @@ class RemoteChat:
             if cmd == 'notify':
                 sess.ingest_notify(rcr)
             elif cmd == "prompt" or (cmd == "reprompt" and sess.is_empty()):
-                self._worker_queue.submit(self.first_session_response, device_id, sess, rcr, make_response(rcr))
+                self._worker_queue.submit(self.first_session_response, device_id, sess, Volley(rcr))
             else:
-                self._worker_queue.submit(self.next_session_response, device_id, sess, rcr, make_response(rcr))
+                self._worker_queue.submit(self.next_session_response, device_id, sess, Volley(rcr))
         else:
             session_reset = False
             if device_id in self._device_sessions:
@@ -323,7 +322,8 @@ class RemoteChat:
             if cmd != 'notify':
                 logger.debug(f'Ignoring request for other module: {id} SessionReset:{session_reset}')
                 # Rather than ignoring these, we return a generic FALLBACK response
-                resp = make_response(rcr, output_type='FALLBACK')
-                resp['output']['text'] = resp['output']['markup'] = "I'm sorry. Can  you repeat that?"
-                self._server.send_command_to_bot_json(device_id, 'remote_chat', resp)
+                volley = Volley(rcr, output_type='FALLBACK')
+                fbline = "I'm sorry. Can  you repeat that?"
+                volley.set_output(fbline, fbline)
+                self._server.send_command_to_bot_json(device_id, 'remote_chat', volley.response)
 
