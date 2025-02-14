@@ -16,6 +16,7 @@ from .models import SinglePromptChat, MoxieDevice, MoxieSchedule, HiveConfigurat
 from .content.data import DM_MISSION_CONTENT_IDS, get_moxie_customization_groups
 from .mqtt.moxie_server import get_instance
 from .mqtt.robot_data import DEFAULT_ROBOT_CONFIG, DEFAULT_ROBOT_SETTINGS
+from .mqtt.volley import Volley
 import json
 import uuid
 import logging
@@ -113,15 +114,17 @@ def interact_update(request):
     module_id = request.POST['module_id']
     content_id = request.POST['content_id'].split('|')[0]
     session = get_instance().get_web_session_for_module(token, module_id, content_id)
-    if not speech:
-        line,overflow = session.get_prompt(),False
+    # Check global responses manually
+    gresp = get_instance().get_web_session_global_response(speech) if speech else None
+    if gresp:
+        line = gresp
+        details = {}
     else:
-        gresp = get_instance().get_web_session_global_response(speech)
-        if gresp:
-            line,overflow = gresp,False
-        else:
-            line,overflow = session.next_response(speech)
-    return JsonResponse({'message': line, 'overflow': overflow})
+        volley = Volley.request_from_speech(speech, module_id=module_id, content_id=content_id)
+        session.handle_volley(volley)
+        line = volley.debug_response_string()
+        details = volley.response
+    return JsonResponse({'message': line, 'details': details})
 
 # RELOAD - Reload any records initialized from the database
 def reload_database(request):

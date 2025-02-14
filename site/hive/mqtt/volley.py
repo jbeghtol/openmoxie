@@ -1,3 +1,7 @@
+import logging
+import uuid
+
+logger = logging.getLogger(__name__)
 
 class Volley:
     _request : dict
@@ -7,8 +11,18 @@ class Volley:
 
     def __init__(self, request, result=0, output_type='GLOBAL_RESPONSE'):
         self._request = request
-        self._response = self.create_response(res=result, output_type=output_type)
+        self.create_response(res=result, output_type=output_type)
         self._local_data = {}
+
+    @staticmethod
+    def request_from_speech(speech, module_id=None, content_id=None):
+        if speech:
+            request = { 'event_id': str(uuid.uuid4()), 'command': 'continue', 'speech': speech, 'backend': 'router' }
+        else:
+            request = { 'event_id': str(uuid.uuid4()), 'command': 'prompt',  'backend': 'router' }
+        if module_id: request['module_id'] = module_id
+        if content_id: request['content_id'] = content_id
+        return Volley(request)
 
     @property
     def request(self):
@@ -20,11 +34,12 @@ class Volley:
     
     def set_output(self, text, markup):
         self._response['output']['text'] = text
-        self._response['output']['markup'] = markup
+        if markup:
+            self._response['output']['markup'] = markup
 
     def create_response(self, res=0, output_type='GLOBAL_RESPONSE'):
         rcr = self._request
-        resp = { 
+        self._response = { 
             'command': 'remote_chat',
             'result': res,
             'backend': rcr['backend'],
@@ -42,8 +57,7 @@ class Volley:
         }
 
         if 'speech' in rcr:
-            resp['input_speech'] = rcr['speech']
-        return resp
+            self._response['input_speech'] = rcr['speech']
     
     # Add a named response action to a response, with optional params
     def add_response_action(self, action_name, module_id=None, content_id=None, output_type='GLOBAL_RESPONSE'):
@@ -89,15 +103,15 @@ class Volley:
                 if "action" in ra:
                     if ra["action"] == "launch":
                         pending_launch = ( ra["module_id"], ra["content_id"] if "content_id" in ra else "")
-                        respact += f' [{payload["response_action"]["action"]} -> {pending_launch}]'
+                        respact += f' [{ra["action"]} -> {pending_launch}]'
                     elif ra["action"] == "launch_if_confirmed":
                         pending_if = ( ra["module_id"], ra["content_id"] if "content_id" in ra else "")
-                        respact += f' [{payload["response_action"]["action"]} -> {pending_if}]'
+                        respact += f' [{ra["action"]} -> {pending_if}]'
                     elif ra["action"] == "execute":
                         pending_if = ( ra["function_id"], ra["function_args"] if "function_args" in ra else "")
-                        respact += f' [{payload["response_action"]["action"]} -> {pending_if}]'
+                        respact += f' [{ra["action"]} -> {pending_if}]'
                     elif ra["action"] == "exit_module":
-                        respact += f' [{payload["response_action"]["action"]}]'
+                        respact += f' [{ra["action"]}]'
                     else:
-                        respact += f' [{payload["response_action"]["action"]} -> Unsupported action]'
+                        respact += f' [{ra["action"]} -> Unsupported action]'
         return payload['output']['text'] + respact

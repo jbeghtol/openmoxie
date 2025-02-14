@@ -10,11 +10,13 @@ the remote service everytime it says something.  This data is used to accumulate
 history of the conversation and provides mostly seemless conversation context for the AI,
 even when the user provides input in multiple speech windows before hearing a response.
 '''
+import traceback
 from openai import OpenAI
 import copy
 import random
 import re
 import concurrent.futures
+from django.template import Template, Context
 from .ai_factory import create_openai
 from ..models import SinglePromptChat
 from ..automarkup import process as automarkup_process
@@ -28,6 +30,7 @@ from .volley import Volley
 # Turn on to enable global commands in the cloud
 _ENABLE_GLOBAL_COMMANDS = True
 _LOG_ALL_RCR = False
+_MAX_WORKER_THREADS = 5
 
 logger = logging.getLogger(__name__)
 
@@ -59,9 +62,9 @@ class ChatSession:
     def reset(self):
         self._history = []
         
-    def get_prompt(self, msg='Welcome to open chat'):
+    def get_opener(self, msg='Welcome to open chat'):
         self.reset()
-        return msg
+        return msg,self.overflow()
 
     def ingest_notify(self, rcr):
         # RULES - speech field is what 'assistant' said, but we should skip the [animation]
@@ -73,9 +76,15 @@ class ChatSession:
         if speech and 'animation:' not in speech:
             self.add_history('assistant', speech)
 
-    def next_response(self, speech):
+    def next_response(self, speech, context):
         logger.debug(f'Inference using history:\n{self._history}')
         return f"chat history {len(self._history)}", None
+
+    def overflow(self):
+        return False
+    
+    def handle_volley(self, volley:Volley):
+        pass
 
 '''
 Our simple Single Prompt conversation.  It uses the ChatSession to manage the history
@@ -105,6 +114,13 @@ class SingleContextChatSession(ChatSession):
         self._exit_line = exit_line
         self._auto_history = False
         self._exit_requested = False
+        self._pre_filter = None
+        self._post_filter = None
+        self._prompt_template = Template(prompt)
+
+    def set_filters(self, pre_filter=None, post_filter=None):
+        self._pre_filter = pre_filter
+        self._post_filter = post_filter
 
     # For web-based, we have no Moxie and no Notify channel, so auto-history is used
     def set_auto_history(self, val):
@@ -114,8 +130,44 @@ class SingleContextChatSession(ChatSession):
     def overflow(self):
         return self._total_volleys >= self._max_volleys or self._exit_requested
     
+    # Render an updated prompt context for this volley
+    def make_volley_context(self, volley:Volley):
+        return [ { "role": "system", 
+                    "content": self._prompt_template.render(Context({'volley': volley}))
+                    } ]
+    
+    # Handle a volley, using its request and populating the response
+    def handle_volley(self, volley:Volley):
+        try:
+            # preprocess, if filter returns True, we are done
+            if self._pre_filter:
+                logger.debug("Running volley pre-filter")
+                if self._pre_filter(volley, self):
+                    return
+            
+            # Handle prompt vs next response
+            cmd = volley.request.get('command')
+            if cmd == "prompt" or (cmd == "reprompt" and self.is_empty()):
+                text,overflow = self.get_opener()
+            else:
+                speech = "hm" if volley.request.get("command")=="reprompt" else volley.request["speech"]
+                text,overflow = self.next_response(speech, self.make_volley_context(volley))
+            volley.set_output(text, None)
+            if overflow:
+                volley.add_launch_or_exit()
+            # postprocess the volley
+            if self._post_filter:
+                logger.debug("Running volley post-filter")
+                self._post_filter(volley, self)
+        except Exception as e:
+            #stack = traceback.format_exc()
+            err_text = f"Error handling volley: {e}"
+            logger.error(err_text)
+            volley.create_response() # flush any pre-exception response changes
+            volley.set_output(err_text,err_text)
+
     # Get the next thing we should say, given the user speech and the history
-    def next_response(self, speech):
+    def next_response(self, speech, context):
         of = self.overflow()
         if self._auto_history:
             # accumulating automatically, no interruptions or aborts
@@ -129,7 +181,7 @@ class SingleContextChatSession(ChatSession):
             client = create_openai()
             resp = client.chat.completions.create(
                         model=self._model,
-                        messages=self._context + history,
+                        messages=context + history,
                         max_tokens=self._max_tokens,
                         temperature=self._temperature
                     ).choices[0].message.content
@@ -150,19 +202,26 @@ class SingleContextChatSession(ChatSession):
         return resp, of
     
     # Prompt in this case is an opener line to say when we start the conversation module
-    def get_prompt(self):
+    def get_opener(self):
         # Supports multiple random prompts separated by |, pick a random one
         opener = random.choice(self._opener.split('|'))
-        resp = super().get_prompt(msg=opener)
+        resp,overflow = super().get_opener(msg=opener)
         if self._auto_history:
             self.add_history('assistant', resp)
-        return resp
+        return resp,overflow
 
 # A database backed version, the way we normally load them
 class SinglePromptDBChatSession(SingleContextChatSession):
     def __init__(self, pk):
         source = SinglePromptChat.objects.get(pk=pk)
         super().__init__(max_history=source.max_history, max_volleys=source.max_volleys, model=source.model, prompt=source.prompt, opener=source.opener, max_tokens=source.max_tokens, temperature=source.temperature)
+        if source.code:
+            try:
+                loc = locals()
+                exec(source.code, globals(), loc)
+                self.set_filters(pre_filter=loc.get('pre_process'), post_filter=loc.get('post_process'))
+            except Exception as e:
+                logger.error(f"Error loading code for chat session: {e}")
 
 '''
 RemoteChat is the plugin to the MoxieServer that handles all remote module requests.  It
@@ -177,7 +236,7 @@ class RemoteChat:
         self._device_sessions = {}
         self._modules = { }
         self._modules_info = { "modules": [], "version": "openmoxie_v1" }
-        self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=5)
+        self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=_MAX_WORKER_THREADS)
         self._automarkup_rules = automarkup_initialize_rules()
         self._global_responses = GlobalResponses()
 
@@ -257,28 +316,17 @@ class RemoteChat:
         return automarkup_process(text, self._automarkup_rules, mood_and_intensity=mood_and_intensity)
 
     # Get the next response to a chat
-    def next_session_response(self, device_id, sess, volley: Volley):
-        # from experimentation, hm works best as a reprompt from the AI
-        speech = "hm" if volley.request.get("command")=="reprompt" else volley.request["speech"]
-        text,overflow = sess.next_response(speech)
-        volley.set_output(text, self.make_markup(text))
-        if overflow:
-            volley.add_launch_or_exit()
+    def create_session_response(self, device_id, sess:ChatSession, volley: Volley):
+        sess.handle_volley(volley)
+        if 'markup' not in volley.response['output']:
+            # if we don't have markup, create it
+            text = volley.response['output']['text']
+            volley.set_output(text, self.make_markup(text))
+
         if _LOG_ALL_RCR:
             logger.info(f"RemoteChatResponse\n{volley.response}")
         self._server.send_command_to_bot_json(device_id, 'remote_chat', volley.response)
     
-    # Get the first prompt for a chat
-    def first_session_response(self, device_id, sess, volley: Volley):
-        text = sess.get_prompt()
-        volley.set_output(text, self.make_markup(text))
-        # Special for prompt-only one-line modules, exit on prompt if max_len=0
-        if sess.overflow():
-            volley.add_launch_or_exit()
-        if _LOG_ALL_RCR:
-            logger.info(f"RemoteChatResponse\n{volley.response}")
-        self._server.send_command_to_bot_json(device_id, 'remote_chat', volley.response)
-
     # Produce / execute a global response
     def global_response(self, device_id, functor):
         resp = functor()
@@ -309,10 +357,8 @@ class RemoteChat:
             sess = self.get_session(device_id, id, maker)
             if cmd == 'notify':
                 sess.ingest_notify(rcr)
-            elif cmd == "prompt" or (cmd == "reprompt" and sess.is_empty()):
-                self._worker_queue.submit(self.first_session_response, device_id, sess, Volley(rcr))
             else:
-                self._worker_queue.submit(self.next_session_response, device_id, sess, Volley(rcr))
+                self._worker_queue.submit(self.create_session_response, device_id, sess, Volley(rcr))
         else:
             session_reset = False
             if device_id in self._device_sessions:
