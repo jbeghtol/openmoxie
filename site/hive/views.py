@@ -114,13 +114,13 @@ def interact_update(request):
     module_id = request.POST['module_id']
     content_id = request.POST['content_id'].split('|')[0]
     session = get_instance().get_web_session_for_module(token, module_id, content_id)
+    volley = Volley.request_from_speech(speech, module_id=module_id, content_id=content_id, local_data=session.local_data)
     # Check global responses manually
-    gresp = get_instance().get_web_session_global_response(speech) if speech else None
+    gresp = get_instance().get_web_session_global_response(volley) if speech else None
     if gresp:
         line = gresp
         details = {}
     else:
-        volley = Volley.request_from_speech(speech, module_id=module_id, content_id=content_id)
         session.handle_volley(volley)
         line = volley.debug_response_string()
         details = volley.response

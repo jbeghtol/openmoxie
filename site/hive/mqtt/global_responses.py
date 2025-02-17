@@ -16,6 +16,7 @@ from ..models import GlobalResponse, GlobalAction
 import re
 import logging
 from .rchat import make_response,add_response_action
+from .volley import Volley
 from functools import partial
 import traceback
 
@@ -30,19 +31,17 @@ class ActionPattern:
         self._re = re.compile(source.pattern)
         self._action = action
 
-    def response_functor(self, speech, rcr):
+    def response_functor(self, speech, volley):
         matches = self._re.match(speech)
         if matches:
-            return partial(self.create_response, matches, rcr)
+            return partial(self.create_response, matches, volley)
         return None
     
-    def create_response(self, matches, rcr):
-        resp = make_response(rcr, output_type='GLOBAL_COMMAND')
-        resp['output']['text'] = self._source.response_text
-        resp['output']['markup'] = self._source.response_markup
+    def create_response(self, matches, volley:Volley):
+        volley.set_output(self._source.response_text, self._source.response_markup, output_type='GLOBAL_COMMAND')
         if self._action:
-            add_response_action(resp, self._action, output_type='GLOBAL_COMMAND', module_id=self._source.module_id, content_id=self._source.content_id)
-        return resp
+            volley.add_response_action(self._action, output_type='GLOBAL_COMMAND', module_id=self._source.module_id, content_id=self._source.content_id)
+        return volley.response
 
 # Action Patterns - these produce a single response generated on the fly from a custom method
 class MethodPattern(ActionPattern):
@@ -51,36 +50,43 @@ class MethodPattern(ActionPattern):
         super().__init__(source)
         self._entity_groups = [int(x) for x in source.entity_groups.split(',') if x] if source.entity_groups else None
 
-    def create_response(self, matches, rcr):
-        resp = make_response(rcr)
+    def create_response(self, matches, volley):
         loc = locals()
         try:
             exec(self._source.code, globals(), loc)
             func = loc.get('get_response')
-            if func:
-                # get_response(request, response, entities)
+            func_v = loc.get('handle_volley')
+            if func or func_v:
                 entities = [matches.group(x) for x in self._entity_groups] if self._entity_groups else None
                 # run background, limited at 10s
                 with ThreadPoolExecutor(max_workers=1) as executor:
-                    future = executor.submit(func, rcr, resp, entities)
+                    if func_v:
+                        # handle_volley(volley)
+                        volley.local_data["entities"] = entities
+                        future = executor.submit(func_v, volley)
+                    else:
+                        # get_response(request, response, entities)
+                        future = executor.submit(func, volley.request, volley.response, entities)
                     result = future.result(timeout=10.0)
                 if isinstance(result, str):
                     # if string, overwrite text in canned response
-                    resp['output']['text'] = result
-                else:
+                    volley.set_output(result, None)
+                elif result:
                     # other option, full response is the result - return it as is
                     return result
+                else:
+                    logger.info(f"GLOBAL METHOD, FINAL LOCAL {volley.local_data}")
             else:
-                resp['output']['text'] = "Script error: Could not locate method get_response"
+                volley.set_output("Script error: Could not locate method get_response", None)
         except TimeoutError:
             logger.error("Method code exceeded time limit.")
-            resp['output']['text'] = f"Script error: Timeout exceeded"
+            volley.set_output("Script error: Timeout exceeded", None)
         except Exception as e:
             exc_info = traceback.format_exc()
             logger.error(exc_info)
-            resp['output']['text'] = f"Script error: {e}"
+            volley.set_output(f"Script error: {e}", None)
 
-        return resp
+        return volley.response
 
 # The object owning ALL active Global Responses.  It loads them from the database only on
 # startup and request.  All response handling must be executed in the returned functor.
@@ -108,13 +114,13 @@ class GlobalResponses:
             else:
                 logger.warning(f"Unsupported type {gr.action} in GlobalResponse {gr.name}")
 
-    def check_global(self, rcr):
-        speech = rcr.get('speech')
+    def check_global(self, volley:Volley):
+        speech = volley.request.get('speech')
         if speech:
             # all global commands match at lowercase
             speech = speech.lower()
             for p in self._patterns:
-                f = p.response_functor(speech, rcr)
+                f = p.response_functor(speech, volley)
                 if f:
                     return f
         return None

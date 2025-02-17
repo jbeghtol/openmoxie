@@ -126,3 +126,10 @@ class GlobalResponse(models.Model):
         
     def __str__(self):
         return self.name
+    
+class PersistentData(models.Model):
+    device = models.OneToOneField(MoxieDevice, on_delete=models.CASCADE)
+    data = models.JSONField()
+
+    def __str__(self):
+        return f'{self.device} - Data'

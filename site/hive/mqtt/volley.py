@@ -7,22 +7,23 @@ class Volley:
     _request : dict
     _response : dict
     _local_data : dict
-    _persistent_data: dict
+    _robot_data: dict
 
-    def __init__(self, request, result=0, output_type='GLOBAL_RESPONSE'):
+    def __init__(self, request, result=0, output_type='GLOBAL_RESPONSE', robot_data=None, local_data=None):
         self._request = request
         self.create_response(res=result, output_type=output_type)
-        self._local_data = {}
+        self._local_data = local_data if local_data != None else {}
+        self._robot_data = robot_data if robot_data != None else {}
 
     @staticmethod
-    def request_from_speech(speech, module_id=None, content_id=None):
+    def request_from_speech(speech, module_id=None, content_id=None, local_data=None):
         if speech:
             request = { 'event_id': str(uuid.uuid4()), 'command': 'continue', 'speech': speech, 'backend': 'router' }
         else:
             request = { 'event_id': str(uuid.uuid4()), 'command': 'prompt',  'backend': 'router' }
         if module_id: request['module_id'] = module_id
         if content_id: request['content_id'] = content_id
-        return Volley(request)
+        return Volley(request, local_data=local_data)
 
     @property
     def request(self):
@@ -32,10 +33,39 @@ class Volley:
     def response(self):
         return self._response
     
-    def set_output(self, text, markup):
+    @property
+    def local_data(self):
+        return self._local_data
+
+    @property
+    def persist_data(self):
+        return self._robot_data.get("persist",{})
+    
+    @property
+    def config(self):
+        return self._robot_data.get("config",{})
+    
+    @property
+    def state(self):
+        return self._robot_data.get("state",{})
+
+    @property
+    def entities(self):
+        return self._local_data.get("entities",[])
+    
+    # Called by volley handling to pass local session data
+    def assign_local_data(self, local_data):
+        self._local_data = local_data
+        logger.info(f'Assigning local_data={local_data}')
+
+    def set_output(self, text, markup, output_type=None):
         self._response['output']['text'] = text
         if markup:
             self._response['output']['markup'] = markup
+        if output_type:
+            self._response['response_action']['output_type'] = output_type
+            self._response['response_actions'][0]['output_type'] = output_type
+
 
     def create_response(self, res=0, output_type='GLOBAL_RESPONSE'):
         rcr = self._request

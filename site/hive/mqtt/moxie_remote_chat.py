@@ -43,6 +43,7 @@ class ChatSession:
         self._history = []
         self._max_history = max_history
         self._total_volleys = 0
+        self._local_data = {}
 
     def add_history(self, role, message, history=None):
         if not history:
@@ -62,6 +63,10 @@ class ChatSession:
     def reset(self):
         self._history = []
         
+    @property
+    def local_data(self):
+        return self._local_data
+    
     def get_opener(self, msg='Welcome to open chat'):
         self.reset()
         return msg,self.overflow()
@@ -138,6 +143,7 @@ class SingleContextChatSession(ChatSession):
     
     # Handle a volley, using its request and populating the response
     def handle_volley(self, volley:Volley):
+        volley.assign_local_data(self._local_data)
         try:
             # preprocess, if filter returns True, we are done
             if self._pre_filter:
@@ -274,14 +280,20 @@ class RemoteChat:
         self._global_responses.update_from_database()
     
     # Handle GLOBAL patterns, available inside (almost) any module
-    def check_global(self, rcr):
-        return self._global_responses.check_global(rcr) if _ENABLE_GLOBAL_COMMANDS else None
+    def check_global(self, volley):
+        return self._global_responses.check_global(volley) if _ENABLE_GLOBAL_COMMANDS else None
         
     def on_chat_complete(self, device_id, id, session):
         logger.info(f'Chat Session Complete: {id}')
 
     # Get the current or a new session for this device for this module/content ID pair
-    def get_session(self, device_id, id, maker):
+    def active_session_data(self, device_id):
+        if device_id in self._device_sessions:
+            return self._device_sessions[device_id]['session'].local_data
+        return None
+            
+    # Get the current or a new session for this device for this module/content ID pair
+    def get_session(self, device_id, id, maker) -> ChatSession:
         # each device has a single session only for now
         if device_id in self._device_sessions:
             if self._device_sessions[device_id]['id'] == id:
@@ -300,9 +312,9 @@ class RemoteChat:
         maker = self._modules.get(id)
         return self.get_session(device_id, id, maker) if maker else None
 
-    def get_web_session_global_response(self, speech):
-        req = { "speech": speech, "backend": "router", "event_id": "fake" }
-        global_functor = self.check_global(req)
+    def get_web_session_global_response(self, volley):
+        #volley = Volley({ "speech": speech, "backend": "router", "event_id": "fake" })
+        global_functor = self.check_global(volley)
         if global_functor:
             resp = global_functor()
             if isinstance(resp, str):
@@ -338,38 +350,53 @@ class RemoteChat:
         pass
 
     # Entry point where all RemoteChatRequests arrive
-    def handle_request(self, device_id, rcr):
+    def handle_request(self, device_id, rcr, volley_data):
         if _LOG_ALL_RCR:
             logger.info(f"RemoteChatRequest\n{rcr}")
         id = rcr.get('module_id', '') + '/' + rcr.get('content_id', '')
         cmd = rcr.get('command')
 
+        # Create volley if needed
+        #volley = Volley(rcr, robot_data=volley_data, local_data=self.active_session_data(device_id)) if cmd != 'notify' else None
+
         # check any global commands, and use their responses over anything else
-        global_functor = self.check_global(rcr)
-        if global_functor:
-            logger.debug(f'Global response inside {id}')
-            self._worker_queue.submit(self.global_response, device_id, global_functor)
-            return
+        # global_functor = self.check_global(volley) if volley else None
+        # if global_functor:
+        #     logger.debug(f'Global response inside {id}')
+        #     self._worker_queue.submit(self.global_response, device_id, global_functor)
+        #     return
 
         maker = self._modules.get(id)
         if maker:
+            # THIS IS THE PATH FOR REMOTE CONTENT - MODULE/CONTENT HOSTED IN OPENMOXIE
             logger.debug(f'Handling RCR:{cmd} for {id}') 
             sess = self.get_session(device_id, id, maker)
             if cmd == 'notify':
                 sess.ingest_notify(rcr)
             else:
-                self._worker_queue.submit(self.create_session_response, device_id, sess, Volley(rcr))
+                volley = Volley(rcr, robot_data=volley_data, local_data=sess.local_data)
+                if not self.handled_global(device_id, volley):
+                    self._worker_queue.submit(self.create_session_response, device_id, sess, volley)
         else:
+            # THIS IS THE PATH FOR MOXIE ON-BOARD CONTENT
             session_reset = False
             if device_id in self._device_sessions:
                 session = self._device_sessions.pop(device_id, None)
                 self.on_chat_complete(device_id, id, session)
                 session_reset = True
             if cmd != 'notify':
-                logger.debug(f'Ignoring request for other module: {id} SessionReset:{session_reset}')
-                # Rather than ignoring these, we return a generic FALLBACK response
-                volley = Volley(rcr, output_type='FALLBACK')
-                fbline = "I'm sorry. Can  you repeat that?"
-                volley.set_output(fbline, fbline)
-                self._server.send_command_to_bot_json(device_id, 'remote_chat', volley.response)
-
+                volley = Volley(rcr, robot_data=volley_data)
+                if not self.handled_global(device_id, volley):
+                    logger.debug(f'Ignoring request for other module: {id} SessionReset:{session_reset}')
+                    # Rather than ignoring these, we return a generic FALLBACK response
+                    fbline = "I'm sorry. Can  you repeat that?"
+                    volley.set_output(fbline, fbline, output_type='FALLBACK')
+                    self._server.send_command_to_bot_json(device_id, 'remote_chat', volley.response)
+    
+    def handled_global(self, device_id, volley):
+        global_functor = self.check_global(volley)
+        if global_functor:
+            logger.debug(f'Global response inside {id}')
+            self._worker_queue.submit(self.global_response, device_id, global_functor)
+            return True
+        return False
