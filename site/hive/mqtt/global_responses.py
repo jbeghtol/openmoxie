@@ -15,7 +15,6 @@ from concurrent.futures import ThreadPoolExecutor,TimeoutError
 from ..models import GlobalResponse, GlobalAction
 import re
 import logging
-from .rchat import make_response,add_response_action
 from .volley import Volley
 from functools import partial
 import traceback
