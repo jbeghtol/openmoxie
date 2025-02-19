@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="moxheader"><a href="{% url 'hive:dashboard' %}"><img class="moximage" src="{% static 'hive/openmoxie_logo.svg' %}"></a>OpenMoxie<span class="moxversion">{{moxie_version}}</span></div>
+<div class="p-3">
+<h2>Import Moxie Content</h2>
+<p>
+Select a content JSON file to import and then review and accept the content pieces to import them into your
+content database.  Code blocks inside content can be malicious, so be sure to review before accepting for import.
+</p>
+<p>
+The badge next to each piece of content explains what will change if you select that item for import.
+<ul>
+    <li><span class="badge text-bg-danger">Replace vX</span> : Current content has version X and will be replaced with the version listed.</li>
+    <li><span class="badge text-bg-success">Upgrade from vX</span> : Current content has version X and will be upgraded to the version listed.</li>
+    <li><span class="badge text-bg-success">New</span> : This is new content that will be added to your content database</li>
+</ul>
+</p>
+</div>
+<div class="p-3">
+<h2>Content Selection</h2>
+<form id="import_form" action="{% url 'hive:import_data' %}" method="post">
+    {% csrf_token %}
+    <textarea name="json_data" style="display:none;">{{json_data_str}}</textarea>
+    <table class="table">
+        <tr><th>Content Name</th><td>{{json_data.name}}</td></tr>
+        <tr><th>Details</th><td>{{json_data.details}}</td></tr>
+        <tr><th>Global Responses</th><td>
+            {% for g in json_data.globals %}
+            <input type="checkbox" name="globals" value="{{ forloop.counter0 }}" id="global_{{ forloop.counter0 }}">
+            <label for="global_{{ forloop.counter0 }}">{{g.name}} (v{{g.source_version}})
+            <span class="badge {% if g.meta_state.0 == 'R' %}text-bg-danger{% else %}text-bg-success{% endif %}">{{g.meta_state}}</span>
+            </label>
+            <br>
+            {% endfor %}
+         </td></tr>
+         <tr><th>Schedules</th><td>
+            {% for s in json_data.schedules %}
+            <input type="checkbox" name="schedules" value="{{ forloop.counter0 }}" id="schedule_{{ forloop.counter0 }}">
+            <label for="schedule_{{ forloop.counter0 }}">{{s.name}} (v{{s.source_version}})
+            <span class="badge {% if s.meta_state.0 == 'R' %}text-bg-danger{% else %}text-bg-success{% endif %}">{{s.meta_state}}</span>
+            </label>
+            <br>
+            {% endfor %}
+         </td></tr>
+         <tr><th>Conversations</th><td>
+            {% for s in json_data.conversations %}
+            <input type="checkbox" name="conversations" value="{{ forloop.counter0 }}" id="convo_{{ forloop.counter0 }}">
+            <label for="convo_{{ forloop.counter0 }}">{{s.name}} (v{{s.source_version}})
+            <span class="badge {% if s.meta_state.0 == 'R' %}text-bg-danger{% else %}text-bg-success{% endif %}">{{s.meta_state}}</span>
+            </label>
+            <br>
+            {% endfor %}
+         </td></tr>
+      </table>
+    <button type="submit" class="btn btn-primary">Import</button>
+</form>
+</div>    
+{% endblock %}

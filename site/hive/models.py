@@ -114,6 +114,7 @@ class GlobalResponse(models.Model):
     content_id = models.CharField(max_length=80, null=True, blank=True) # for launches, content ID to target
     code = models.TextField(null=True, blank=True) # Python code for METHOD, w/ def get_response(request, response, entities):
     sort_key = models.IntegerField(default=1) # in case ordering matters, they order desc so high goes first
+    source_version = models.IntegerField(default=1)
 
     # Ensure we have all we need
     def clean(self):

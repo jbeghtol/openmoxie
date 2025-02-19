@@ -123,6 +123,12 @@ class Volley:
         else:
             self._response['response_actions'] = [ action ]
             self._response['response_action'] = action
+    
+    # Change event subscriptions on this response
+    def update_subscriptions(self, event_list, clear=False):
+        subrec = { 'active': event_list, 'clear': clear }
+        self._response['response_action']['event_subscription'] = subrec
+        self._response['response_actions'][0]['event_subscription'] = subrec
 
     # Get a paintext string from a remote chat response w/ actions in text
     def debug_response_string(self):

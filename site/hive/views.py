@@ -1,3 +1,4 @@
+from django.forms import model_to_dict
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -12,8 +13,9 @@ import qrcode
 from PIL import Image
 from io import BytesIO
 
-from .models import SinglePromptChat, MoxieDevice, MoxieSchedule, HiveConfiguration, MentorBehavior
+from .models import GlobalResponse, SinglePromptChat, MoxieDevice, MoxieSchedule, HiveConfiguration, MentorBehavior
 from .content.data import DM_MISSION_CONTENT_IDS, get_moxie_customization_groups
+from .data_import import update_import_status, import_content
 from .mqtt.moxie_server import get_instance
 from .mqtt.robot_data import DEFAULT_ROBOT_CONFIG, DEFAULT_ROBOT_SETTINGS
 from .mqtt.volley import Volley
@@ -324,3 +326,77 @@ def moxie_wake(request, pk):
     except MoxieDevice.DoesNotExist as e:
         logger.warning("Moxie wake for unfound pk {pk}")
         return redirect('hive:dashboard_alert', alert_message='No such Moxie')
+
+# MOXIE - Export Moxie Content Data
+class ExportDataView(generic.TemplateView):
+    template_name = "hive/export.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['conversations'] = SinglePromptChat.objects.all()
+        context['schedules'] = MoxieSchedule.objects.all()
+        context['globals'] = GlobalResponse.objects.all()
+        return context
+    
+@require_http_methods(["POST"])
+def export_data(request):
+    content_name = request.POST['content_name']
+    content_details = request.POST['content_details']
+    globals = request.POST.getlist("globals")
+    schedules = request.POST.getlist("schedules")
+    conversations = request.POST.getlist("conversations")
+    output = { "name": content_name, "details": content_details }
+    for pk in globals:
+        r = GlobalResponse.objects.get(pk=pk)
+        rec = model_to_dict(r, exclude=['id'])
+        output["globals"] = output.get("globals", []) + [rec]
+    for pk in schedules:
+        r = MoxieSchedule.objects.get(pk=pk)
+        rec = model_to_dict(r, exclude=['id'])
+        output["schedules"] = output.get("schedules", []) + [rec]
+    for pk in conversations:
+        r = SinglePromptChat.objects.get(pk=pk)
+        rec = model_to_dict(r, exclude=['id'])
+        output["conversations"] = output.get("conversations", []) + [rec]
+    # TODO: Save output as JSON file
+    export_name = content_name if content_name else 'moxie_content'
+    response = JsonResponse(output, json_dumps_params={'indent': 4})
+    response['Content-Disposition'] = f'attachment; filename="{export_name}.json"'
+    return response
+
+# MOXIE - Import Moxie Content Data
+@require_http_methods(['POST'])
+def upload_import_data(request):
+    json_file = request.FILES.get('json_file')
+    if not json_file:
+        return JsonResponse({'error': 'No file uploaded'}, status=400)
+
+    try:
+        json_data = json.loads(json_file.read().decode('utf-8'))
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON file'}, status=400)
+
+    # Preprocess the JSON data to build the context for the template
+    update_import_status(json_data)
+    context = {
+        'json_data': json_data,
+        'json_data_str': json.dumps(json_data)
+        # Add other context variables as needed
+    }
+    return render(request, 'hive/import.html', context)
+
+@require_http_methods(['POST'])
+def import_data(request):
+    # these hold indexes into the source JSON arrays that we want to import
+    g_list = request.POST.getlist("globals")
+    s_list = request.POST.getlist("schedules")
+    c_list = request.POST.getlist("conversations")
+    # the original JSON upload, passed back to us
+    jstring = request.POST.get("json_data")
+    logger.info(f'IMPORTING {jstring}')
+    json_data = json.loads(jstring)
+    # finally import the data
+    message = import_content(json_data, g_list, s_list, c_list)
+    # and refresh all things
+    get_instance().update_from_database()
+    return redirect('hive:dashboard_alert', alert_message=message)

@@ -37,6 +37,25 @@
   {% endfor %}
 </table>
 <br>
+<h2>Content Database</h2>
+<table class="table table-striped">
+  <tr><th>Refresh</th><td>
+    <a title="Reload any database entries modified in the Admin view" class="btn btn-primary btn-sm" role="button" href="{% url 'hive:reload_database' %}">Refresh from DB</a>
+  </td></tr>
+  <tr><th>Export</th><td>
+    <a title="Export some or all of your Moxie content" class="btn btn-primary btn-sm" role="button" href="{% url 'hive:export_content' %}">Export Content</a>
+  </td></tr>
+  <tr><th>Import</th><td>
+    <form method="post" enctype="multipart/form-data" action="{% url 'hive:import_review' %}" method="post">
+      {% csrf_token %}
+      <div class="form-group">
+        <input title="Select Content JSON file to Upload" type="file" id="json_file" name="json_file" accept=".json" class="form-control-file">
+        <button title="Upload content to review for adding to your own Moxie content" type="submit" class="btn btn-primary btn-sm">Upload for Review</button>
+      </div>
+    </form>
+  </td></tr>
+</table>
+<br>
 <h2>Schedules</h2>
 <table class="table table-striped">
   <tr><th>Name</th></tr>
@@ -45,7 +64,7 @@
   {% endfor %}
 </table>
 <br>
-<h2>Conversations</h2><a class="btn btn-primary btn-sm" role="button" href="{% url 'hive:reload_database' %}">Refresh from DB</a>
+<h2>Conversations</h2>
 <table class="table table-striped">
   <tr><th>Name</th><th>Module ID</th><th>Content ID</th><th></th></tr>
   {% for s in conversations %}

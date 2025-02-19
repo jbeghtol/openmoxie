@@ -41,13 +41,14 @@ schedules or used in a launch global command.
 * Module ID - The `module_id` for this piece of content
 * Content ID - The `content_id` for this piece of content.  This may include multiple content IDs separated by the `|` character.
 * Opener - A line to play when content starts.  This uses a random line from `|` separated strings, so you can provide multiple openers and hear a random one.
-* Prompt - The prompt itself, the language directing the AI how to have this conversation
+* Prompt - The prompt itself, the language directing the AI how to have this conversation (supports Templates)
 * Max History - this limits how much of the conversation is sent to the AI in each inference. more history, better memory, but also can degrade AI performance and uses more tokens and you can run into token limits if the history gets too long
 * Max Volleys - how long the conversation can go before Moxie calls it quits.  If set to 0, module will exit immediately after the line into the next scheduled activity.
 * Vendor - The AI vendor (only OpenAI currently)
 * Model - the openAI (or other) model, pick one you like for latency, quality, and cost
 * Max Tokens - this is output tokens, usually better to limit in the prompt with things like "keep responses short" as moxie talking forever is usually dull, but if you find it truncating responses increase this
 * Temperature - The level of randomness in the model, from 0-1, with 1 having maximum randomness.
+* Code - This is an optional code block with Python methods to filter/alter/handle interactions.
 * Source version - The last version imported, used to allow new OpenMoxie versions to update the stock content
 
 ## AI Response Tags
@@ -66,4 +67,42 @@ There is only one, but this table may grow.
 |Tag|Function|
 |---|--------|
 |`<exit>`|Completes the module and moves to the next scheduled activity|
+
+## Advanced Content
+
+Both GlobalResponses and SinglePromptChat objects offer a `code` field where custom Python methods may
+be added.  These methods rely heavily on the Volley object to manage custom actions and responses as well
+as accessing data. All methods are optional.
+
+### Volley Methods
+
+Whenever a speech/event occurs, a Volley object is created to handle the request, which also contains the
+response to make back to Moxie and some data accessor methods so methods can be aware of things like the
+robot's configuration and state, the current chat session, as well as saving their own variables that can be kept local to the session or can be persistent and stored in the database.
+
+Flow:
+1. Volley is passed to the `pre_process` method.  If that method returns True, it is assumed the method has filled in the response and should be already in place.  Whatever is in the response will be returned for Moxie to play.
+2. If `pre_process` returns False, the `prompt` field from the SinglePromptChat will be rendered as a Django template and passed the `volley` as an object.  The resulting output is used as the prompt that is sent to the AI for inference.
+3. Next, the volley is passed to the `post_process` method, which can see the response provided by the AI, alter or adjust it if needed.
+4. Finally, if the volley output does not contain markup, the text in the output is automatically converted to markup and added to the output record before sending to Moxie.
+
+```
+def pre_process(volley:Volley, session:ChatSession):
+    return False
+
+def post_process(volley:Volley, session:ChatSession):
+    pass
+```
+
+### Volley Object Fields
+
+It is worth looking at site/hive/mqtt/volley.py for all the details, but the volley object contains several properties that gain access to dictionaries for data records.
+
+* local_data - Holds local session data for this specific chat session.  It is discarded when the conversation ends.
+* persist_data - Holds the robot's persistent data record.  This data is loaded/saved to the robot's PersistentData model in the database.  There is no namespace, and all data is accessible to all volleys for this robot.
+* request - The actual originating RemoteChatRequest object from Moxie
+* response - The matching response RemoteChatResponse object going to Moxie
+* config - The robot's combined configuration object
+* state - The robot's latest state object
+* entities - For GlobalResponses only, list of extracted entities
 

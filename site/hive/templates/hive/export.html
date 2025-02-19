@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="moxheader"><a href="{% url 'hive:dashboard' %}"><img class="moximage" src="{% static 'hive/openmoxie_logo.svg' %}"></a>OpenMoxie<span class="moxversion">{{moxie_version}}</span></div>
+<div class="p-3">
+<h2>Export Moxie Content</h2>
+<p>
+You may export and save conversations, schedules, and global response data into a single file
+you can re-import or share with others.  When sharing, try to keep depdencies together, for example
+exporting a GlobalResponse to launch a conversation along with the conversation.
+</p>
+<form id="export_form" action="{% url 'hive:export_data' %}" method="post">
+    {% csrf_token %}
+    <table class="table">
+        <tr><th>Content Name</th><td><input type="text" placeholder="Enter a short name for this content block, used as the filename" class="form-control" name="content_name"></td></tr>
+        <tr><th>Details</th><td><textarea placeholder="Share details about this content block" class="form-control" name="content_details" rows="3"></textarea></td></tr>
+        <tr><th>Global Responses</th><td>
+            {% for g in globals %}
+            <input type="checkbox" name="globals" value="{{ g.pk }}" id="global_{{ g.pk }}">
+            <label for="global_{{ g.pk }}">{{g}} (v{{g.source_version}})</label>
+            <br>
+            {% endfor %}
+         </td></tr>
+         <tr><th>Schedules</th><td>
+            {% for s in schedules %}
+            <input type="checkbox" name="schedules" value="{{ s.pk }}" id="schedule_{{ s.pk }}">
+            <label for="schedule_{{ s.pk }}">{{s}} (v{{s.source_version}})</label>
+            <br>
+            {% endfor %}
+         </td></tr>
+         <tr><th>Conversations</th><td>
+            {% for s in conversations %}
+            <input type="checkbox" name="conversations" value="{{ s.pk }}" id="convo_{{ s.pk }}">
+            <label for="convo_{{ s.pk }}">{{s}} (v{{s.source_version}})</label>
+            <br>
+            {% endfor %}
+         </td></tr>
+      </table>
+    <button type="submit" class="btn btn-primary">Export</button>
+</form>
+</div>    
+{% endblock %}
