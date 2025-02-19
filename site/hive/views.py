@@ -327,7 +327,7 @@ def moxie_wake(request, pk):
         logger.warning("Moxie wake for unfound pk {pk}")
         return redirect('hive:dashboard_alert', alert_message='No such Moxie')
 
-# MOXIE - Export Moxie Content Data
+# MOXIE - Export Moxie Content Data - Selection View
 class ExportDataView(generic.TemplateView):
     template_name = "hive/export.html"
 
@@ -338,6 +338,7 @@ class ExportDataView(generic.TemplateView):
         context['globals'] = GlobalResponse.objects.all()
         return context
     
+# MOXIE - Export Moxie Content Data - Save Action
 @require_http_methods(["POST"])
 def export_data(request):
     content_name = request.POST['content_name']
@@ -345,6 +346,8 @@ def export_data(request):
     globals = request.POST.getlist("globals")
     schedules = request.POST.getlist("schedules")
     conversations = request.POST.getlist("conversations")
+    if not content_name:
+        content_name = 'moxie_content'
     output = { "name": content_name, "details": content_details }
     for pk in globals:
         r = GlobalResponse.objects.get(pk=pk)
@@ -358,10 +361,9 @@ def export_data(request):
         r = SinglePromptChat.objects.get(pk=pk)
         rec = model_to_dict(r, exclude=['id'])
         output["conversations"] = output.get("conversations", []) + [rec]
-    # TODO: Save output as JSON file
-    export_name = content_name if content_name else 'moxie_content'
+    # Save output as JSON file
     response = JsonResponse(output, json_dumps_params={'indent': 4})
-    response['Content-Disposition'] = f'attachment; filename="{export_name}.json"'
+    response['Content-Disposition'] = f'attachment; filename="{content_name}.json"'
     return response
 
 # MOXIE - Import Moxie Content Data

@@ -36,7 +36,36 @@ exporting a GlobalResponse to launch a conversation along with the conversation.
             {% endfor %}
          </td></tr>
       </table>
-    <button type="submit" class="btn btn-primary">Export</button>
 </form>
-</div>    
+<button id="export-button" class="btn btn-primary">Export</button>
+</div>
+<script>
+    $(document).ready(function() {
+        $('#export-button').click(function() {
+            console.log('CLICK')
+            // Send the POST request
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'hive:export_data' %}',
+                data: $('#export_form').serialize(),
+                success: function(data) {
+                    console.log('SUCCESS')
+                    var jsonStr = JSON.stringify(data);
+                    var blob = new Blob([jsonStr], {type: 'application/json'});
+                    var url = window.URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = data.name + '.json';
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    message = "Saved " + data.name
+                    window.location.href = '{% url 'hive:dashboard_alert' alert_message='Export Saved' %}';
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', xhr, status, error);
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}
