@@ -252,11 +252,13 @@ def puppet_api(request, pk):
             result = { 
                 "online": get_instance().robot_data().device_online(device.device_id),
                 "puppet_state": get_instance().robot_data().get_puppet_state(device.device_id),
-                "puppet_enabled": device.robot_config.get("moxie_mode") == "TELEHEALTH"
+                "puppet_enabled": device.robot_config.get("moxie_mode") == "TELEHEALTH" if device.robot_config else False
             }
             return JsonResponse(result)
         elif request.method == 'POST':
             # Handle COMMANDS request
+            if not device.robot_config:
+                device.robot_config = {}
             cmd = request.POST['command']
             if cmd == "enable":
                 device.robot_config["moxie_mode"] = "TELEHEALTH"

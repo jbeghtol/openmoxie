@@ -1,5 +1,6 @@
 import logging
 import uuid
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -58,6 +59,7 @@ class Volley:
         self._local_data = local_data
         logger.info(f'Assigning local_data={local_data}')
 
+    # Set the output text, markup and optionally output type
     def set_output(self, text, markup, output_type=None):
         self._response['output']['text'] = text
         if markup:
@@ -65,8 +67,27 @@ class Volley:
         if output_type:
             self._response['response_action']['output_type'] = output_type
             self._response['response_actions'][0]['output_type'] = output_type
+    
+    # Convert any action tags in the response text into response actions
+    def ingest_action_tags(self):
+        resp = self._response['output']['text']
+        # find and attach actions for each tag
+        tag_regex = re.compile(r'<[^>]*>')
+        matches = tag_regex.findall(resp)
+        for m in matches:
+            tagact = m[1:-1].split(':')
+            if tagact[0] == 'exit':
+                self.add_launch_or_exit()
+            elif tagact[0] == 'sleep':
+                self.add_response_action('sleep')
+            elif tagact[0] == 'launch':
+                self.add_response_action('launch', module_id=tagact[1], content_id=tagact[2] if len(tagact) > 2 else None)
+            elif tagact[0] == 'launch_if_confirmed':
+                self.add_response_action('launch_if_confirmed', module_id=tagact[1], content_id=tagact[2] if len(tagact) > 2 else None)
+        # finally, remote any tags from the response
+        self._response['output']['text'] = re.sub(r'<.*?>', '', resp)
 
-
+    # Create the base response for our request
     def create_response(self, res=0, output_type='GLOBAL_RESPONSE'):
         rcr = self._request
         self._response = { 
@@ -132,22 +153,22 @@ class Volley:
 
     # Get a paintext string from a remote chat response w/ actions in text
     def debug_response_string(self):
+        def params_string(ra):
+            return f'({ra["module_id"]}/{ra["content_id"]})' if "content_id" in ra else f'({ra["module_id"]})'
         payload = self._response
         respact = ""
         if 'response_actions' in payload:
             for ra in payload["response_actions"]:
                 if "action" in ra:
                     if ra["action"] == "launch":
-                        pending_launch = ( ra["module_id"], ra["content_id"] if "content_id" in ra else "")
+                        pending_launch = params_string(ra)
                         respact += f' [{ra["action"]} -> {pending_launch}]'
                     elif ra["action"] == "launch_if_confirmed":
-                        pending_if = ( ra["module_id"], ra["content_id"] if "content_id" in ra else "")
+                        pending_if = params_string(ra)
                         respact += f' [{ra["action"]} -> {pending_if}]'
                     elif ra["action"] == "execute":
                         pending_if = ( ra["function_id"], ra["function_args"] if "function_args" in ra else "")
                         respact += f' [{ra["action"]} -> {pending_if}]'
-                    elif ra["action"] == "exit_module":
-                        respact += f' [{ra["action"]}]'
                     else:
-                        respact += f' [{ra["action"]} -> Unsupported action]'
+                        respact += f' [{ra["action"]}]'
         return payload['output']['text'] + respact

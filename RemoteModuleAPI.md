@@ -70,9 +70,9 @@ detector activation remains active only until an item of this type is detected. 
 detector active, the detection event handler response should call the enabler function again.  Users should
 also be sure to subscribe to the matching even to receive the detection event properly.
 
-* eb_enable_book : enable book recognition for moxie trained book covers
-* eb_enable_draw : enable aruco code recognition
-* eb_enable_qr : enable QR reading
+* eb_enable_book(bool) : enable book recognition for moxie trained book covers
+* eb_enable_draw(bool) : enable aruco code recognition
+* eb_enable_qr(bool) : enable QR reading
 
 ### Wait Timers
 

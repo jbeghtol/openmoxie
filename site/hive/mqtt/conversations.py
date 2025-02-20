@@ -5,6 +5,7 @@ import logging
 import copy
 import random
 import re
+import traceback
 from django.template import Template, Context
 from .ai_factory import create_openai
 from ..models import SinglePromptChat
@@ -46,7 +47,6 @@ class ChatSession:
         return self._local_data
     
     def get_opener(self, msg='Welcome to open chat'):
-        self.reset()
         return msg,self.overflow()
 
     def ingest_notify(self, rcr):
@@ -123,14 +123,19 @@ class SingleContextChatSession(ChatSession):
     def handle_volley(self, volley:Volley):
         volley.assign_local_data(self._local_data)
         try:
+            cmd = volley.request.get('command')
+            # when prompting into a convo, make sure its clean
+            if cmd == "prompt" and not self.is_empty():
+                self.reset()
             # preprocess, if filter returns True, we are done
             if self._pre_filter:
                 logger.debug("Running volley pre-filter")
                 if self._pre_filter(volley, self):
+                    # handle any actions tags in the response
+                    volley.ingest_action_tags()
                     return
             
             # Handle prompt vs next response
-            cmd = volley.request.get('command')
             if cmd == "prompt" or (cmd == "reprompt" and self.is_empty()):
                 text,overflow = self.get_opener()
             else:
@@ -143,10 +148,12 @@ class SingleContextChatSession(ChatSession):
             if self._post_filter:
                 logger.debug("Running volley post-filter")
                 self._post_filter(volley, self)
+            # handle any actions tags in the response
+            volley.ingest_action_tags()
         except Exception as e:
-            #stack = traceback.format_exc()
+            stack = traceback.format_exc()
+            logger.error(f"Error handling volley: {e}\n{stack}")
             err_text = f"Error handling volley: {e}"
-            logger.error(err_text)
             volley.create_response() # flush any pre-exception response changes
             volley.set_output(err_text,err_text)
 
@@ -174,8 +181,6 @@ class SingleContextChatSession(ChatSession):
             if self._exit_requested:
                 logger.info("Exit tag detected in response.")
                 of = True
-            # remove any random xml like tags
-            resp = re.sub(r'<.*?>', '', resp)
         except Exception as e:
             logger.warning(f'Exception attempting inference: {e}')
             resp = "Oh no.  I have run into a bug"
