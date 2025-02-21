@@ -43,6 +43,7 @@ class ChatSession:
     
     def reset(self):
         self._history = []
+        self._total_volleys = 0
         
     @property
     def local_data(self):
@@ -107,7 +108,6 @@ class SingleContextChatSession(ChatSession):
         self._temperature = temperature
         self._exit_line = exit_line
         self._auto_history = False
-        self._exit_requested = False
         self._pre_filter = None
         self._post_filter = None
         self._complete_handler = None
@@ -124,12 +124,13 @@ class SingleContextChatSession(ChatSession):
     
     # Check if we exceed max volleys for a conversation
     def overflow(self):
-        return self._total_volleys >= self._max_volleys or self._exit_requested
+        return self._total_volleys >= self._max_volleys
     
     # Render an updated prompt context for this volley
     def make_volley_context(self, volley:Volley):
+        ctx = self._prompt_template.render(Context({'volley': volley, 'session': self}))
         return [ { "role": "system", 
-                    "content": self._prompt_template.render(Context({'volley': volley}))
+                    "content": ctx
                     } ]
     
     # Handle a volley, using its request and populating the response
@@ -189,11 +190,6 @@ class SingleContextChatSession(ChatSession):
                         max_tokens=self._max_tokens,
                         temperature=self._temperature
                     ).choices[0].message.content
-            # detect <exit> request from AI
-            self._exit_requested = self._exit_requested or '<exit>' in resp
-            if self._exit_requested:
-                logger.info("Exit tag detected in response.")
-                of = True
         except Exception as e:
             logger.warning(f'Exception attempting inference: {e}')
             resp = "Oh no.  I have run into a bug"
