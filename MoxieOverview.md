@@ -109,6 +109,7 @@ to the default schedule, but doesn't have Tips and Tricks or Systems Check modul
 * chat_request - the module/content ID when user asks "moxie let's chat"
 * end_of_session - a block describing what to do when the schedule is done, where you do the `end_module` followed by `chat_count` of the `chat_module` before being forced to sleep
 * generate - rules to automatically extend the schedule
+* hub_config - If configured, hub modules are automatically scheduled in between most modules in the schedule (see below)
 
 ### Generation Keys
 
@@ -126,6 +127,19 @@ WAKEUP_LAUNCHER.  To use this, add this to your schedule:
 
 ```
 "wake_module": { "module_id": "WAKEUP_LAUNCHER" },
+```
+
+### Hub Module(s)
+
+The schedule can also automatically inject a "hub" module in between most activities in the schedule.  The
+term stems fro the "hub and spokes" navigation model, where after each activity, you return to a central
+hub to find something to do next.
+
+The scheduler loops repeatedly through the list of `hubs` each time it return to the hub, though only 
+one is required in the list.
+
+```
+"hub_config": {"hubs": [{"module_id": "MOXIE_GO", "content_id": "default"}] }
 ```
 
 # Configuration and Settings
