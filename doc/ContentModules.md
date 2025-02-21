@@ -62,11 +62,16 @@ If the user asks to stop or quit, respond with '<exit>'.
 
 ### Special Tags
 
-There is only one, but this table may grow.
+These tags are automatically extracted and included as actions in the response when found in response text.
 
 |Tag|Function|
 |---|--------|
 |`<exit>`|Completes the module and moves to the next scheduled activity|
+|`<launch:module_id>`|Launch a different module|
+|`<launch:module_id:content_id>`|Launch a different module and content|
+|`<launch_if_confirmed:module_id>`|If user confirms, launch a different module|
+|`<launch_if_confirmed:module_id:content_id>`|If user confirms, launch a different module and content|
+|`<sleep>`|Put Moxie back to sleep|
 
 ## Advanced Content
 

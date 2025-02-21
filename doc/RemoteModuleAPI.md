@@ -109,6 +109,8 @@ at a specific time.
 
 ## Events
 
+Minor note: Some variable names have a leading $ and some do not.
+
 * eb-br-event : a moxie book was visually detected, book name in `input_vars['$eb_br_value']`
 * eb-dr-event : an aruco code was detected, aruco code in `input_vars['$eb_dr_value']`
 * eb-qr-event : a QR code was read, QR string in `input_vars['$eb_qr_value']`
