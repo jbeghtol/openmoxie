@@ -46,7 +46,7 @@ exporting a GlobalResponse to launch a conversation along with the conversation.
             // Send the POST request
             $.ajax({
                 type: 'POST',
-                url: '{% url 'hive:export_data' %}',
+                url: "{% url 'hive:export_data' %}",
                 data: $('#export_form').serialize(),
                 success: function(data) {
                     console.log('SUCCESS')
@@ -59,7 +59,7 @@ exporting a GlobalResponse to launch a conversation along with the conversation.
                     a.click();
                     window.URL.revokeObjectURL(url);
                     message = "Saved " + data.name
-                    window.location.href = '{% url 'hive:dashboard_alert' alert_message='Export Saved' %}';
+                    window.location.href = "{% url 'hive:dashboard_alert' alert_message='Export Saved' %}";
                 },
                 error: function(xhr, status, error) {
                     console.log('Error:', xhr, status, error);
