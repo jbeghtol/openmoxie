@@ -81,8 +81,12 @@ class RemoteChat:
     def check_global(self, volley):
         return self._global_responses.check_global(volley) if _ENABLE_GLOBAL_COMMANDS else None
         
-    def on_chat_complete(self, device_id, id, session):
+    def on_chat_complete(self, device_id, id, session:ChatSession):
         logger.info(f'Chat Session Complete: {id}')
+        if session.has_complete_hook():
+            # make a data-only Volley for the completion hook
+            volley = Volley({}, device_id=device_id, data_only=True, robot_data=self._server.robot_data().get_volley_data(device_id), local_data=session.local_data)
+            self._worker_queue.submit(session.complete_hook, volley)
 
     # Get the current or a new session for this device for this module/content ID pair
     def active_session_data(self, device_id):
@@ -160,7 +164,7 @@ class RemoteChat:
             if cmd == 'notify':
                 sess.ingest_notify(rcr)
             else:
-                volley = Volley(rcr, robot_data=volley_data, local_data=sess.local_data)
+                volley = Volley(rcr, device_id=device_id, robot_data=volley_data, local_data=sess.local_data)
                 if not self.handled_global(device_id, volley):
                     self._worker_queue.submit(self.create_session_response, device_id, sess, volley)
         else:
@@ -171,7 +175,7 @@ class RemoteChat:
                 self.on_chat_complete(device_id, id, session)
                 session_reset = True
             if cmd != 'notify':
-                volley = Volley(rcr, robot_data=volley_data)
+                volley = Volley(rcr, device_id=device_id, robot_data=volley_data)
                 if not self.handled_global(device_id, volley):
                     logger.debug(f'Ignoring request for other module: {id} SessionReset:{session_reset}')
                     # Rather than ignoring these, we return a generic FALLBACK response

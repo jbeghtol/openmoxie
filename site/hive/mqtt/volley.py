@@ -9,23 +9,32 @@ class Volley:
     _response : dict
     _local_data : dict
     _robot_data: dict
+    _device_id: str
 
-    def __init__(self, request, result=0, output_type='GLOBAL_RESPONSE', robot_data=None, local_data=None):
+    def __init__(self, request, result=0, output_type='GLOBAL_RESPONSE', robot_data=None, local_data=None, data_only=False, device_id=None):
+        self._device_id = device_id
         self._request = request
-        self.create_response(res=result, output_type=output_type)
+        if data_only:
+            self._response = {}
+        else:
+            self.create_response(res=result, output_type=output_type)
         self._local_data = local_data if local_data != None else {}
         self._robot_data = robot_data if robot_data != None else {}
 
     @staticmethod
-    def request_from_speech(speech, module_id=None, content_id=None, local_data=None):
+    def request_from_speech(speech, device_id=None, module_id=None, content_id=None, local_data=None):
         if speech:
             request = { 'event_id': str(uuid.uuid4()), 'command': 'continue', 'speech': speech, 'backend': 'router' }
         else:
             request = { 'event_id': str(uuid.uuid4()), 'command': 'prompt',  'backend': 'router' }
         if module_id: request['module_id'] = module_id
         if content_id: request['content_id'] = content_id
-        return Volley(request, local_data=local_data)
+        return Volley(request, device_id=device_id, local_data=local_data)
 
+    @property
+    def device_id(self):
+        return self._device_id
+    
     @property
     def request(self):
         return self._request

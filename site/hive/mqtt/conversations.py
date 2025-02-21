@@ -13,6 +13,8 @@ from .volley import Volley
 
 logger = logging.getLogger(__name__)
 
+_DEFAULT_SUMMARY_PROMPT = "Summarize the following conversation between the friendly robot Moxie, and the user.  Keep the summary brief, but include any important details."
+
 '''
 Base type of a module that has a chat session interaction on Moxie.  It
 manages the history, rotating out records to keep tokens more lean.
@@ -69,6 +71,15 @@ class ChatSession:
     def handle_volley(self, volley:Volley):
         pass
 
+    def summarize(self, model=None, prompt_base=None, max_tokens=None):
+        return "No summary available."
+
+    def has_complete_hook(self):
+        return False
+    
+    def complete_hook(self, device_id, volley:Volley):
+        pass
+
 '''
 Our simple Single Prompt conversation.  It uses the ChatSession to manage the history
 of the conversation and focuses on keeping the conversation within volley limits and
@@ -99,11 +110,13 @@ class SingleContextChatSession(ChatSession):
         self._exit_requested = False
         self._pre_filter = None
         self._post_filter = None
+        self._complete_handler = None
         self._prompt_template = Template(prompt)
 
-    def set_filters(self, pre_filter=None, post_filter=None):
+    def set_filters(self, pre_filter=None, post_filter=None, complete_handler=None):
         self._pre_filter = pre_filter
         self._post_filter = post_filter
+        self._complete_handler = complete_handler
 
     # For web-based, we have no Moxie and no Notify channel, so auto-history is used
     def set_auto_history(self, val):
@@ -198,6 +211,41 @@ class SingleContextChatSession(ChatSession):
         if self._auto_history:
             self.add_history('assistant', resp)
         return resp,overflow
+    
+    def summarize(self, model=None, prompt_base=None, max_tokens=None):
+        try:
+            if not model:
+                model = self._model
+            if not max_tokens:
+                max_tokens = self._max_tokens
+            client = create_openai()
+            # Concatenate the chat history into a single string
+            chat_transcript = "\n".join([f"{'Moxie' if msg['role'] == 'assistant' else msg['role']}: {msg['content']}" for msg in self._history])
+            prompt = prompt_base if prompt_base else _DEFAULT_SUMMARY_PROMPT
+            prompt += f"\nTranscript:\n\n{chat_transcript}"
+            # Summarize the chat transcript
+            msgs = [ { "role": "user", 
+                "content": prompt
+                } ]
+            resp = client.chat.completions.create(
+                    model=model,
+                    messages=msgs,
+                    max_tokens=max_tokens,
+                    temperature=self._temperature
+                    ).choices[0].message.content
+            return resp
+        except Exception as e:
+            stack = traceback.format_exc()
+            logger.error(f"Error summarizing chat: {e}\n{stack}")
+            return f"Error summarizing chat: {e}."
+
+
+    def has_complete_hook(self):
+        return self._complete_handler is not None
+    
+    def complete_hook(self, volley:Volley):
+        self._complete_handler(volley, self)
+        pass
 
 # A database backed version, the way we normally load them
 class SinglePromptDBChatSession(SingleContextChatSession):
@@ -208,6 +256,8 @@ class SinglePromptDBChatSession(SingleContextChatSession):
             try:
                 loc = locals()
                 exec(source.code, globals(), loc)
-                self.set_filters(pre_filter=loc.get('pre_process'), post_filter=loc.get('post_process'))
+                self.set_filters(pre_filter=loc.get('pre_process'), 
+                                 post_filter=loc.get('post_process'),
+                                 complete_handler=loc.get('complete_handler'))
             except Exception as e:
                 logger.error(f"Error loading code for chat session: {e}")

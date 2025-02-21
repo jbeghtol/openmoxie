@@ -99,6 +99,16 @@ def post_process(volley:Volley, session:ChatSession):
     pass
 ```
 
+When a conversation completes, the framework calls any `complete_handler` method inside the code block, allowing custom actions to be taken when a conversation completes.  In this case, the Volley object
+provided has no request or response data, but still contains access to the local data, persistent data,
+and the session itself.
+
+```
+def complete_handler(volley, session):
+    summary = session.summarize()
+    volley.persist_data['last_summary'] = summary
+```
+
 ### Volley Object Fields
 
 It is worth looking at site/hive/mqtt/volley.py for all the details, but the volley object contains several properties that gain access to dictionaries for data records.
@@ -111,3 +121,29 @@ It is worth looking at site/hive/mqtt/volley.py for all the details, but the vol
 * state - The robot's latest state object
 * entities - For GlobalResponses only, list of extracted entities
 
+### Conversation Summarization
+
+The session includes a summarize method that allows custom prompts against the conversation history. Keep
+in mind that the conversation history is limited by the `max_history` field of the conversation, and will
+only be considering the last `max_history` volleys in the summary.
+
+The method signature for summarize is:
+
+```
+def summarize(self, model=None, prompt_base=None, max_tokens=None):
+```
+
+The AI vendor will always be the same for any conversation, but summarization can override the conversation's default model using the `model` parameter, the maximum output using the `max_tokens` parameter and may adjust the base prompt for the summarization which is currently set to:
+
+```
+Summarize the following conversation between the friendly robot Moxie, and the user.  Keep the summary brief, but include any important details.
+```
+
+Here's an example of a custom action that is pretty silly, but shows how you can ask the AI to review the session in different ways.  After a short chat where I talked about playing Starcraft, the code below produced: `"last_analysis": ["No food talk this time.", "They are still talking about games"]`
+
+```
+def complete_handler(volley, session):
+    food_summary = session.summarize(prompt_base='Review this conversation.  If the user talked about food, say "They are still talking about food" otherwise say "No food talk this time."')
+    games_summary = session.summarize(prompt_base='Review this conversation.  If the user talked about games, say "They are still talking about games" otherwise say "No games talk this time."')
+    volley.persist_data['last_analysis'] =  [food_summary, games_summary]
+```
