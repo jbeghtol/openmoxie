@@ -72,6 +72,35 @@ def get_response(request, response, entities):
 Note: You can use import from within the method scope.  Any exceptions in processing this will produce a response
 with an error and the name of the exception.  There is a 10s timeout on execution.
 
+### NEW Volley Based Method
+
+While the original `get_response` method above is still supported, there is a newer method which is preferred if you want to also access the Volley object to consider persistent data or configuration.  This method is used over `get_response` if both exist in the code.
+
+The new method, `handle_volley` performs the operation using the volley object.  This allows it to access all the useful volley data we'd like, but the method must call `vollley.set_output` to provide the response explicitly.  When working from the Volley context, entities are provided using the `volley.entities` property.
+
+In this example, we redo the chicken butt example from above, but we also store the last result, so we can track what was said previously inside the same conversation.
+
+```
+def handle_volley(volley):
+    resp = { "what": "Chicken Butt", "why": "Chicken Thigh", "how": "Chicken Cow" } 
+    last_msg = volley.local_data.get("last_chicken")
+    out = resp.get(volley.entities[0], "Error")
+    volley.local_data["last_chicken"] = out
+    if last_msg:
+        out += " (last time I said " + last_msg + ")"
+    volley.set_output(out, None)
+```
+
+This conversation then plays out like:
+
+```
+Moxie:  Let's talk! What's a good topic?
+User: moxie what
+Moxie:  Chicken Butt
+User: moxie how
+Moxie:  Chicken Cow (last time I said Chicken Butt)
+```
+
 ## OMG How does one make a regex anyway?
 
 If you aren't familiar with them, do some googling.  But, AIs are often pretty good if you describe what you want.  I used

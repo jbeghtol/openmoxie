@@ -11,7 +11,7 @@ import logging
 import deepmerge
 from django.db import connections
 from django.db import transaction
-from ..models import HiveConfiguration, MoxieDevice, MoxieSchedule, MentorBehavior
+from ..models import HiveConfiguration, MoxieDevice, MoxieSchedule, MentorBehavior, PersistentData
 from django.conf import settings
 from django.forms.models import model_to_dict
 from django.utils import timezone
@@ -135,6 +135,9 @@ class RobotData:
             self._robot_map[robot_id] = { "schedule": device.schedule.schedule if device.schedule else DEFAULT_SCHEDULE }
         # build our config
         self._robot_map[robot_id]["config"] = self.build_config(device, curr_cfg)
+        # load our robot's persistent data
+        persistent_data, persistent_data_created = PersistentData.objects.get_or_create(device=device, defaults={'data': {}})
+        self._robot_map[robot_id]["persistent_data"] = persistent_data
         device.save()
 
     # Finalize device record on disconnect
@@ -143,6 +146,10 @@ class RobotData:
         if device:
             device.last_disconnect = timezone.now()
             device.save()
+        # save persistent data for the robot
+        pdata = self._robot_map.get(robot_id, {}).get("persistent_data")
+        if pdata:
+            pdata.save()
 
     # Get the active configuration for a device from the database objects
     def get_config_for_device(self, device):
@@ -162,6 +169,17 @@ class RobotData:
         cfg = robot_rec.get("config", DEFAULT_COMBINED_CONFIG)
         logger.debug(f'Providing config {cfg} to {robot_id}')
         return cfg
+
+    # Create a data record to connect to a volley for processing
+    def get_volley_data(self, robot_id):
+        robot_rec = self._robot_map.get(robot_id, {})
+        data = { "config": robot_rec.get("config", DEFAULT_COMBINED_CONFIG),
+                 "state": robot_rec.get("state", {})
+                }
+        # persist is linked to the data record of our model object
+        prec = robot_rec.get("persistent_data")
+        data["persist"] = prec.data if prec else {}
+        return data
 
     # Save robot state data
     def put_state(self, robot_id, state):

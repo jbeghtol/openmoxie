@@ -24,4 +24,8 @@ urlpatterns = [
     path("moxie_wake/<int:pk>", views.moxie_wake, name="moxie_wake"),
     path("puppet/<int:pk>", views.MoxiePuppetView.as_view(), name="puppet"),
     path("puppet_api/<int:pk>", views.puppet_api, name="puppet_api"),
+    path("export_content/", views.ExportDataView.as_view(), name="export_content"),
+    path("export_data/", views.export_data, name="export_data"),
+    path("import_review/", views.upload_import_data, name="import_review"),
+    path("import_data/", views.import_data, name="import_data"),
 ]
