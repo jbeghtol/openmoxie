@@ -126,4 +126,4 @@ When a real-time timer expires on the robot, Moxie wakes up if needed and launch
 "alarm_module": { "module_id": "ALARM", "content_id": "alert"}
 ```
 
-Multiple timers may exist.  The specific timer number is passed in `input_vars['eb_timer_id']` when the alarm module fires.
+Multiple timers may exist.  The specific timer number is passed in `input_vars['eb_timer_id']` when the alarm module fires and `input_vars['eb_wake']` is set to `true` or `false` based on whether Moxie had to wake up to handle the alarm.

@@ -172,7 +172,7 @@ class RemoteChat:
             session_reset = False
             if device_id in self._device_sessions:
                 session = self._device_sessions.pop(device_id, None)
-                self.on_chat_complete(device_id, id, session)
+                self.on_chat_complete(device_id, id, session['session'])
                 session_reset = True
             if cmd != 'notify':
                 volley = Volley(rcr, device_id=device_id, robot_data=volley_data)

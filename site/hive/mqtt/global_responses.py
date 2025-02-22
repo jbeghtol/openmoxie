@@ -69,21 +69,21 @@ class MethodPattern(ActionPattern):
                     result = future.result(timeout=10.0)
                 if isinstance(result, str):
                     # if string, overwrite text in canned response
-                    volley.set_output(result, None)
+                    volley.set_output(result, None, output_type='GLOBAL_COMMAND')
                 elif result:
                     # other option, full response is the result - return it as is
                     return result
                 else:
-                    logger.info(f"GLOBAL METHOD, FINAL LOCAL {volley.local_data}")
+                    volley.update_output_type('GLOBAL_COMMAND')
             else:
                 volley.set_output("Script error: Could not locate method get_response", None)
         except TimeoutError:
             logger.error("Method code exceeded time limit.")
-            volley.set_output("Script error: Timeout exceeded", None)
+            volley.set_output("Script error: Timeout exceeded", None, output_type='GLOBAL_COMMAND')
         except Exception as e:
             exc_info = traceback.format_exc()
             logger.error(exc_info)
-            volley.set_output(f"Script error: {e}", None)
+            volley.set_output(f"Script error: {e}", None, output_type='GLOBAL_COMMAND')
 
         return volley.response
 

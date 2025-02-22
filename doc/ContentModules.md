@@ -73,6 +73,23 @@ These tags are automatically extracted and included as actions in the response w
 |`<launch_if_confirmed:module_id:content_id>`|If user confirms, launch a different module and content|
 |`<sleep>`|Put Moxie back to sleep|
 
+## Prompt Templates
+
+The `prompt` field of the SinglePromptChat is rendered using Django's template engine.  This allows the prompt itself
+to be contextualized with data from the `volley` or `session`, both of which are available to the renderer.  This allows you
+to do things like including the Mentor's name or altering the end of a length-limited conversation.
+
+Here, we alter the prompt for OPENMOXIE_CHAT/short to encourage it to not ask questions when we are in overflow state (over max length) and to know about the mentor's name.
+
+```
+You are a robot named Moxie who comes from the Global Robotics Laboratory. You are having a conversation your friend {{volley.config.child_pii.nickname}}. 
+{% if session.overflow %}
+Whatever the user says, you should politely respond but do not ask any questions.
+{% else %}
+Chat about a topic that the person finds interesting and fun. Share short facts and opinions about the topic, one fact or opinion at a time. You are curious and love learning what the person thinks.
+{% endif %}
+```
+
 ## Advanced Content
 
 Both GlobalResponses and SinglePromptChat objects offer a `code` field where custom Python methods may
@@ -87,7 +104,7 @@ robot's configuration and state, the current chat session, as well as saving the
 
 Flow:
 1. Volley is passed to the `pre_process` method.  If that method returns True, it is assumed the method has filled in the response and should be already in place.  Whatever is in the response will be returned for Moxie to play.
-2. If `pre_process` returns False, the `prompt` field from the SinglePromptChat will be rendered as a Django template and passed the `volley` as an object.  The resulting output is used as the prompt that is sent to the AI for inference.
+2. If `pre_process` returns False, the `prompt` field from the SinglePromptChat will be rendered as a Django template and passed the `volley` and `session` as objects.  The resulting output is used as the prompt that is sent to the AI for inference.
 3. Next, the volley is passed to the `post_process` method, which can see the response provided by the AI, alter or adjust it if needed.
 4. Finally, if the volley output does not contain markup, the text in the output is automatically converted to markup and added to the output record before sending to Moxie.
 

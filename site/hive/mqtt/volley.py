@@ -160,6 +160,11 @@ class Volley:
         self._response['response_action']['event_subscription'] = subrec
         self._response['response_actions'][0]['event_subscription'] = subrec
 
+    # Change event subscriptions on this response
+    def update_output_type(self, output_type):
+        self._response['response_action']['output_type'] = output_type
+        self._response['response_actions'][0]['output_type'] = output_type
+
     # Get a paintext string from a remote chat response w/ actions in text
     def debug_response_string(self):
         def params_string(ra):
