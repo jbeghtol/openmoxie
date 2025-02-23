@@ -173,7 +173,7 @@ class MoxieServer:
                 self.send_command_to_bot_json(device_id, 'remote_chat', { 'command': 'remote_chat', 'result': 0, 'event_id': req_id, 'query_data': rc_modules} )
             elif rcr.get('backend') == "router":
                 # REMOTE CHAT CONVERSATION ENDPOINT
-                self._remote_chat.handle_request(device_id, rcr)
+                self._remote_chat.handle_request(device_id, rcr, self._robot_data.get_volley_data(device_id))
         elif eventname == "client-service-activity-log":
             # Topic originally for reporting activities, but extended with subtopics
             csa = json.loads(msg.payload)

@@ -18,6 +18,7 @@ class SinglePromptChat(models.Model):
     model = models.CharField(max_length=200, default="gpt-3.5-turbo")
     max_tokens = models.IntegerField(default=70)
     temperature = models.FloatField(default=0.5)
+    code = models.TextField(null=True, blank=True) # Python code for filter methods
     source_version = models.IntegerField(default=1)
     
     def __str__(self):
@@ -113,6 +114,7 @@ class GlobalResponse(models.Model):
     content_id = models.CharField(max_length=80, null=True, blank=True) # for launches, content ID to target
     code = models.TextField(null=True, blank=True) # Python code for METHOD, w/ def get_response(request, response, entities):
     sort_key = models.IntegerField(default=1) # in case ordering matters, they order desc so high goes first
+    source_version = models.IntegerField(default=1)
 
     # Ensure we have all we need
     def clean(self):
@@ -125,3 +127,10 @@ class GlobalResponse(models.Model):
         
     def __str__(self):
         return self.name
+    
+class PersistentData(models.Model):
+    device = models.OneToOneField(MoxieDevice, on_delete=models.CASCADE)
+    data = models.JSONField()
+
+    def __str__(self):
+        return f'{self.device} - Data'

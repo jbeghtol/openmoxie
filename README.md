@@ -42,7 +42,7 @@ Once running, the URL above should bring you to the setup page.  Details on sett
 account can be found there.  Also, Docker Desktop can be used to stop and restart this without returning
 to the terminal, but a `local/work` directory will be created holding the database and log files for OpenMoxie.
 
-Do take a look at the [Moxie Overview](MoxieOverview.md) to learn more about the schedule and settings.
+Do take a look at the [Moxie Overview](doc/MoxieOverview.md) to learn more about the schedule and settings.
 
 # Slow Start
 
