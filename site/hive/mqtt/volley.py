@@ -79,7 +79,9 @@ class Volley:
     
     # Convert any action tags in the response text into response actions
     def ingest_action_tags(self):
-        resp = self._response['output']['text']
+        resp = self._response['output'].get('text')
+        if not resp:
+            return
         # find and attach actions for each tag
         tag_regex = re.compile(r'<[^>]*>')
         matches = tag_regex.findall(resp)

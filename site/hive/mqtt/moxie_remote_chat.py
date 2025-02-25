@@ -23,6 +23,7 @@ from .volley import Volley
 # Turn on to enable global commands in the cloud
 _ENABLE_GLOBAL_COMMANDS = True
 _LOG_ALL_RCR = False
+_LOG_NOTIFY_RCR = True
 _MAX_WORKER_THREADS = 5
 
 logger = logging.getLogger(__name__)
@@ -101,7 +102,7 @@ class RemoteChat:
             if self._device_sessions[device_id]['id'] == id:
                 return self._device_sessions[device_id]['session']
             else:
-                self.on_chat_complete(device_id, id, self._device_sessions[device_id]['session'])
+                self.on_chat_complete(device_id, self._device_sessions[device_id]['id'], self._device_sessions[device_id]['session'])
 
         # new session needed
         new_session = { 'id': id, 'session': maker['xtor'](**maker['params']) }
@@ -150,19 +151,31 @@ class RemoteChat:
         self._server.send_command_to_bot_json(device_id, 'remote_chat', resp)
         pass
 
+    def log_notify(self, rcr):
+        moxie_speech = rcr.get('speech')
+        for el in rcr.get('extra_lines', []):
+            if el.get('context_type') == 'input':
+                logger.info(f"-- USER: {el.get('text')}")    
+        if moxie_speech:
+            logger.info(f"-- MOXIE: {moxie_speech} [{rcr.get('module_id')}/{rcr.get('content_id')}]")
+
     # Entry point where all RemoteChatRequests arrive
     def handle_request(self, device_id, rcr, volley_data):
         if _LOG_ALL_RCR:
             logger.info(f"RemoteChatRequest\n{rcr}")
         id = rcr.get('module_id', '') + '/' + rcr.get('content_id', '')
         cmd = rcr.get('command')
+        if _LOG_NOTIFY_RCR and cmd == 'notify':
+            self.log_notify(rcr)
+
         maker = self._modules.get(id)
         if maker:
             # THIS IS THE PATH FOR REMOTE CONTENT - MODULE/CONTENT HOSTED IN OPENMOXIE
             logger.debug(f'Handling RCR:{cmd} for {id}') 
             sess = self.get_session(device_id, id, maker)
             if cmd == 'notify':
-                sess.ingest_notify(rcr)
+                volley = Volley(rcr, device_id=device_id, robot_data=volley_data, local_data=sess.local_data, data_only=True)
+                sess.ingest_notify(volley)
             else:
                 volley = Volley(rcr, device_id=device_id, robot_data=volley_data, local_data=sess.local_data)
                 if not self.handled_global(device_id, volley):
@@ -172,7 +185,7 @@ class RemoteChat:
             session_reset = False
             if device_id in self._device_sessions:
                 session = self._device_sessions.pop(device_id, None)
-                self.on_chat_complete(device_id, id, session['session'])
+                self.on_chat_complete(device_id, session['id'], session['session'])
                 session_reset = True
             if cmd != 'notify':
                 volley = Volley(rcr, device_id=device_id, robot_data=volley_data)

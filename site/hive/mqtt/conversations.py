@@ -52,14 +52,15 @@ class ChatSession:
     def get_opener(self, msg='Welcome to open chat'):
         return msg,self.overflow()
 
-    def ingest_notify(self, rcr):
+    def ingest_notify(self, volley:Volley):
+        rcr = volley.request
         # RULES - speech field is what 'assistant' said, but we should skip the [animation]
         # 'user' speech comes from extra_lines[].text when .context_type=='input'
         for line in rcr.get('extra_lines', []):
             if line['context_type'] == 'input':
                 self.add_history('user', line['text'])
         speech = rcr.get('speech')
-        if speech and 'animation:' not in speech:
+        if speech and 'animation:' not in speech and 'silent:' not in speech:
             self.add_history('assistant', speech)
 
     def next_response(self, speech, context):
@@ -110,13 +111,15 @@ class SingleContextChatSession(ChatSession):
         self._auto_history = False
         self._pre_filter = None
         self._post_filter = None
+        self._notify_handler = None
         self._complete_handler = None
         self._prompt_template = Template(prompt)
 
-    def set_filters(self, pre_filter=None, post_filter=None, complete_handler=None):
+    def set_filters(self, pre_filter=None, post_filter=None, complete_handler=None, notify_handler=None):
         self._pre_filter = pre_filter
         self._post_filter = post_filter
         self._complete_handler = complete_handler
+        self._notify_handler = notify_handler
 
     # For web-based, we have no Moxie and no Notify channel, so auto-history is used
     def set_auto_history(self, val):
@@ -133,6 +136,12 @@ class SingleContextChatSession(ChatSession):
                     "content": ctx
                     } ]
     
+    # Handle Moxie saying something, accumulate to history
+    def ingest_notify(self, volley:Volley):
+        super().ingest_notify(volley)
+        if self._notify_handler:
+            self._notify_handler(volley, self)
+
     # Handle a volley, using its request and populating the response
     def handle_volley(self, volley:Volley):
         volley.assign_local_data(self._local_data)
@@ -254,6 +263,7 @@ class SinglePromptDBChatSession(SingleContextChatSession):
                 exec(source.code, globals(), loc)
                 self.set_filters(pre_filter=loc.get('pre_process'), 
                                  post_filter=loc.get('post_process'),
-                                 complete_handler=loc.get('complete_handler'))
+                                 complete_handler=loc.get('complete_handler'),
+                                 notify_handler=loc.get('notify_handler'))
             except Exception as e:
                 logger.error(f"Error loading code for chat session: {e}")

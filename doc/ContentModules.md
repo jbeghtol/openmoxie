@@ -126,6 +126,15 @@ def complete_handler(volley, session):
     volley.persist_data['last_summary'] = summary
 ```
 
+If you want to take any actions in response to Moxie playing an output, you can also provide a `notify_handler` that will be called with every output
+Moxie plays from the conversation.  Like the `complete_handler`, this volley no response object, but it does contain the full notify request and
+accessors for data.
+
+```
+def notify_handler(volley, session):
+    pass
+```
+
 ### Volley Object Fields
 
 It is worth looking at site/hive/mqtt/volley.py for all the details, but the volley object contains several properties that gain access to dictionaries for data records.
