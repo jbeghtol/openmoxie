@@ -167,7 +167,6 @@ class MoxieView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['active_config'] = get_instance().robot_data().get_config_for_device(self.object)
         context['schedules'] = MoxieSchedule.objects.all()
-        context['persist_data'] = json.dumps(get_instance().robot_data().get_persist_for_device(self.object))
         return context
 
 # MOXIE-POST - Save changes to a Moxie record
@@ -405,3 +404,14 @@ def import_data(request):
     # and refresh all things
     get_instance().update_from_database()
     return redirect('hive:dashboard_alert', alert_message=message)
+
+# MOXIE - View Moxie Data
+class MoxieDataView(generic.DetailView):
+    template_name = "hive/moxie_data.html"
+    model = MoxieDevice
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['active_config'] = json.dumps(get_instance().robot_data().get_config_for_device(self.object))
+        context['persist_data'] = json.dumps(get_instance().robot_data().get_persist_for_device(self.object))
+        return context

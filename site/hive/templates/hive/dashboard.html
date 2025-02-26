@@ -29,9 +29,10 @@
     {% if device.robot_config.wake_button_enabled and device.device_id in live %}
     <a class="btn btn-success btn-sm" href="{% url 'hive:moxie_wake' device.pk %}">Wake</a>
     {% endif %}
-    <a title="Modify completed missions or reset content progress" class="btn btn-secondary btn-sm" href="{% url 'hive:moxie_missions' device.pk %}">Content Progress</a>
+    <a title="Modify completed missions or reset content progress" class="btn btn-secondary btn-sm" href="{% url 'hive:moxie_missions' device.pk %}">Missions</a>
     <a title="Customize Moxie's Face" class="btn btn-secondary btn-sm" href="{% url 'hive:face' device.pk %}">Edit Face</a>
     <a title="Puppeteer Moxie" class="btn btn-secondary btn-sm" href="{% url 'hive:puppet' device.pk %}">Puppet</a>
+    <a title="View Moxie persistent data." class="btn btn-secondary btn-sm" href="{% url 'hive:moxie_data' device.pk %}">Data</a>
   </td>
   </tr>
   {% endfor %}

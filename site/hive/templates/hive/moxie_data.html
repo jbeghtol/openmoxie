@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<script defer src="https://unpkg.com/pretty-json-custom-element/index.js"></script>
+<div class="moxheader"><a href="{% url 'hive:dashboard' %}"><img class="moximage" src="{% static 'hive/openmoxie_logo.svg' %}"></a>OpenMoxie<span class="moxversion">{{moxie_version}}</span></div>
+<div class="p-3">
+<h2>Moxie Data</h2>
+<div class="moxie-window">
+  <table class="table">
+    <tr><th>Name</th><td>{{object.name}}</td></tr>
+    <tr><th>Device ID</th><td>{{object.device_id}}</td></tr>
+  </table>
+</div>
+<br>
+<h2>Persistent Data</h2>
+<div class="moxie-window">
+  <pretty-json expand="0" truncate-string="3000">
+  {{persist_data}}
+  </pretty-json>
+</div>
+<br>
+<h2>Configuration</h2>
+<div class="moxie-window">
+  <pretty-json expand="0" truncate-string="3000">
+  {{active_config}}
+  </pretty-json>
+</div>
+</div>
+{% endblock %}
