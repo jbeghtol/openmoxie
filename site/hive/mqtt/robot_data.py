@@ -151,6 +151,15 @@ class RobotData:
         if pdata:
             pdata.save()
 
+    # Get persist record, cached or from db
+    def get_persist_for_device(self, device:MoxieDevice):
+        if device.device_id in self._robot_map:
+            prec = self._robot_map[device.device_id].get("persistent_data")
+            return prec.data if prec else {}
+        else:
+            persistent_data, persistent_data_created = PersistentData.objects.get_or_create(device=device, defaults={'data': {}})
+            return persistent_data.data
+    
     # Get the active configuration for a device from the database objects
     def get_config_for_device(self, device):
         curr_cfg = HiveConfiguration.objects.filter(name='default').first()

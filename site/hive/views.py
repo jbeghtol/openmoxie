@@ -167,6 +167,7 @@ class MoxieView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         context['active_config'] = get_instance().robot_data().get_config_for_device(self.object)
         context['schedules'] = MoxieSchedule.objects.all()
+        context['persist_data'] = json.dumps(get_instance().robot_data().get_persist_for_device(self.object))
         return context
 
 # MOXIE-POST - Save changes to a Moxie record

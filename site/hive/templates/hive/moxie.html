@@ -37,5 +37,13 @@
   <button type="submit" class="btn btn-primary">Save</button>
 </form>
 </div>
+<br>
+<h2>Persistent Data</h2>
+<div class="moxie-window">
+  <script defer src="https://unpkg.com/pretty-json-custom-element/index.js"></script>
+  <pretty-json expand="0">
+  {{persist_data}}
+  </pretty-json>
+</div>
 </div>
 {% endblock %}
