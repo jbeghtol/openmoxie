@@ -156,7 +156,7 @@ only be considering the last `max_history` volleys in the summary.
 The method signature for summarize is:
 
 ```
-def summarize(self, model=None, prompt_base=None, max_tokens=None):
+def summarize(self, model=None, prompt_base=None, max_tokens=None, append_transcript=True):
 ```
 
 The AI vendor will always be the same for any conversation, but summarization can override the conversation's default model using the `model` parameter, the maximum output using the `max_tokens` parameter and may adjust the base prompt for the summarization which is currently set to:

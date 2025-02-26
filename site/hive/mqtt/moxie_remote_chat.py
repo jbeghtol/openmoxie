@@ -83,7 +83,7 @@ class RemoteChat:
         return self._global_responses.check_global(volley) if _ENABLE_GLOBAL_COMMANDS else None
         
     def on_chat_complete(self, device_id, id, session:ChatSession):
-        logger.info(f'Chat Session Complete: {id}')
+        logger.info(f'Chat Session Complete: {id} {session.has_complete_hook()}')
         if session.has_complete_hook():
             # make a data-only Volley for the completion hook
             volley = Volley({}, device_id=device_id, data_only=True, robot_data=self._server.robot_data().get_volley_data(device_id), local_data=session.local_data)

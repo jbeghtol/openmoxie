@@ -41,6 +41,10 @@ class ChatSession:
     def is_empty(self):
         return len(self._history) == 0
     
+    @property
+    def total_volleys(self):
+        return self._total_volleys
+    
     def reset(self):
         self._history = []
         self._total_volleys = 0
@@ -217,17 +221,18 @@ class SingleContextChatSession(ChatSession):
             self.add_history('assistant', resp)
         return resp,overflow
     
-    def summarize(self, model=None, prompt_base=None, max_tokens=None):
+    def summarize(self, model=None, prompt_base=None, max_tokens=None, append_transcript=True):
         try:
             if not model:
                 model = self._model
             if not max_tokens:
                 max_tokens = self._max_tokens
             client = create_openai()
-            # Concatenate the chat history into a single string
-            chat_transcript = "\n".join([f"{'Moxie' if msg['role'] == 'assistant' else msg['role']}: {msg['content']}" for msg in self._history])
             prompt = prompt_base if prompt_base else _DEFAULT_SUMMARY_PROMPT
-            prompt += f"\nTranscript:\n\n{chat_transcript}"
+            if append_transcript:
+                # Concatenate the chat history into a single string
+                chat_transcript = "\n".join([f"{'Moxie' if msg['role'] == 'assistant' else msg['role']}: {msg['content']}" for msg in self._history])
+                prompt += f"\nTranscript:\n\n{chat_transcript}"
             # Summarize the chat transcript
             msgs = [ { "role": "user", 
                 "content": prompt
@@ -249,8 +254,11 @@ class SingleContextChatSession(ChatSession):
         return self._complete_handler is not None
     
     def complete_hook(self, volley:Volley):
-        self._complete_handler(volley, self)
-        pass
+        try:
+            self._complete_handler(volley, self)
+        except Exception as e:
+            stack = traceback.format_exc()
+            logger.error(f"Error running complete hook: {e}\n{stack}")
 
 # A database backed version, the way we normally load them
 class SinglePromptDBChatSession(SingleContextChatSession):
