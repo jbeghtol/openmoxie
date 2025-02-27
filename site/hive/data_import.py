@@ -41,7 +41,9 @@ def import_content(import_data:dict, global_indexes:list, schedule_indexes:list,
             def_gr.__dict__.update(rec)
             def_gr.save()
         except GlobalResponse.DoesNotExist:
-            GlobalResponse.objects.create(**rec)
+            model_fields = [f.name for f in GlobalResponse._meta.get_fields()]
+            filtered_rec = {k: v for k, v in rec.items() if k in model_fields}
+            GlobalResponse.objects.create(**filtered_rec)
         gnames.append(rec["name"])
 
     snames = []
