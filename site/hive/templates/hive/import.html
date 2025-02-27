@@ -55,5 +55,9 @@ The badge next to each piece of content explains what will change if you select 
       </table>
     <button type="submit" class="btn btn-primary">Import</button>
 </form>
+<br>
+<h2>Details</h2>
+<script defer src="https://unpkg.com/pretty-json-custom-element/index.js"></script>
+<pretty-json expand="0" unsafe="true" truncate-string="3000">{{json_data_str}}</pretty-json>
 </div>    
 {% endblock %}
