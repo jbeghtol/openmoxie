@@ -21,7 +21,10 @@ from ..models import HiveConfiguration
 
 _BASIC_FORMAT = '{1}'
 _MOXIE_SERVICE_INSTANCE = None
-_OPENAI_APIKEY=None
+# OpenMoxie doesn't support any, but providing a dummy token can unblock some Moxie actions like OTA download
+_PROVIDE_HTTP_TOKENS=False
+# As this key is expressly shared and thus usably by any clients, this turns it off
+_SHARE_GOOGLE_KEY=True
 
 def now_ms():
     return time.time_ns() // 1_000_000
@@ -191,7 +194,7 @@ class MoxieServer:
                 elif csa.get("query") == "license":
                     # ROBOT IS ASKING FOR ANY LICENSES IT CAN USE (e.g. google speech)
                     req_id = csa.get('request_id')
-                    if self._google_service_account:
+                    if _SHARE_GOOGLE_KEY and self._google_service_account:
                         logger.debug(f"Providing google speech credentials to {device_id}")
                         self.send_command_to_bot_json(device_id, 'query_result', 
                                                     { 'command': 'query_result', 'request_id': req_id, 'query': 'license',
@@ -208,7 +211,11 @@ class MoxieServer:
                 th_state = csa["message"].get("state")
                 if th_state:
                     self._robot_data.put_puppet_state(device_id, th_state)
-
+        elif _PROVIDE_HTTP_TOKENS and eventname=="client-service-http-token":
+            # There are no services to use them, but if enabled we respond with a 'notoken' access token
+            logger.info(f"Sending HTTP TOKEN to device {device_id}")
+            self.send_command_to_bot_json(device_id, 'http_token',
+                                            { 'command': 'http_token', 'http_token': 'notoken'})
         elif eventname == "zmq":
             # ZMQ BRIDGE INCOMING
             colon_index = msg.payload.find(b':')

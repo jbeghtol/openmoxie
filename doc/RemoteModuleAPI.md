@@ -127,3 +127,36 @@ When a real-time timer expires on the robot, Moxie wakes up if needed and launch
 ```
 
 Multiple timers may exist.  The specific timer number is passed in `input_vars['eb_timer_id']` when the alarm module fires and `input_vars['eb_wake']` is set to `true` or `false` based on whether Moxie had to wake up to handle the alarm.
+
+## OTA Update (Notes Only)
+
+I'm adding this section here as a reminder of how OTA updates work.  I used this method to upgrade robots with version 801 to
+version 803 using my own signed certificate server.
+
+Basic process:
+
+1. Robot is provided an ota_update record in config, which has an ID and a version name.
+2. If version does not match robot's current OTA version, it requests an HTTP access token, then makes a web service call to `{web_root}/api/ota_updates/{id}/url?access_token={token}&robot_id={device_id}`.  This URL returns a JSON object with a `url` key which contains a URL to retrieve the actual OTA image from.  
+3. The updater saves the URL from the response in step 2, and uses that to download the signed OTA image.
+
+To make this work, I edited moxie_server.py to include the web root which is normally not provided to my domain.  I also
+changed the project name to be just "o" to minimize QR density as Moxie can struggle with dense QR codes.  And I enabled the
+`_PROVIDE_HTTP_TOKENS=True` at the top to serve bogus access tokens.
+
+```
+    # Get the endppint / moxie relocate QR code to move a Moxie to this service
+    def get_endpoint_qr_data(self):
+        hiveconfig = HiveConfiguration.objects.filter(name="default").first()
+        scfg = ServiceConfiguration2()
+        scfg.webservice_root = "https://mysite.com/" # <--- ADDED
+        #scfg.gcp_project = self._mqtt_project_id
+        scfg.gcp_project = "o"
+```
+
+For release bots, I added this to the robot config `"ota_update": { "id": "rls", "version": "v3.6.4-24_12_28-18_42-master-a90cfdee72-v24.10.803-rls-robot"}`
+
+This makes the resulting URL `https://mysite.com/api/ota_updates/rls/url?access_token=notoken&robot_id={some uuid}` and since
+my Apache server returns files ignoring the parameters, I simply made a file in my web root here: `/var/www/api/ota_updates/rls/url` which is just a JSON file with contents `{ "url": "https://mysite.com/moxie/v3.6.4-24_12_28-18_42-master-a90cfdee72-v24.10.803-rls-robot" }`.
+
+All put together, a robot running 801 will see a new "rls" ID which has a newer version, will get a bogus token, then download the URL file containing the real URL of the image, and then the actual OTA image that URL.
+
