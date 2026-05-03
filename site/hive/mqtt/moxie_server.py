@@ -268,11 +268,19 @@ class MoxieServer:
             self._robot_data.db_release(device_id)
             logger.info(f'Moxie DISCONNECTED {device_id}')
 
+    def send_zmq_subscribe(self, device_id):
+        sub = ProtoSubscribe()
+        sub.protos.append('embodied.perception.audio.zmqSTTRequest')
+        sub.timestamp = now_ms()
+        self.send_zmq_to_bot(device_id, sub)
+
     # Fallback, we missed the connect message but robot is connected
     def check_device_connect(self, device_id, info="Missing"):
         if self._robot_data.connect_init_needed(device_id):
             logger.info(f"Unconnected robot {device_id} location {info}.  Connecting now.")
             self._worker_queue.submit(self.on_device_connect, device_id, True, info)
+        else:
+            self.send_zmq_subscribe(device_id)
 
     # Moxie reporting its own state information
     def on_device_state(self, device_id, msg):
