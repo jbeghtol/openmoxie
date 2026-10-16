@@ -6,6 +6,7 @@ import io
 import time
 import logging
 import concurrent.futures
+import threading
 from .ai_factory import create_openai
 
 LOG_WAV=False
@@ -55,15 +56,17 @@ class STTSession:
         resp.timestamp = now_ms()
 
         try:
-            client = create_openai()
+            client = self._parent.get_stt_client()
             transcript = client.audio.transcriptions.create(
                 file=('test.wav', wav_bytes),
                 model=OPENAI_MODEL,
                 response_format="verbose_json",
-                timestamp_granularities=["word"])
+                timestamp_granularities=["segment"])
             resp.speech = transcript.text
-            min_start = min(d.start for d in transcript.words) if transcript.words else 0
-            max_end = max(d.end for d in transcript.words) if transcript.words else 0
+            # Moxie needs phrase boundaries, not an alignment for every word.
+            segments = transcript.segments or []
+            min_start = min(d.start for d in segments) if segments else 0
+            max_end = max(d.end for d in segments) if segments else 0
             resp.start_timestamp = self._start_ts + int(min_start*1000)
             resp.end_timestamp = self._start_ts + int(max_end*1000)
             logger.info(f'STT-FINAL: {transcript.text}')
@@ -92,7 +95,16 @@ class STTHandler(ZMQHandler):
     def __init__(self, server):
         super().__init__(server)
         self._sessions = {}
+        self._client_state = threading.local()
         self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=5)
+
+    def get_stt_client(self):
+        # Reuse connections within each worker, without sharing clients across threads.
+        client = getattr(self._client_state, "client", None)
+        if client is None:
+            client = create_openai()
+            self._client_state.client = client
+        return client
 
     def handle_zmq(self, device_id, protoname, protodata):
         req = zmqSTTRequest()
