@@ -13,11 +13,45 @@ from .volley import Volley
 
 logger = logging.getLogger(__name__)
 
+def _normalize_model(model):
+    return (model or "").strip().lower()
+
+
+def is_reasoning_chat_model(model):
+    """True for OpenAI reasoning Chat Completions models (o-series, GPT-5+)."""
+    name = _normalize_model(model)
+    return bool(re.match(r"^(o[1-9]|gpt-[5-9])", name))
+
+
+def supports_reasoning_none(model):
+    """True when reasoning_effort='none' is valid for low-latency chat replies."""
+    name = _normalize_model(model)
+    if re.match(r"^o[1-9]", name):
+        return False
+    if "astra" in name or "gpt-6.1" in name:
+        return False
+    # GPT-5+ / GPT-6 Luna & Sol accept none; excluded models returned above.
+    return is_reasoning_chat_model(model)
+
+
 def completion_options(model, max_tokens, temperature):
-    """Use Luna's supported parameters without changing legacy chat requests."""
-    if model == "gpt-6-luna":
-        return {"max_completion_tokens": max_tokens, "reasoning_effort": "none"}
-    return {"max_tokens": max_tokens, "temperature": temperature}
+    """Build Chat Completions kwargs for the selected model.
+
+    Legacy chat models keep max_tokens + temperature. Reasoning-family models
+    require max_completion_tokens; when the model supports reasoning_effort
+    'none' (e.g. gpt-6-luna), use that for short conversational replies and
+    keep temperature. Otherwise use a low effort and omit temperature.
+    """
+    if not is_reasoning_chat_model(model):
+        return {"max_tokens": max_tokens, "temperature": temperature}
+
+    opts = {"max_completion_tokens": max_tokens}
+    if supports_reasoning_none(model):
+        opts["reasoning_effort"] = "none"
+        opts["temperature"] = temperature
+    else:
+        opts["reasoning_effort"] = "low"
+    return opts
 
 
 _DEFAULT_SUMMARY_PROMPT = "Summarize the following conversation between the friendly robot Moxie, and the user.  Keep the summary brief, but include any important details."
@@ -104,7 +138,7 @@ class SingleContextChatSession(ChatSession):
                  max_volleys=9999,
                  prompt="You are a having a conversation with your friend. Make it interesting and keep the conversation moving forward. Your utterances are around 30-40 words long. Ask only one question per response and ask it at the end of your response.",
                  opener="Hi there!  Welcome to Open Moxie chat!",
-                 model="gpt-3.5-turbo",
+                 model="gpt-6-luna",
                  max_tokens=70,
                  temperature=0.5,
                  exit_line="Well, that was fun.  Let's move on."

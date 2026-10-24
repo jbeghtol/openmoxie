@@ -15,7 +15,7 @@ class SinglePromptChat(models.Model):
     opener = models.TextField()
     prompt = models.TextField()
     vendor = models.IntegerField(choices=[(tag.value, tag.name) for tag in AIVendor],default=AIVendor.OPEN_AI.value)
-    model = models.CharField(max_length=200, default="gpt-3.5-turbo")
+    model = models.CharField(max_length=200, default="gpt-6-luna")
     max_tokens = models.IntegerField(default=70)
     temperature = models.FloatField(default=0.5)
     code = models.TextField(null=True, blank=True) # Python code for filter methods
