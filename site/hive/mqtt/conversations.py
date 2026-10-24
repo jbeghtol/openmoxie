@@ -13,6 +13,13 @@ from .volley import Volley
 
 logger = logging.getLogger(__name__)
 
+def completion_options(model, max_tokens, temperature):
+    """Use Luna's supported parameters without changing legacy chat requests."""
+    if model == "gpt-6-luna":
+        return {"max_completion_tokens": max_tokens, "reasoning_effort": "none"}
+    return {"max_tokens": max_tokens, "temperature": temperature}
+
+
 _DEFAULT_SUMMARY_PROMPT = "Summarize the following conversation between the friendly robot Moxie, and the user.  Keep the summary brief, but include any important details."
 
 '''
@@ -200,8 +207,7 @@ class SingleContextChatSession(ChatSession):
             resp = client.chat.completions.create(
                         model=self._model,
                         messages=context + history,
-                        max_tokens=self._max_tokens,
-                        temperature=self._temperature
+                        **completion_options(self._model, self._max_tokens, self._temperature)
                     ).choices[0].message.content
         except Exception as e:
             logger.warning(f'Exception attempting inference: {e}')
@@ -240,8 +246,7 @@ class SingleContextChatSession(ChatSession):
             resp = client.chat.completions.create(
                     model=model,
                     messages=msgs,
-                    max_tokens=max_tokens,
-                    temperature=self._temperature
+                    **completion_options(model, max_tokens, self._temperature)
                     ).choices[0].message.content
             return resp
         except Exception as e:
