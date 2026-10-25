@@ -9,6 +9,7 @@ import re
 import logging
 import base64
 import ssl
+import threading
 from .ai_factory import set_openai_key
 from .robot_credentials import RobotCredentials
 from .robot_data import RobotData
@@ -25,6 +26,9 @@ _MOXIE_SERVICE_INSTANCE = None
 _PROVIDE_HTTP_TOKENS=False
 # As this key is expressly shared and thus usably by any clients, this turns it off
 _SHARE_GOOGLE_KEY=True
+# Config + ZMQ subscribe can race "MQTT connected" vs robot ready to receive.
+# Retry a few times with delays instead of a single fixed sleep.
+_SESSION_PROVISION_DELAYS_SEC = (1.0, 2.0, 4.0)
 
 def now_ms():
     return time.time_ns() // 1_000_000
@@ -78,8 +82,20 @@ class MoxieServer:
         self._zmq_handlers = {}
         self._client_metrics = {}
         self._connect_pattern = r"connected from (.*) as (d_[a-f0-9-]+)"
-        self._disconnect_pattern = r"Client (d_[a-f0-9-]+) (closed its connection|disconnected)"
+        # Mosquitto 2.x / recent images often insert "[ip:port]" after the client id, e.g.
+        # "Client d_… [192.168.1.2:1234] disconnected."
+        _did = r"(d_[a-f0-9-]+)"
+        _addr = r"(?:\s+\[[^\]]+\])?"  # optional " [host:port]"
+        self._disconnect_patterns = [
+            re.compile(rf"Client {_did}{_addr} (closed its connection|disconnected)"),
+            re.compile(rf"Socket error on client {_did}, disconnecting"),
+            re.compile(rf"Client {_did}{_addr} has exceeded timeout, disconnecting"),
+            re.compile(rf"Client {_did}{_addr} disconnected due to"),
+        ]
         self._worker_queue = concurrent.futures.ThreadPoolExecutor(max_workers=5)
+        # Per-device MQTT session: config + ZMQ subscribe sent once per connection
+        self._device_sessions = {}
+        self._session_lock = threading.Lock()
         self.update_from_database()
 
     # Connect to the broker - the jwt stuff left in place, but isn't required
@@ -145,17 +161,34 @@ class MoxieServer:
             logging.exception("Error handling mqtt messsage:")
     
 
+    def _match_disconnect_device(self, line):
+        for pat in self._disconnect_patterns:
+            m = pat.search(line)
+            if m:
+                return m.group(1)
+        return None
+
     # Handle messages FROM mosquitto syslog topic, looking for connect/disconnects
     def on_sys_log_message(self, basetype, msg):
         if basetype == "N": # Notifications
             line = msg.payload.decode('utf-8')
             match = re.search(self._connect_pattern, line)
-            match2 = None if match else re.search(self._disconnect_pattern, line)
             if match:
-                if self._robot_data.connect_init_needed(match.group(2)):
-                    self._worker_queue.submit(self.on_device_connect, match.group(2), True, match.group(1))
-            elif match2:
-                self._worker_queue.submit(self.on_device_connect, match2.group(1), False)
+                # Always re-provision on broker connect. Do not gate on connect_init_needed:
+                # after a missed disconnect the device stays in _robot_map and would otherwise
+                # never get config / ZMQ subscribe again after sleep/wake.
+                device_id = match.group(2)
+                ip_addr = match.group(1)
+                self._worker_queue.submit(
+                    self.provision_device_session, device_id, f"sys:{ip_addr}", True
+                )
+                return
+            device_id = self._match_disconnect_device(line)
+            if device_id:
+                self._worker_queue.submit(self.on_device_disconnect, device_id)
+            elif 'd_' in line:
+                # Help catch future Mosquitto phrasing changes
+                logger.debug(f'Unhandled broker log (N): {line}')
 
     # Handles metrics from mosquitto
     def on_client_metrics(self, basetype, msg):
@@ -250,29 +283,104 @@ class MoxieServer:
         logger.info(f'Providing {len(mbh)} MBH records to {device_id}')
         self.send_command_to_bot_json(device_id, 'query_result', { 'command': 'query_result', 'query': 'mentor_behaviors', 'request_id': req_id, 'mentor_behaviors': mbh} )
 
+    def send_zmq_subscribe(self, device_id):
+        """Ask the robot to forward STT requests over the ZMQ bridge."""
+        sub = ProtoSubscribe()
+        sub.protos.append('embodied.perception.audio.zmqSTTRequest')
+        sub.timestamp = now_ms()
+        self.send_zmq_to_bot(device_id, sub)
+        logger.debug(f'Sent ZMQ STT subscribe to {device_id}')
+
+    def _session_provisioned(self, device_id):
+        with self._session_lock:
+            sess = self._device_sessions.get(device_id) or {}
+            return bool(sess.get('provisioned'))
+
+    def _session_busy_or_done(self, device_id):
+        with self._session_lock:
+            sess = self._device_sessions.get(device_id) or {}
+            return bool(sess.get('provisioned') or sess.get('provisioning'))
+
+    def _clear_device_session(self, device_id):
+        with self._session_lock:
+            self._device_sessions.pop(device_id, None)
+
     # NOTE: Called from worker thread pool
+    def on_device_disconnect(self, device_id):
+        self._clear_device_session(device_id)
+        self._robot_data.db_release(device_id)
+        logger.info(f'Moxie DISCONNECTED {device_id}')
+
+    # NOTE: Called from worker thread pool
+    def provision_device_session(self, device_id, reason="connect", force=False):
+        """Send config + ZMQ subscribe once per MQTT connection (with retries).
+
+        force=True is used for $SYS connect so a reconnect after a missed
+        disconnect still re-sends session setup.
+        """
+        with self._session_lock:
+            sess = self._device_sessions.setdefault(
+                device_id, {'provisioned': False, 'provisioning': False}
+            )
+            if force:
+                sess['provisioned'] = False
+            if sess.get('provisioned') or sess.get('provisioning'):
+                return
+            sess['provisioning'] = True
+
+        try:
+            logger.info(f'Moxie session provision {device_id} ({reason})')
+            # Ensure map slot exists so concurrent check_device_connect won't
+            # also try to start a first-time connect race.
+            self._robot_data.connect_init_needed(device_id)
+            self._robot_data.db_connect(device_id)
+            for attempt, delay in enumerate(_SESSION_PROVISION_DELAYS_SEC, start=1):
+                time.sleep(delay)
+                self.send_config_to_bot_json(
+                    device_id, self._robot_data.get_config(device_id)
+                )
+                self.send_zmq_subscribe(device_id)
+                logger.info(
+                    f'Sent config + ZMQ subscribe to {device_id} '
+                    f'(attempt {attempt}/{len(_SESSION_PROVISION_DELAYS_SEC)})'
+                )
+            with self._session_lock:
+                sess = self._device_sessions.setdefault(
+                    device_id, {'provisioned': False, 'provisioning': False}
+                )
+                sess['provisioned'] = True
+        except Exception:
+            logging.exception(f'Error provisioning session for {device_id}')
+        finally:
+            with self._session_lock:
+                sess = self._device_sessions.get(device_id)
+                if sess is not None:
+                    sess['provisioning'] = False
+
+    # NOTE: Called from worker thread pool (compat / disconnect path)
     def on_device_connect(self, device_id, connected, ip_addr=None):
         if connected:
-            logger.info(f'Moxie CONNECTED {device_id} from {ip_addr}')
-            self._robot_data.db_connect(device_id)
-            # Sleep to avoid sending sub/config before client is ready
-            time.sleep(1.0)
-            self.send_config_to_bot_json(device_id, self._robot_data.get_config(device_id))
-            # subscripe to ZMQ STT
-            sub = ProtoSubscribe()
-            sub.protos.append('embodied.perception.audio.zmqSTTRequest')
-            sub.timestamp = now_ms()
-            logger.debug(f'Subscribed to ZMQ STT')
-            self.send_zmq_to_bot(device_id, sub)
+            self.provision_device_session(device_id, reason=f"connect:{ip_addr}", force=True)
         else:
-            self._robot_data.db_release(device_id)
-            logger.info(f'Moxie DISCONNECTED {device_id}')
+            self.on_device_disconnect(device_id)
 
-    # Fallback, we missed the connect message but robot is connected
+    # Fallback when we missed $SYS connect but the robot is sending traffic
     def check_device_connect(self, device_id, info="Missing"):
+        if self._session_busy_or_done(device_id):
+            return
         if self._robot_data.connect_init_needed(device_id):
             logger.info(f"Unconnected robot {device_id} location {info}.  Connecting now.")
-            self._worker_queue.submit(self.on_device_connect, device_id, True, info)
+            self._worker_queue.submit(
+                self.provision_device_session, device_id, info, False
+            )
+        else:
+            # Known in DB cache but this MQTT connection never got config/ZMQ
+            logger.info(
+                f"Robot {device_id} online without session provision ({info}).  Provisioning now."
+            )
+            self._worker_queue.submit(
+                self.provision_device_session, device_id, info, False
+            )
 
     # Moxie reporting its own state information
     def on_device_state(self, device_id, msg):
