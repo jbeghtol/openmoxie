@@ -291,15 +291,14 @@ class MoxieServer:
         self.send_zmq_to_bot(device_id, sub)
         logger.debug(f'Sent ZMQ STT subscribe to {device_id}')
 
-    def _session_provisioned(self, device_id):
-        with self._session_lock:
-            sess = self._device_sessions.get(device_id) or {}
-            return bool(sess.get('provisioned'))
-
     def _session_busy_or_done(self, device_id):
         with self._session_lock:
-            sess = self._device_sessions.get(device_id) or {}
-            return bool(sess.get('provisioned') or sess.get('provisioning'))
+            return device_id in self._device_sessions
+
+    def _session_is_current(self, device_id, token):
+        with self._session_lock:
+            sess = self._device_sessions.get(device_id)
+            return sess is not None and sess['token'] is token
 
     def _clear_device_session(self, device_id):
         with self._session_lock:
@@ -316,17 +315,15 @@ class MoxieServer:
         """Send config + ZMQ subscribe once per MQTT connection (with retries).
 
         force=True is used for $SYS connect so a reconnect after a missed
-        disconnect still re-sends session setup.
+        disconnect still re-sends session setup. A forced provision replaces
+        any in-flight one; a disconnect cancels it. Each run holds a token and
+        stops as soon as its session is no longer the current one.
         """
+        token = object()
         with self._session_lock:
-            sess = self._device_sessions.setdefault(
-                device_id, {'provisioned': False, 'provisioning': False}
-            )
-            if force:
-                sess['provisioned'] = False
-            if sess.get('provisioned') or sess.get('provisioning'):
+            if device_id in self._device_sessions and not force:
                 return
-            sess['provisioning'] = True
+            self._device_sessions[device_id] = {'token': token, 'provisioned': False}
 
         try:
             logger.info(f'Moxie session provision {device_id} ({reason})')
@@ -336,6 +333,9 @@ class MoxieServer:
             self._robot_data.db_connect(device_id)
             for attempt, delay in enumerate(_SESSION_PROVISION_DELAYS_SEC, start=1):
                 time.sleep(delay)
+                if not self._session_is_current(device_id, token):
+                    logger.info(f'Session provision for {device_id} cancelled (disconnected or superseded)')
+                    return
                 self.send_config_to_bot_json(
                     device_id, self._robot_data.get_config(device_id)
                 )
@@ -345,17 +345,16 @@ class MoxieServer:
                     f'(attempt {attempt}/{len(_SESSION_PROVISION_DELAYS_SEC)})'
                 )
             with self._session_lock:
-                sess = self._device_sessions.setdefault(
-                    device_id, {'provisioned': False, 'provisioning': False}
-                )
-                sess['provisioned'] = True
+                sess = self._device_sessions.get(device_id)
+                if sess is not None and sess['token'] is token:
+                    sess['provisioned'] = True
         except Exception:
             logging.exception(f'Error provisioning session for {device_id}')
-        finally:
+            # Drop our session so a later event can retry provisioning
             with self._session_lock:
                 sess = self._device_sessions.get(device_id)
-                if sess is not None:
-                    sess['provisioning'] = False
+                if sess is not None and sess['token'] is token:
+                    del self._device_sessions[device_id]
 
     # NOTE: Called from worker thread pool (compat / disconnect path)
     def on_device_connect(self, device_id, connected, ip_addr=None):
