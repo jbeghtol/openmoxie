@@ -46,7 +46,7 @@ to the terminal, but a `local/work` directory will be created holding the databa
 
 Do take a look at the [Moxie Overview](doc/MoxieOverview.md) to learn more about the schedule and settings.
 
-To use GPT-6 Luna as an optional lower-cost chat model, see [Choosing a chat model](doc/ChatModels.md).
+Chat defaults to GPT-6 Luna. To change models or understand request parameters, see [Choosing a chat model](doc/ChatModels.md).
 
 # Slow Start
 
